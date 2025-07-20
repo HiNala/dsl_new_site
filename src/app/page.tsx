@@ -18,7 +18,7 @@ export default function Home() {
             return (
               <span 
                 key={index}
-                className={`text-[clamp(14px,1.1vw,24px)] text-[#4A90E2] ${isFirstLetter ? 'font-medium underline decoration-1 underline-offset-2 decoration-[#4A90E2]/30' : 'font-light'}`}
+                className={`text-[clamp(14px,1.1vw,24px)] text-[#4A90E2] ${isFirstLetter ? 'font-medium underline decoration-2 underline-offset-4 decoration-[#4A90E2]/60' : 'font-light'}`}
               >
                 {letter}
               </span>
