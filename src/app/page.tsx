@@ -29,7 +29,7 @@ export default function Home() {
         <div className="relative min-h-[calc(100vh-100px)]">
           
           {/* Main Headline - smaller and refined like reference */}
-          <div className="absolute left-[4vw] top-[100px]">
+          <div className="absolute left-[4vw] top-[85px]">
             <h1 className="text-[clamp(40px,5.2vw,110px)] font-light leading-[1.1] text-[#4A90E2] max-w-[65vw]">
               We believe in the<br />
               value of what can't<br />
