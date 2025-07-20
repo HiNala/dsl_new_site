@@ -45,7 +45,7 @@ export function PillNavigation({
           className
         )}
       >
-        <div className="flex items-center gap-2 bg-black/10 backdrop-blur-xl border border-black/30 rounded-full px-2 py-2 shadow-2xl shadow-black/10">
+        <div className="flex items-center gap-2 bg-black/10 backdrop-blur-xl border border-black/30 rounded-2xl px-3 py-3 shadow-2xl shadow-black/10">
           {items.map((item) => {
             const Icon = item.icon
             const isActive = activeTab === item.name
@@ -55,7 +55,7 @@ export function PillNavigation({
                 key={item.name}
                 onClick={() => handleItemClick(item.name)}
                 className={cn(
-                  "relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300",
+                  "relative px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300",
                   "hover:text-gray-500",
                   isActive 
                     ? "text-black" 
@@ -73,7 +73,7 @@ export function PillNavigation({
                   <>
                     <motion.div
                       layoutId="pill-bg"
-                      className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-full border border-black/40"
+                      className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl border border-black/40"
                       initial={false}
                       transition={{
                         type: "spring",
@@ -83,7 +83,7 @@ export function PillNavigation({
                     />
                     <motion.div
                       layoutId="pill-glow"
-                      className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-blue-300/20 to-white/30 rounded-full blur-sm"
+                      className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-blue-300/20 to-white/30 rounded-xl blur-sm"
                       initial={false}
                       transition={{
                         type: "spring",
@@ -109,9 +109,9 @@ export function PillNavigation({
           className
         )}
       >
-        <div className="bg-black/10 backdrop-blur-xl border border-black/30 rounded-full shadow-2xl shadow-black/10">
+        <div className="bg-black/10 backdrop-blur-xl border border-black/30 rounded-2xl shadow-2xl shadow-black/10">
           {!isMenuOpen ? (
-            <div className="flex items-center gap-1 px-2 py-2">
+            <div className="flex items-center gap-1 px-3 py-3">
               {items.slice(0, 3).map((item) => {
                 const Icon = item.icon
                 const isActive = activeTab === item.name
@@ -121,7 +121,7 @@ export function PillNavigation({
                     key={item.name}
                     onClick={() => handleItemClick(item.name)}
                     className={cn(
-                      "relative p-3 rounded-full transition-all duration-300",
+                      "relative p-3 rounded-xl transition-all duration-300",
                       isActive 
                         ? "text-black" 
                         : "text-black hover:text-gray-500"
@@ -133,7 +133,7 @@ export function PillNavigation({
                     {isActive && (
                       <motion.div
                         layoutId="mobile-pill-bg"
-                        className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-full border border-black/40"
+                        className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl border border-black/40"
                         initial={false}
                         transition={{
                           type: "spring",
@@ -148,7 +148,7 @@ export function PillNavigation({
               
               <motion.button
                 onClick={() => setIsMenuOpen(true)}
-                className="p-3 rounded-full text-black hover:text-gray-500 transition-colors"
+                className="p-3 rounded-xl text-black hover:text-gray-500 transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
@@ -159,7 +159,7 @@ export function PillNavigation({
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="flex items-center gap-1 px-2 py-2"
+              className="flex items-center gap-1 px-3 py-3"
             >
               {items.map((item) => {
                 const Icon = item.icon
@@ -170,7 +170,7 @@ export function PillNavigation({
                     key={item.name}
                     onClick={() => handleItemClick(item.name)}
                     className={cn(
-                      "relative p-3 rounded-full transition-all duration-300",
+                      "relative p-3 rounded-xl transition-all duration-300",
                       isActive 
                         ? "text-black" 
                         : "text-black hover:text-gray-500"
@@ -182,7 +182,7 @@ export function PillNavigation({
                     {isActive && (
                       <motion.div
                         layoutId="mobile-expanded-pill-bg"
-                        className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-full border border-black/40"
+                        className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl border border-black/40"
                         initial={false}
                         transition={{
                           type: "spring",
@@ -197,7 +197,7 @@ export function PillNavigation({
               
               <motion.button
                 onClick={() => setIsMenuOpen(false)}
-                className="p-3 rounded-full text-black hover:text-gray-500 transition-colors"
+                className="p-3 rounded-xl text-black hover:text-gray-500 transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
