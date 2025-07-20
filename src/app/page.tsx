@@ -226,7 +226,7 @@ export default function Home() {
           </div>
 
           {/* Work Content Grid - Left Side (flipped from About Us) */}
-          <div className="absolute left-[4vw] top-[14rem] max-w-[70vw]">
+          <div className="absolute left-[12vw] top-[16rem] max-w-[70vw]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
               
               {/* Portfolio Companies */}
