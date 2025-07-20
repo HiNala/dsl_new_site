@@ -9,7 +9,7 @@ export default function Home() {
       
       {/* Title - Left Side */}
       <div className="absolute top-1/4 left-8 md:left-16 -translate-y-1/2 z-10">
-        <h1 className="text-black font-light text-4xl md:text-6xl lg:text-7xl leading-none tracking-tight">
+        <h1 className="text-black font-light text-6xl md:text-8xl lg:text-9xl leading-none tracking-tight">
           <div>Digital</div>
           <div>Studio</div>
           <div>Labs</div>
