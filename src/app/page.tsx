@@ -126,7 +126,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 3: Blue Section */}
+      {/* Section 3: Our Work */}
       <section className="relative min-h-screen bg-[#4A90E2]" style={{ scrollSnapAlign: 'start' }}>
         <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
           
@@ -135,6 +135,56 @@ export default function Home() {
             <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-[0.8]">D</span>
             <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-[0.8]">S</span>
             <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-[0.8]">L</span>
+          </div>
+
+          {/* Our Work Headline - Right Side (flipped from About Us) */}
+          <div className="absolute right-[4vw] mt-[8rem] mb-[3rem]">
+            <h2 className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] text-[#F8F9FA] max-w-[50vw] text-right">
+              OUR WORK
+            </h2>
+          </div>
+
+          {/* Work Content Grid - Left Side (flipped from About Us) */}
+          <div className="absolute left-[4vw] top-[16rem] max-w-[60vw]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
+              
+              {/* Portfolio Companies */}
+              <div className="border-b border-white/20 pb-[1.5rem]">
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Portfolio Companies</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+                  Building and investing in innovative startups that are reshaping 
+                  industries and creating the future of technology.
+                </p>
+              </div>
+
+              {/* Emerging Tech */}
+              <div className="border-b border-white/20 pb-[1.5rem]">
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Emerging Tech</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+                  Exploring cutting-edge technologies like AI, blockchain, and 
+                  quantum computing to unlock new possibilities.
+                </p>
+              </div>
+
+              {/* Creator Tools */}
+              <div className="border-b border-white/20 pb-[1.5rem]">
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Creator Tools</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+                  Developing platforms and tools that empower creators to build, 
+                  monetize, and scale their creative endeavors.
+                </p>
+              </div>
+
+              {/* Innovation Labs */}
+              <div className="border-b border-white/20 pb-[1.5rem]">
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Innovation Labs</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+                  Experimental projects and research initiatives that push the 
+                  boundaries of what's possible in technology.
+                </p>
+              </div>
+
+            </div>
           </div>
 
         </div>
