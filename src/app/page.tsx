@@ -212,22 +212,25 @@ export default function Home() {
             <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-[0.8]">L</span>
           </div>
 
-          {/* Our Work Headline - Right Side (flipped from About Us) */}
-          <div className="absolute right-[4vw] top-[8rem] text-right">
-            <TextSplit
-              className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
-              topClassName="text-[#F8F9FA]"
-              bottomClassName="text-white/60"
-              maxMove={100}
-              falloff={0.2}
-            >
-              OUR WORK
-            </TextSplit>
+          {/* Our Work Headline - Right Side (mirroring About Us) */}
+          <div className="absolute right-[4vw] top-[8rem]">
+            <div className="text-right mb-[3rem]">
+              <TextSplit
+                className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
+                topClassName="text-[#F8F9FA]"
+                bottomClassName="text-white/60"
+                maxMove={100}
+                falloff={0.2}
+              >
+                OUR WORK
+              </TextSplit>
+            </div>
           </div>
 
-          {/* Work Content Grid - Left Side (flipped from About Us) */}
-          <div className="absolute left-[12vw] top-[16rem] max-w-[70vw]">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
+          {/* Work Content Grid - Exactly mirroring About Us but right-aligned */}
+          <div className="absolute right-[4vw] top-[14rem] flex justify-end">
+            <div className="max-w-[75vw]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
               
               {/* Portfolio Companies */}
               <div className="border-b border-white/20 pb-[1.5rem]">
@@ -265,8 +268,9 @@ export default function Home() {
                 </p>
               </div>
 
-            </div>
-          </div>
+               </div>
+             </div>
+           </div>
 
         </div>
       </section>
