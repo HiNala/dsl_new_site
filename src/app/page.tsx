@@ -73,8 +73,8 @@ export default function Home() {
             <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-[0.8]">L</span>
           </div>
 
-          {/* About Us Headline */}
-          <div className="mb-[3rem]">
+          {/* About Us Headline - moved down */}
+          <div className="mt-[8rem] mb-[3rem]">
             <h2 className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] text-white max-w-[50vw]">
               ABOUT US
             </h2>
