@@ -1,44 +1,50 @@
 'use client'
 
-import Spline from '@splinetool/react-spline/next';
-import { motion } from 'framer-motion';
-
 export default function Home() {
   return (
-    <main className="h-screen w-full relative">
-      <Spline
-        scene="https://prod.spline.design/RSlYov6mvjeyk1b6/scene.splinecode" 
-      />
-      
-      {/* Title - Left Side */}
-      <div className="absolute top-1/4 left-8 md:left-16 -translate-y-1/2 z-10">
-        <h1 className="text-black font-light text-4xl md:text-6xl lg:text-7xl leading-none tracking-tight">
-          <div>Digital</div>
-          <div>Studio</div>
-          <div>Labs</div>
+    <main className="min-h-screen bg-white text-blue-600 px-8 py-12">
+      {/* Top Header - Letter Spaced */}
+      <div className="text-center mb-24">
+        <h1 className="text-lg font-light tracking-[0.5em] uppercase">
+          D I G I T A L  S T U D I O  L A B S
         </h1>
-        
-        {/* Our Work Button */}
-        <motion.button
-          className="mt-8 px-8 py-4 bg-black/10 backdrop-blur-xl border border-black/30 rounded-2xl text-black font-medium transition-all duration-300 hover:bg-black/20 hover:border-black/40 shadow-lg"
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.98 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          Our Work
-        </motion.button>
       </div>
-      
-      {/* Tagline - Bottom */}
-      <div className="absolute bottom-8 left-8 md:left-16 right-8 md:right-16 z-10">
-        <blockquote className="text-black/70 text-sm md:text-base leading-relaxed max-w-2xl">
-          "The minute you choose to do what you really want to do, it's a different kind of life."
-          <footer className="text-black/50 text-xs md:text-sm mt-2">
-            - Buckminster Fuller
-          </footer>
-        </blockquote>
+
+      {/* Main Content Area */}
+      <div className="max-w-7xl mx-auto flex">
+        {/* Left Navigation */}
+        <nav className="w-64 pr-16">
+          <ul className="space-y-6 text-lg font-light">
+            <li><a href="#" className="hover:opacity-70 transition-opacity">Home</a></li>
+            <li><a href="#" className="hover:opacity-70 transition-opacity">Companies</a></li>
+            <li><a href="#" className="hover:opacity-70 transition-opacity">About</a></li>
+            <li><a href="#" className="hover:opacity-70 transition-opacity">Contact</a></li>
+          </ul>
+        </nav>
+
+        {/* Main Content */}
+        <div className="flex-1 flex">
+          {/* Left Side - Main Heading */}
+          <div className="w-1/2 pr-16">
+            <h2 className="text-6xl font-light leading-tight">
+              We believe in the<br />
+              value of what can't<br />
+              be measured.
+            </h2>
+          </div>
+
+          {/* Right Side - Description */}
+          <div className="w-1/2 pt-16">
+            <p className="text-lg font-light leading-relaxed">
+              Digital Studio Labs is a Los Angeles-based venture studio that 
+              invests in founders and builds companies in the creator economy. 
+              We believe in the value of what can't be measured: traits like 
+              creativity, authenticity, and community. We're builders and 
+              investors with a shared vision of the future that is driven by 
+              creators and innovation.
+            </p>
+          </div>
+        </div>
       </div>
     </main>
   );
