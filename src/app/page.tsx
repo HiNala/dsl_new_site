@@ -1,4 +1,5 @@
 import Spline from '@splinetool/react-spline/next';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
@@ -14,6 +15,18 @@ export default function Home() {
           <div>Studio</div>
           <div>Labs</div>
         </h1>
+        
+        {/* Our Work Button */}
+        <motion.button
+          className="mt-8 px-8 py-4 bg-black/10 backdrop-blur-xl border border-black/30 rounded-2xl text-black font-medium transition-all duration-300 hover:bg-black/20 hover:border-black/40 shadow-lg"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          Our Work
+        </motion.button>
       </div>
       
       {/* Tagline - Bottom */}
