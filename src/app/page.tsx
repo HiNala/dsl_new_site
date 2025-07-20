@@ -2,52 +2,68 @@
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gray-50 text-blue-500">
-      {/* Large Header Text - Letters spread across full width */}
-      <div className="pt-16 pb-20">
-        <h1 className="text-center text-4xl font-thin tracking-[0.5em] text-blue-500">
-          D I G I T A L &nbsp;&nbsp; S T U D I O &nbsp;&nbsp; L A B S
-        </h1>
-      </div>
+    <>
+      {/* Row 1 - Fixed Header Strip with Brand Wordmark */}
+      <header className="fixed top-0 left-0 w-full h-20 bg-gray-50 z-10">
+        <ul className="flex justify-between items-center h-full px-[4vw] list-none m-0 p-0">
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">D</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">I</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">G</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">I</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">T</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">A</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">L</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">S</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">T</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">U</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">D</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">I</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">O</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">L</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">A</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">B</li>
+          <li className="text-blue-500 font-medium text-[clamp(14px,1.1vw,24px)]">S</li>
+        </ul>
+      </header>
 
-             {/* Layout with navigation and asymmetrical content */}
-       <div className="max-w-7xl mx-auto px-8">
-         <div className="flex">
-           {/* Left Column - Sidebar Navigation (20% width) */}
-           <nav className="w-1/5">
-             <ul className="space-y-6">
-               <li><a href="#" className="text-lg font-light text-blue-500 hover:opacity-70 transition-opacity">Home</a></li>
-               <li><a href="#" className="text-lg font-light text-blue-500 hover:opacity-70 transition-opacity">Companies</a></li>
-               <li><a href="#" className="text-lg font-light text-blue-500 hover:opacity-70 transition-opacity">About</a></li>
-               <li><a href="#" className="text-lg font-light text-blue-500 hover:opacity-70 transition-opacity">Contact</a></li>
-             </ul>
-           </nav>
+      {/* Row 2 - Main Content with padding-top for fixed header */}
+      <main className="min-h-screen bg-gray-50 pt-20">
+        {/* Hero Section - 12 Column Grid */}
+        <section className="hero-grid grid grid-cols-12 gap-[2vw] w-full min-h-screen relative pl-[4vw] pr-[4vw]">
+          
+          {/* Headline - Columns 1-7 */}
+          <div className="col-span-7 mt-[7.5rem]">
+            <h1 className="text-[clamp(40px,6vw,120px)] leading-[1.05] font-normal text-blue-500">
+              We believe in the<br />
+              value of what can't<br />
+              be measured.
+            </h1>
+          </div>
 
-           {/* Main Content Area - spans most of the remaining space */}
-           <div className="flex-1 relative">
-             {/* Primary Headline - extends across 60-70% of total content area */}
-             <div className="mb-16 pr-32">
-               <h2 className="text-6xl font-thin leading-tight text-blue-500">
-                 We believe in the<br />
-                 value of what can't<br />
-                 be measured.
-               </h2>
-             </div>
+          {/* Body Paragraph - Columns 8-12 */}
+          <div className="col-span-5 self-start mt-[12rem]">
+            <p className="max-w-[34ch] text-[clamp(14px,1.1vw,20px)] leading-[1.4] font-light text-blue-500">
+              Digital Studio Labs is a Los Angeles-based venture studio that 
+              invests in founders and builds companies in the creator economy. 
+              We believe in the value of what can't be measured: traits like 
+              creativity, authenticity, and community. We're builders and 
+              investors with a shared vision of the future that is driven by 
+              creators and innovation.
+            </p>
+          </div>
 
-             {/* Body Text Paragraph - positioned far right in narrow column */}
-             <div className="absolute top-16 right-0 w-80">
-               <p className="text-base font-light leading-relaxed text-blue-500">
-                 Digital Studio Labs is a Los Angeles-based venture studio that 
-                 invests in founders and builds companies in the creator economy. 
-                 We believe in the value of what can't be measured: traits like 
-                 creativity, authenticity, and community. We're builders and 
-                 investors with a shared vision of the future that is driven by 
-                 creators and innovation.
-               </p>
-             </div>
-           </div>
-         </div>
-       </div>
-    </main>
+          {/* Side Navigation - Absolutely positioned bottom left */}
+          <nav className="absolute bottom-16 left-[4vw]">
+            <ul className="flex flex-col gap-3 list-none m-0 p-0">
+              <li><a href="#" className="text-sm text-blue-500 hover:opacity-70 transition-opacity no-underline">Home</a></li>
+              <li><a href="#" className="text-sm text-blue-500 hover:opacity-70 transition-opacity no-underline">Companies</a></li>
+              <li><a href="#" className="text-sm text-blue-500 hover:opacity-70 transition-opacity no-underline">About</a></li>
+              <li><a href="#" className="text-sm text-blue-500 hover:opacity-70 transition-opacity no-underline">Contact</a></li>
+            </ul>
+          </nav>
+
+        </section>
+      </main>
+    </>
   );
 }
