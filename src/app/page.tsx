@@ -10,15 +10,15 @@ export default function Home() {
       {/* Section 1: Hero */}
       <section className="relative min-h-screen bg-[#F8F9FA]" style={{ scrollSnapAlign: 'start' }}>
         
-        {/* Header Letters - as part of hero section (not fixed) */}
-        <div className="h-[120px] flex justify-between items-center px-[4vw] bg-[#F8F9FA]">
+        {/* Header Letters - exactly like reference */}
+        <div className="h-[140px] flex justify-between items-center px-[4vw] bg-[#F8F9FA]">
           {brandLetters.map((letter, index) => {
             // First letters: D (index 0), S (index 7), L (index 13)
             const isFirstLetter = index === 0 || index === 7 || index === 13;
             return (
               <span 
                 key={index}
-                className={`text-[clamp(14px,1.1vw,24px)] text-[#4A90E2] ${isFirstLetter ? 'font-medium underline decoration-2 underline-offset-4 decoration-[#4A90E2]/60' : 'font-light'}`}
+                className={`text-[clamp(16px,1.2vw,28px)] text-[#4A90E2] ${isFirstLetter ? 'font-medium underline decoration-1 underline-offset-2 decoration-[#4A90E2]/30' : 'font-light'}`}
               >
                 {letter}
               </span>
@@ -26,19 +26,19 @@ export default function Home() {
           })}
         </div>
 
-        <div className="relative min-h-[calc(100vh-120px)]">
+        <div className="relative min-h-[calc(100vh-140px)]">
           
-          {/* Main Headline */}
-          <div className="absolute left-[4vw] top-[80px]">
-            <h1 className="text-[clamp(40px,6vw,120px)] font-light leading-[1.05] text-[#4A90E2] max-w-[60vw]">
+          {/* Main Headline - exactly like reference */}
+          <div className="absolute left-[4vw] top-[180px]">
+            <h1 className="text-[clamp(60px,7vw,140px)] font-light leading-[0.95] text-[#4A90E2] max-w-[700px]">
               We believe in the<br />
               value of what can't<br />
               be measured.
             </h1>
           </div>
 
-          {/* Body Text Paragraph */}
-          <div className="absolute right-[4vw] top-[400px] w-[clamp(300px,25vw,400px)]">
+          {/* Body Text Paragraph - exactly like reference */}
+          <div className="absolute right-[64px] top-[520px] w-[380px]">
             <p className="text-[16px] font-normal leading-[1.6] text-[#4A90E2]">
               Digital Studio Labs is a San Francisco-based venture studio that 
               invests in founders and builds companies in the creator economy. 
@@ -49,9 +49,9 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Navigation */}
-          <nav className="absolute left-[4vw] bottom-[4rem]">
-            <ul className="space-y-[1rem]">
+          {/* Navigation - exactly like reference */}
+          <nav className="absolute left-[4vw] bottom-[64px]">
+            <ul className="space-y-[8px]">
               <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Home</a></li>
               <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Companies</a></li>
               <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">About</a></li>
