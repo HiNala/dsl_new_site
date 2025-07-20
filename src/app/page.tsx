@@ -1,3 +1,78 @@
+'use client';
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+function cn(...classes: (string | undefined | null | boolean)[]): string {
+  return classes.filter(Boolean).join(" ");
+}
+
+interface TextSplitProps {
+  children: string;
+  className?: string;
+  topClassName?: string;
+  bottomClassName?: string;
+  maxMove?: number;
+  falloff?: number;
+}
+
+const TextSplit: React.FC<TextSplitProps> = ({
+  children,
+  className,
+  topClassName,
+  bottomClassName,
+  maxMove = 50,
+  falloff = 0.3,
+}) => {
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
+  const getOffset = (index: number) => {
+    if (hoverIndex === null) return 0;
+    const distance = Math.abs(index - hoverIndex);
+    return Math.max(0, maxMove * (1 - distance * falloff));
+  };
+
+  return (
+    <div className={cn("relative flex items-center justify-center", className)}>
+      {children.split("").map((char, index) => {
+        const offset = getOffset(index);
+        const displayChar = char === " " ? "\u00A0" : char;
+
+        return (
+          <div
+            key={`${char}-${index}`}
+            className="relative flex flex-col h-[1em] w-auto leading-none"
+            onMouseEnter={() => setHoverIndex(index)}
+            onMouseLeave={() => setHoverIndex(null)}
+          >
+            <motion.span
+              initial={false}
+              animate={{
+                y: `-${offset}%`,
+              }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className={cn("overflow-hidden", topClassName)}
+            >
+              {displayChar}
+            </motion.span>
+
+            <motion.span
+              initial={false}
+              animate={{
+                y: `${offset}%`,
+              }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className={cn("overflow-hidden", bottomClassName)}
+            >
+              <span className="block -translate-y-1/2">{displayChar}</span>
+            </motion.span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
@@ -138,14 +213,20 @@ export default function Home() {
           </div>
 
           {/* Our Work Headline - Right Side (flipped from About Us) */}
-          <div className="absolute right-[4vw] mt-[8rem] mb-[3rem]">
-            <h2 className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] text-[#F8F9FA] max-w-[50vw] text-right">
+          <div className="absolute right-[4vw] top-[8rem] text-right">
+            <TextSplit
+              className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
+              topClassName="text-[#F8F9FA]"
+              bottomClassName="text-white/60"
+              maxMove={100}
+              falloff={0.2}
+            >
               OUR WORK
-            </h2>
+            </TextSplit>
           </div>
 
           {/* Work Content Grid - Left Side (flipped from About Us) */}
-          <div className="absolute left-[4vw] top-[16rem] max-w-[60vw]">
+          <div className="absolute left-[4vw] top-[14rem] max-w-[70vw]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
               
               {/* Portfolio Companies */}
