@@ -9,12 +9,27 @@ export default function Home() {
         {brandLetters.map((letter, index) => {
           // First letters: D (index 0), S (index 7), L (index 13)
           const isFirstLetter = index === 0 || index === 7 || index === 13;
+          const getBeamClass = () => {
+            if (index === 0) return 'border-beam-d';  // D
+            if (index === 7) return 'border-beam-s';  // S
+            if (index === 13) return 'border-beam-l'; // L
+            return '';
+          };
+          
           return (
             <span 
               key={index}
-              className={`text-[20px] ${isFirstLetter ? 'font-medium underline decoration-1 underline-offset-2 decoration-[#4A90E2]/30' : 'font-light'}`}
+              className={`text-[20px] ${isFirstLetter ? 'font-medium' : 'font-light'}`}
             >
-              {letter}
+              {isFirstLetter ? (
+                <span className={getBeamClass()}>
+                  <span className="letter-box">
+                    {letter}
+                  </span>
+                </span>
+              ) : (
+                letter
+              )}
             </span>
           );
         })}
