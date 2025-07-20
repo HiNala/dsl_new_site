@@ -18,7 +18,7 @@ export default function Home() {
             return (
               <span 
                 key={index}
-                className={`text-[clamp(14px,1.0vw,22px)] text-[#4A90E2] ${isFirstLetter ? 'font-normal underline decoration-1 underline-offset-1 decoration-[#4A90E2]/40' : 'font-light'}`}
+                className={`text-[clamp(14px,1.0vw,22px)] text-[#4A90E2] ${isFirstLetter ? 'font-normal underline decoration-2 underline-offset-2 decoration-[#4A90E2]/60' : 'font-light'}`}
               >
                 {letter}
               </span>
@@ -37,9 +37,9 @@ export default function Home() {
             </h1>
           </div>
 
-          {/* Body Text Paragraph - better positioned like reference */}
+          {/* Body Text Paragraph - slightly bigger */}
           <div className="absolute right-[64px] top-[380px] w-[360px]">
-            <p className="text-[16px] font-normal leading-[1.6] text-[#4A90E2]">
+            <p className="text-[17px] font-normal leading-[1.6] text-[#4A90E2]">
               Digital Studio Labs is a San Francisco-based venture studio that 
               invests in founders and builds companies in the creator economy. 
               We believe in the value of what can't be measured: traits like 
@@ -49,13 +49,13 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Navigation - better spacing like reference */}
+          {/* Navigation - slightly bigger */}
           <nav className="absolute left-[4vw] bottom-[80px]">
             <ul className="space-y-[6px]">
-              <li><a href="#about" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Home</a></li>
-              <li><a href="#about" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Companies</a></li>
-              <li><a href="#about" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">About</a></li>
-              <li><a href="#about" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Contact</a></li>
+              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Home</a></li>
+              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Companies</a></li>
+              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">About</a></li>
+              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Contact</a></li>
             </ul>
           </nav>
 
