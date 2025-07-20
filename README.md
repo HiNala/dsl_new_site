@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DSL New Site
 
-## Getting Started
+A modern Next.js application featuring an immersive 3D Spline hero section.
 
-First, run the development server:
+## 🌟 Features
 
+- **Interactive 3D Hero Section** - Powered by Spline for stunning visual experiences
+- **Next.js 15.4.2** - Latest stable version with App Router
+- **React 19.1.0** - Latest stable React version
+- **TypeScript** - Full type safety and IntelliSense
+- **Tailwind CSS v4** - Modern utility-first CSS framework
+- **ESLint** - Code quality and consistency
+- **Production Ready** - Optimized builds and performance
+
+## 🚀 Tech Stack
+
+- [Next.js](https://nextjs.org/) - React framework for production
+- [React](https://reactjs.org/) - JavaScript library for building user interfaces
+- [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript at any scale
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Spline](https://spline.design/) - 3D design tool for web
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn or pnpm
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/HiNala/dsl_new_site.git
+cd dsl_new_site
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+## 📝 Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server  
+- `npm run lint` - Run ESLint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 3D Scene
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The hero section features a custom Spline 3D scene that provides an interactive visual experience. The scene is fully responsive and optimized for web performance.
 
-## Deploy on Vercel
+## 📁 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/
+│   ├── layout.tsx     # Root layout
+│   ├── page.tsx       # Home page with Spline hero
+│   ├── globals.css    # Global styles with Tailwind
+│   └── favicon.ico    # Favicon
+├── components/        # Reusable components (future)
+└── utils/            # Utility functions (future)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Deployment
+
+The app is ready for deployment on platforms like:
+
+- [Vercel](https://vercel.com/) (recommended for Next.js)
+- [Netlify](https://netlify.com/)
+- [Railway](https://railway.app/)
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/HiNala/dsl_new_site/issues).
+
+## 📞 Contact
+
+For questions or feedback, please open an issue on GitHub.
+
+---
+
+Built with ❤️ using Next.js and Spline
