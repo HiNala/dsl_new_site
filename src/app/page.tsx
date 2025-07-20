@@ -38,7 +38,7 @@ export default function Home() {
           </div>
 
           {/* Body Text Paragraph - positioned like reference */}
-          <div className="absolute right-[64px] top-[420px] w-[380px]">
+          <div className="absolute right-[64px] top-[390px] w-[380px]">
             <p className="text-[16px] font-normal leading-[1.6] text-[#4A90E2]">
               Digital Studio Labs is a San Francisco-based venture studio that 
               invests in founders and builds companies in the creator economy. 
