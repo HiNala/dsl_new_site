@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "DSL New Site",
-  description: "Modern Next.js application with 3D Spline hero section",
+  title: "Digital Studio Labs",
+  description: "San Francisco-based venture studio investing in the creator economy",
 };
 
 export default function RootLayout({
@@ -24,9 +13,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500&display=swap"
+        />
+      </head>
+      <body className="font-inter font-light bg-[#F5F7FA]" style={{
+        '--brand-blue': '#0D4CFF',
+        '--font-nav-weight': '500',
+        '--font-headline-weight': '300'
+      } as React.CSSProperties}>
         {children}
       </body>
     </html>
