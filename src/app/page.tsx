@@ -9,14 +9,18 @@ export default function Home() {
         {/* Header Letters - 80px from top, centered, 120px spacing */}
         <div className="absolute top-[80px] left-0 right-0">
           <div className="flex justify-center items-center gap-[120px]">
-            {brandLetters.map((letter, index) => (
-              <span 
-                key={index}
-                className="text-[48px] font-light"
-              >
-                {letter}
-              </span>
-            ))}
+            {brandLetters.map((letter, index) => {
+              // First letters: D (index 0), S (index 7), L (index 13)
+              const isFirstLetter = index === 0 || index === 7 || index === 13;
+              return (
+                <span 
+                  key={index}
+                  className={`text-[48px] ${isFirstLetter ? 'font-medium underline decoration-1 underline-offset-2 decoration-[#4A90E2]/30' : 'font-light'}`}
+                >
+                  {letter}
+                </span>
+              );
+            })}
           </div>
         </div>
 
