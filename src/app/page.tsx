@@ -8,12 +8,22 @@ export default function Home() {
       />
       
       {/* Title - Left Side */}
-      <div className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 z-10">
-        <h1 className="text-black font-light text-8xl md:text-9xl lg:text-[12rem] leading-none tracking-tight text-left">
+      <div className="absolute top-1/4 left-8 md:left-16 -translate-y-1/2 z-10">
+        <h1 className="text-black font-light text-4xl md:text-6xl lg:text-7xl leading-none tracking-tight">
           <div>Digital</div>
           <div>Studio</div>
           <div>Labs</div>
         </h1>
+      </div>
+      
+      {/* Tagline - Bottom */}
+      <div className="absolute bottom-8 left-8 md:left-16 right-8 md:right-16 z-10">
+        <blockquote className="text-black/70 text-sm md:text-base leading-relaxed max-w-2xl">
+          "The minute you choose to do what you really want to do, it's a different kind of life."
+          <footer className="text-black/50 text-xs md:text-sm mt-2">
+            - Buckminster Fuller
+          </footer>
+        </blockquote>
       </div>
     </main>
   );
