@@ -35,20 +35,20 @@ export default function Home() {
         })}
       </div>
 
-      {/* Main content area with proper top margin */}
-      <div className="pt-[100px] relative min-h-screen">
+      {/* Main content area with proper spacing */}
+      <div className="relative min-h-screen pt-[120px]">
         
-        {/* Main Headline - positioned like immeasurable.com */}
-        <div className="absolute left-[32px] top-[80px]">
-          <h1 className="text-[84px] font-light leading-[0.9] max-w-[700px]">
+        {/* Main Headline - positioned exactly like reference */}
+        <div className="absolute left-[32px] top-[180px]">
+          <h1 className="text-[72px] font-light leading-[1.05] max-w-[660px]">
             We believe in the<br />
             value of what can't<br />
             be measured.
           </h1>
         </div>
 
-        {/* Body Text Paragraph - positioned on right side like reference */}
-        <div className="absolute right-[64px] top-[520px] w-[380px]">
+        {/* Body Text Paragraph - positioned exactly like reference */}
+        <div className="absolute right-[32px] top-[520px] w-[380px]">
           <p className="text-[16px] font-normal leading-[1.5]">
             Digital Studio Labs is a San Francisco-based venture studio that 
             invests in founders and builds companies in the creator economy. 
@@ -59,9 +59,9 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Navigation - positioned in bottom left like reference */}
-        <nav className="absolute left-[32px] bottom-[64px]">
-          <ul className="space-y-[8px]">
+        {/* Navigation - positioned exactly like reference */}
+        <nav className="absolute left-[32px] bottom-[32px]">
+          <ul className="space-y-[6px]">
             <li><a href="#" className="text-[16px] font-normal hover:opacity-70 transition-opacity">Home</a></li>
             <li><a href="#" className="text-[16px] font-normal hover:opacity-70 transition-opacity">Companies</a></li>
             <li><a href="#" className="text-[16px] font-normal hover:opacity-70 transition-opacity">About</a></li>
