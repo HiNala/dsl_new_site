@@ -10,15 +10,15 @@ export default function Home() {
       {/* Section 1: Hero */}
       <section className="relative min-h-screen bg-[#F8F9FA]" style={{ scrollSnapAlign: 'start' }}>
         
-        {/* Header Letters - small and refined like reference */}
-        <div className="h-[80px] flex justify-between items-center px-[4vw] bg-[#F8F9FA]">
+        {/* Header Letters - bigger like reference */}
+        <div className="h-[100px] flex justify-between items-center px-[4vw] bg-[#F8F9FA]">
           {brandLetters.map((letter, index) => {
             // First letters: D (index 0), S (index 7), L (index 13)
             const isFirstLetter = index === 0 || index === 7 || index === 13;
             return (
               <span 
                 key={index}
-                className={`text-[clamp(10px,0.7vw,16px)] text-[#4A90E2] ${isFirstLetter ? 'font-normal underline decoration-1 underline-offset-1 decoration-[#4A90E2]/40' : 'font-light'}`}
+                className={`text-[clamp(14px,1.0vw,22px)] text-[#4A90E2] ${isFirstLetter ? 'font-normal underline decoration-1 underline-offset-1 decoration-[#4A90E2]/40' : 'font-light'}`}
               >
                 {letter}
               </span>
@@ -26,20 +26,20 @@ export default function Home() {
           })}
         </div>
 
-        <div className="relative min-h-[calc(100vh-80px)]">
+        <div className="relative min-h-[calc(100vh-100px)]">
           
-          {/* Main Headline - clean positioning like reference */}
-          <div className="absolute left-[4vw] top-[100px]">
-            <h1 className="text-[clamp(42px,5.5vw,110px)] font-light leading-[1.1] text-[#4A90E2] max-w-[65vw]">
+          {/* Main Headline - smaller and higher up like reference */}
+          <div className="absolute left-[4vw] top-[60px]">
+            <h1 className="text-[clamp(38px,5.0vw,100px)] font-light leading-[1.1] text-[#4A90E2] max-w-[65vw]">
               We believe in the<br />
               value of what can't<br />
               be measured.
             </h1>
           </div>
 
-          {/* Body Text Paragraph - refined positioning like reference */}
+          {/* Body Text Paragraph - slightly bigger */}
           <div className="absolute right-[64px] top-[420px] w-[360px]">
-            <p className="text-[15px] font-normal leading-[1.55] text-[#4A90E2]">
+            <p className="text-[16px] font-normal leading-[1.6] text-[#4A90E2]">
               Digital Studio Labs is a San Francisco-based venture studio that 
               invests in founders and builds companies in the creator economy. 
               We believe in the value of what can't be measured: traits like 
