@@ -1,212 +1,264 @@
-'use client'
+"use client";
 
-import React, { useState } from "react"
-import { motion } from "framer-motion"
-import { Home, User, Briefcase, FileText, Menu, X } from "lucide-react"
-import { cn } from "@/lib/utils"
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Home, 
+  User, 
+  Briefcase, 
+  FileText, 
+  Menu, 
+  X, 
+  ChevronLeft, 
+  ChevronRight
+} from 'lucide-react';
 
-interface NavItem {
-  name: string
-  url: string
-  icon: React.ElementType
+interface NavigationItem {
+  id: string;
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  href: string;
 }
 
-interface PillNavigationProps {
-  items?: NavItem[]
-  className?: string
+interface NavigationProps {
+  className?: string;
 }
 
-export function PillNavigation({ 
-  items = [
-    { name: 'Home', url: '#', icon: Home },
-    { name: 'About', url: '#about', icon: User },
-    { name: 'Projects', url: '#projects', icon: Briefcase },
-    { name: 'Contact', url: '#contact', icon: FileText }
-  ],
-  className 
-}: PillNavigationProps) {
-  const [activeTab, setActiveTab] = useState(items[0].name)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+// Navigation items
+const navigationItems: NavigationItem[] = [
+  { id: "home", name: "Home", icon: Home, href: "#" },
+  { id: "about", name: "About", icon: User, href: "#about" },
+  { id: "projects", name: "Projects", icon: Briefcase, href: "#projects" },
+  { id: "contact", name: "Contact", icon: FileText, href: "#contact" },
+];
 
-  const handleItemClick = (itemName: string) => {
-    setActiveTab(itemName)
-    setIsMenuOpen(false)
-  }
+export function PillNavigation({ className = "" }: NavigationProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [activeItem, setActiveItem] = useState("home");
+
+  // Auto-open navigation on desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsOpen(true);
+      } else {
+        setIsOpen(false);
+      }
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const toggleNavigation = () => setIsOpen(!isOpen);
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+
+  const handleItemClick = (itemId: string) => {
+    setActiveItem(itemId);
+    if (window.innerWidth < 768) {
+      setIsOpen(false);
+    }
+  };
+
+  // Animation variants
+  const sidebarVariants = {
+    expanded: {
+      width: "280px",
+      transition: {
+        type: "spring" as const,
+        damping: 20,
+        stiffness: 300
+      }
+    },
+    collapsed: {
+      width: "80px",
+      transition: {
+        type: "spring" as const,
+        damping: 20,
+        stiffness: 300
+      }
+    }
+  };
+
+  const itemTextVariants = {
+    expanded: {
+      opacity: 1,
+      x: 0,
+      display: "block",
+      transition: {
+        duration: 0.2,
+        delay: 0.1
+      }
+    },
+    collapsed: {
+      opacity: 0,
+      x: -10,
+      transitionEnd: {
+        display: "none"
+      },
+      transition: {
+        duration: 0.2
+      }
+    }
+  };
 
   return (
     <>
-      {/* Desktop Navigation */}
-      <motion.nav
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={cn(
-          "fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:block",
-          className
-        )}
+      {/* Mobile hamburger button */}
+      <motion.button
+        onClick={toggleNavigation}
+        className="fixed top-6 left-6 z-50 p-3 rounded-xl bg-white/20 backdrop-blur-md shadow-lg border border-black/20 md:hidden hover:bg-white/30 transition-all duration-200"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        aria-label="Toggle navigation"
       >
-        <div className="flex items-center gap-2 bg-black/10 backdrop-blur-xl border border-black/30 rounded-2xl px-3 py-3 shadow-2xl shadow-black/10">
-          {items.map((item) => {
-            const Icon = item.icon
-            const isActive = activeTab === item.name
+        {isOpen ? 
+          <X className="h-5 w-5 text-black" /> : 
+          <Menu className="h-5 w-5 text-black" />
+        }
+      </motion.button>
 
-            return (
-              <motion.button
-                key={item.name}
-                onClick={() => handleItemClick(item.name)}
-                className={cn(
-                  "relative px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300",
-                  "hover:text-gray-500",
-                  isActive 
-                    ? "text-black" 
-                    : "text-black hover:text-gray-500"
-                )}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <Icon size={16} strokeWidth={2} />
-                  {item.name}
-                </span>
-                
-                {isActive && (
-                  <>
-                    <motion.div
-                      layoutId="pill-bg"
-                      className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl border border-black/40"
-                      initial={false}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 30,
-                      }}
-                    />
-                    <motion.div
-                      layoutId="pill-glow"
-                      className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-blue-300/20 to-white/30 rounded-xl blur-sm"
-                      initial={false}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 30,
-                      }}
-                    />
-                  </>
-                )}
-              </motion.button>
-            )
-          })}
-        </div>
-      </motion.nav>
-
-      {/* Mobile Navigation */}
-      <motion.nav
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={cn(
-          "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 md:hidden",
-          className
+      {/* Mobile overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden" 
+            onClick={toggleNavigation} 
+          />
         )}
-      >
-        <div className="bg-black/10 backdrop-blur-xl border border-black/30 rounded-2xl shadow-2xl shadow-black/10">
-          {!isMenuOpen ? (
-            <div className="flex items-center gap-1 px-3 py-3">
-              {items.slice(0, 3).map((item) => {
-                const Icon = item.icon
-                const isActive = activeTab === item.name
+      </AnimatePresence>
 
-                return (
-                  <motion.button
-                    key={item.name}
-                    onClick={() => handleItemClick(item.name)}
-                    className={cn(
-                      "relative p-3 rounded-xl transition-all duration-300",
-                      isActive 
-                        ? "text-black" 
-                        : "text-black hover:text-gray-500"
-                    )}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Icon size={18} strokeWidth={2} />
-                    {isActive && (
-                      <motion.div
-                        layoutId="mobile-pill-bg"
-                        className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl border border-black/40"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                  </motion.button>
-                )
-              })}
-              
-              <motion.button
-                onClick={() => setIsMenuOpen(true)}
-                className="p-3 rounded-xl text-black hover:text-gray-500 transition-colors"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Menu size={18} strokeWidth={2} />
-              </motion.button>
+      {/* Navigation sidebar */}
+      <motion.div
+        variants={sidebarVariants}
+        initial="expanded"
+        animate={isCollapsed ? "collapsed" : "expanded"}
+        className={`
+          fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
+          bg-white/10 backdrop-blur-xl border-r border-black/20 shadow-xl
+          ${className}
+        `}
+      >
+        {/* Header with logo and collapse button */}
+        <div className="flex items-center justify-between p-5 border-b border-black/20">
+          <motion.div 
+            className="flex items-center space-x-2.5"
+            animate={{ opacity: isCollapsed ? 0 : 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="w-9 h-9 bg-black/20 rounded-lg flex items-center justify-center shadow-sm">
+              <span className="text-black font-bold text-base">D</span>
             </div>
-          ) : (
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="flex items-center gap-1 px-3 py-3"
+            <motion.div 
+              className="flex flex-col"
+              variants={itemTextVariants}
             >
-              {items.map((item) => {
-                const Icon = item.icon
-                const isActive = activeTab === item.name
+              <span className="font-semibold text-black text-base">Digital Studio</span>
+              <span className="text-xs text-black/60">Labs</span>
+            </motion.div>
+          </motion.div>
 
-                return (
-                  <motion.button
-                    key={item.name}
-                    onClick={() => handleItemClick(item.name)}
-                    className={cn(
-                      "relative p-3 rounded-xl transition-all duration-300",
-                      isActive 
-                        ? "text-black" 
-                        : "text-black hover:text-gray-500"
-                    )}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Icon size={18} strokeWidth={2} />
-                    {isActive && (
-                      <motion.div
-                        layoutId="mobile-expanded-pill-bg"
-                        className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-xl border border-black/40"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                  </motion.button>
-                )
-              })}
-              
-              <motion.button
-                onClick={() => setIsMenuOpen(false)}
-                className="p-3 rounded-xl text-black hover:text-gray-500 transition-colors"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <X size={18} strokeWidth={2} />
-              </motion.button>
+          {isCollapsed && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="w-9 h-9 bg-black/20 rounded-lg flex items-center justify-center mx-auto shadow-sm"
+            >
+              <span className="text-black font-bold text-base">D</span>
             </motion.div>
           )}
+
+          {/* Desktop collapse button */}
+          <motion.button
+            onClick={toggleCollapse}
+            className="hidden md:flex p-1.5 rounded-md hover:bg-black/10 transition-all duration-200"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="h-4 w-4 text-black/60" />
+            ) : (
+              <ChevronLeft className="h-4 w-4 text-black/60" />
+            )}
+          </motion.button>
         </div>
-      </motion.nav>
+
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-6 overflow-y-auto">
+          <ul className="space-y-2">
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeItem === item.id;
+
+              return (
+                <li key={item.id}>
+                  <motion.button
+                    onClick={() => handleItemClick(item.id)}
+                    className={`
+                      w-full flex items-center space-x-3 px-3 py-3 rounded-xl text-left transition-all duration-200 group
+                      ${isActive
+                        ? "bg-black/20 text-black"
+                        : "text-black/70 hover:bg-black/10 hover:text-black"
+                      }
+                      ${isCollapsed ? "justify-center px-2" : ""}
+                    `}
+                    whileHover={{ 
+                      scale: 1.02,
+                      backgroundColor: isActive ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.15)"
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    title={isCollapsed ? item.name : undefined}
+                  >
+                    <motion.div 
+                      className="flex items-center justify-center min-w-[24px]"
+                                             whileHover={{ rotate: isActive ? 0 : 10 }}
+                       transition={{ type: "spring" as const, stiffness: 400, damping: 10 }}
+                    >
+                      <Icon
+                        className={`
+                          h-5 w-5 flex-shrink-0
+                          ${isActive 
+                            ? "text-black" 
+                            : "text-black/60 group-hover:text-black"
+                          }
+                        `}
+                      />
+                    </motion.div>
+                    
+                    <motion.div 
+                      className="flex items-center justify-between w-full"
+                      variants={itemTextVariants}
+                    >
+                      <span className={`text-sm ${isActive ? "font-medium" : "font-normal"}`}>{item.name}</span>
+                    </motion.div>
+                  </motion.button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Bottom section */}
+        <div className="mt-auto border-t border-black/20 p-4">
+          <motion.div 
+            className={`text-center ${isCollapsed ? 'px-2' : 'px-3'}`}
+            variants={itemTextVariants}
+          >
+            <p className="text-xs text-black/50">Ultra Modern Nav</p>
+          </motion.div>
+        </div>
+      </motion.div>
     </>
-  )
+  );
 } 
