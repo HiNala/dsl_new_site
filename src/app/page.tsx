@@ -1,3 +1,5 @@
+'use client'
+
 import Spline from '@splinetool/react-spline/next';
 import { motion } from 'framer-motion';
 
