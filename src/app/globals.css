@@ -1,74 +1,4 @@
-@import "tailwindcss/preflight";
 @import "tailwindcss";
-
-/* Animated border boxes for D, S, L letters */
-.letter-box {
-  position: relative;
-  display: inline-block;
-  padding: 6px 10px;
-  border: 1px solid #D1D5DB;
-  background: #F8F9FA;
-  box-sizing: border-box;
-}
-
-.letter-box::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #4A90E2;
-  transform-origin: left;
-  animation: borderSweep 3s ease-in-out infinite;
-}
-
-.letter-box::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 1px;
-  height: 100%;
-  background: #4A90E2;
-  transform-origin: top;
-  animation: borderSweep 3s ease-in-out infinite;
-  animation-delay: 0.75s;
-}
-
-@keyframes borderSweep {
-  0%, 100% {
-    transform: scaleX(0);
-    opacity: 1;
-  }
-  15% {
-    transform: scaleX(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scaleX(1);
-    opacity: 0.3;
-  }
-  85% {
-    transform: scaleX(0);
-    opacity: 1;
-  }
-}
-
-.border-beam-d .letter-box::before,
-.border-beam-d .letter-box::after {
-  animation-delay: 0s, 0.75s;
-}
-
-.border-beam-s .letter-box::before,
-.border-beam-s .letter-box::after {
-  animation-delay: 1.3s, 2.05s;
-}
-
-.border-beam-l .letter-box::before,
-.border-beam-l .letter-box::after {
-  animation-delay: 2.6s, 3.35s;
-}
 
 :root {
   --background: #ffffff;
@@ -93,4 +23,39 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Enhanced smooth scrolling and snap behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+/* Smooth scroll for section transitions */
+section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Custom scrollbar for better UX */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4A90E2;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #357abd;
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
