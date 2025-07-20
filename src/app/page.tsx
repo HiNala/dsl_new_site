@@ -38,8 +38,8 @@ export default function Home() {
             Digital Studio Labs is a San Francisco-based venture studio that 
             invests in founders and builds companies in the creator economy. 
             We believe in the value of what can't be measured: traits like 
-            creativity, authenticity, and community. We're builders and 
-            investors with a shared vision of the future that is driven by 
+            creativity, authenticity, and community. We are builders dreamers 
+            artists & engineers with a shared vision of the future that is driven by 
             creators and innovation.
           </p>
         </div>
