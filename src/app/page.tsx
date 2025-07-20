@@ -5,14 +5,14 @@ export default function Home() {
     <div className="relative w-full min-h-screen">
       
       {/* Header Letters - spread across full viewport width */}
-      <div className="fixed top-0 left-0 right-0 h-[120px] flex justify-between items-center px-8">
+      <div className="fixed top-0 left-0 right-0 h-[100px] flex justify-between items-center px-[32px] bg-[#F8F9FA] z-10">
         {brandLetters.map((letter, index) => {
           // First letters: D (index 0), S (index 7), L (index 13)
           const isFirstLetter = index === 0 || index === 7 || index === 13;
           return (
             <span 
               key={index}
-              className={`text-[24px] ${isFirstLetter ? 'font-medium underline decoration-1 underline-offset-2 decoration-[#4A90E2]/30' : 'font-light'}`}
+              className={`text-[20px] ${isFirstLetter ? 'font-medium underline decoration-1 underline-offset-2 decoration-[#4A90E2]/30' : 'font-light'}`}
             >
               {letter}
             </span>
@@ -21,11 +21,11 @@ export default function Home() {
       </div>
 
       {/* Main content area with proper top margin */}
-      <div className="pt-[120px] relative min-h-screen">
+      <div className="pt-[100px] relative min-h-screen">
         
         {/* Main Headline - positioned like immeasurable.com */}
-        <div className="absolute left-8 top-[100px]">
-          <h1 className="text-[72px] font-light leading-[0.95] max-w-[800px]">
+        <div className="absolute left-[32px] top-[80px]">
+          <h1 className="text-[84px] font-light leading-[0.9] max-w-[700px]">
             We believe in the<br />
             value of what can't<br />
             be measured.
@@ -33,8 +33,8 @@ export default function Home() {
         </div>
 
         {/* Body Text Paragraph - positioned on right side like reference */}
-        <div className="absolute right-8 top-[400px] w-[400px]">
-          <p className="text-[16px] font-normal leading-[1.6]">
+        <div className="absolute right-[64px] top-[520px] w-[380px]">
+          <p className="text-[16px] font-normal leading-[1.5]">
             Digital Studio Labs is a San Francisco-based venture studio that 
             invests in founders and builds companies in the creator economy. 
             We believe in the value of what can't be measured: traits like 
@@ -45,8 +45,8 @@ export default function Home() {
         </div>
 
         {/* Navigation - positioned in bottom left like reference */}
-        <nav className="absolute left-8 bottom-16">
-          <ul className="space-y-4">
+        <nav className="absolute left-[32px] bottom-[64px]">
+          <ul className="space-y-[8px]">
             <li><a href="#" className="text-[16px] font-normal hover:opacity-70 transition-opacity">Home</a></li>
             <li><a href="#" className="text-[16px] font-normal hover:opacity-70 transition-opacity">Companies</a></li>
             <li><a href="#" className="text-[16px] font-normal hover:opacity-70 transition-opacity">About</a></li>
