@@ -308,6 +308,205 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
   );
 };
 
+interface ImageMosaicProps {
+  className?: string;
+}
+
+const DESIGN_IMAGES = [
+  // Left column images (8 total, 3 portrait)
+  {
+    src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&auto=format&fit=crop&q=80",
+    alt: "Modern architecture",
+    aspectRatio: "aspect-[4/3]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80",
+    alt: "Interior design",
+    aspectRatio: "aspect-[3/4]", // portrait
+  },
+  {
+    src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&auto=format&fit=crop&q=80",
+    alt: "Minimalist design",
+    aspectRatio: "aspect-[16/9]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?w=600&auto=format&fit=crop&q=80",
+    alt: "Product design",
+    aspectRatio: "aspect-[3/4]", // portrait
+  },
+  {
+    src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&auto=format&fit=crop&q=80",
+    alt: "Graphic design",
+    aspectRatio: "aspect-[4/3]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&auto=format&fit=crop&q=80",
+    alt: "UI design",
+    aspectRatio: "aspect-[3/4]", // portrait
+  },
+  {
+    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=80",
+    alt: "Brand design",
+    aspectRatio: "aspect-[5/3]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=80",
+    alt: "Web design",
+    aspectRatio: "aspect-[4/3]", // landscape
+  },
+];
+
+const RIGHT_COLUMN_IMAGES = [
+  // Right column images (8 total, 2 portrait)
+  {
+    src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&auto=format&fit=crop&q=80",
+    alt: "Creative workspace",
+    aspectRatio: "aspect-[16/9]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=600&auto=format&fit=crop&q=80",
+    alt: "Design tools",
+    aspectRatio: "aspect-[3/4]", // portrait
+  },
+  {
+    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&auto=format&fit=crop&q=80",
+    alt: "Typography",
+    aspectRatio: "aspect-[4/3]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&auto=format&fit=crop&q=80",
+    alt: "Color palette",
+    aspectRatio: "aspect-[3/4]", // portrait
+  },
+  {
+    src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&auto=format&fit=crop&q=80",
+    alt: "Digital art",
+    aspectRatio: "aspect-[5/3]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=800&auto=format&fit=crop&q=80",
+    alt: "Design process",
+    aspectRatio: "aspect-[4/3]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=800&auto=format&fit=crop&q=80",
+    alt: "Creative concept",
+    aspectRatio: "aspect-[16/9]", // landscape
+  },
+  {
+    src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&auto=format&fit=crop&q=80",
+    alt: "Design inspiration",
+    aspectRatio: "aspect-[4/3]", // landscape
+  },
+];
+
+const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
+  const leftColumnRef = React.useRef<HTMLDivElement>(null);
+  const rightColumnRef = React.useRef<HTMLDivElement>(null);
+  const leftScrollY = React.useRef(0);
+  const rightScrollY = React.useRef(0);
+
+  React.useEffect(() => {
+    const animate = () => {
+      // Smooth infinite scrolling
+      leftScrollY.current += 0.5; // scroll down
+      rightScrollY.current -= 0.5; // scroll up
+
+      if (leftColumnRef.current) {
+        const leftHeight = leftColumnRef.current.scrollHeight / 2;
+        if (leftScrollY.current >= leftHeight) {
+          leftScrollY.current = 0;
+        }
+        leftColumnRef.current.style.transform = `translateY(-${leftScrollY.current}px)`;
+      }
+
+      if (rightColumnRef.current) {
+        const rightHeight = rightColumnRef.current.scrollHeight / 2;
+        if (Math.abs(rightScrollY.current) >= rightHeight) {
+          rightScrollY.current = 0;
+        }
+        rightColumnRef.current.style.transform = `translateY(${rightScrollY.current}px)`;
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  }, []);
+
+  return (
+    <div className={cn("w-full h-full overflow-hidden bg-transparent", className)}>
+      <div className="flex h-full gap-3">
+        {/* Left Column - Scrolling Down */}
+        <div className="w-1/2 overflow-hidden">
+          <motion.div
+            ref={leftColumnRef}
+            className="flex flex-col gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            {/* Duplicate images for infinite scroll */}
+            {[...DESIGN_IMAGES, ...DESIGN_IMAGES].map((image, index) => (
+              <motion.div
+                key={`left-${index}`}
+                className={cn(
+                  "relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300",
+                  image.aspectRatio,
+                  "w-full"
+                )}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Right Column - Scrolling Up */}
+        <div className="w-1/2 overflow-hidden">
+          <motion.div
+            ref={rightColumnRef}
+            className="flex flex-col gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
+            {/* Duplicate images for infinite scroll */}
+            {[...RIGHT_COLUMN_IMAGES, ...RIGHT_COLUMN_IMAGES].map((image, index) => (
+              <motion.div
+                key={`right-${index}`}
+                className={cn(
+                  "relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300",
+                  image.aspectRatio,
+                  "w-full"
+                )}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
@@ -559,36 +758,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Image - San Francisco Downtown */}
-          <div className="absolute left-[45vw] top-[10rem] w-[320px] h-[320px]">
-            <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg bg-black/5">
-              <img 
-                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center&auto=format&q=80" 
-                alt="San Francisco Downtown Skyline"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  // Fallback if image fails to load
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const parent = target.parentElement;
-                  if (parent) {
-                    parent.innerHTML = `
-                      <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <div class="text-center space-y-2">
-                          <div class="w-16 h-16 bg-black/10 rounded-full mx-auto flex items-center justify-center">
-                            <div class="w-8 h-8 bg-black/20 rounded-lg"></div>
-                          </div>
-                          <p class="text-black/40 text-sm font-light">
-                            San Francisco<br />
-                            Downtown
-                          </p>
-                        </div>
-                      </div>
-                    `;
-                  }
-                }}
-              />
-            </div>
+          {/* Dynamic Image Mosaic */}
+          <div className="absolute left-[42vw] top-[8rem] w-[450px] h-[400px]">
+            <ImageMosaic />
           </div>
 
         </div>
