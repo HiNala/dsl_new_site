@@ -621,9 +621,9 @@ export default function Home() {
                 </p>
                 
                 <p className="text-[16px] font-light text-black/80 leading-[1.6]">
-                 From breakthrough startups to Fortune 500 enterprises, we bring together 
-                 strategic thinking, cutting-edge technology, and exceptional design to 
-                 transform ambitious ideas into reality.
+                  From startups to Fortune 500 enterprises, we bring together strategic 
+                  thinking, cutting-edge technology, and exceptional design to transform 
+                  ambitious ideas into reality.
                 </p>
                 
                 <div className="space-y-[1rem]">
