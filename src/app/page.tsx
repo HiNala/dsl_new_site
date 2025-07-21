@@ -84,19 +84,44 @@ interface ProximityGradientTextProps {
 const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
   children,
   className,
-  colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#ffd93d", "#ff6b6b"],
-  baseSpeed = 8,
-  proximityRadius = 200,
+  colors = ["#3b82f6", "#ffffff", "#ec4899", "#fbbf24", "#3b82f6"], // Blue, white, pink, yellow
+  baseSpeed = 3, // Much faster base speed
+  proximityRadius = 400, // Larger detection radius
 }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [trailingPos, setTrailingPos] = useState({ x: 0, y: 0 });
   const [isInProximity, setIsInProximity] = useState(false);
   const [proximityFactor, setProximityFactor] = useState(0);
   const [randomSpeedMultiplier, setRandomSpeedMultiplier] = useState(1);
+  const [hoverTime, setHoverTime] = useState(0);
+  const [isVeryClose, setIsVeryClose] = useState(false);
+
+  React.useEffect(() => {
+    let hoverTimer: NodeJS.Timeout;
+    
+    if (isVeryClose) {
+      hoverTimer = setInterval(() => {
+        setHoverTime(prev => Math.min(prev + 0.1, 5)); // Max 5 seconds
+      }, 100);
+    } else {
+      setHoverTime(0);
+    }
+
+    return () => {
+      if (hoverTimer) clearInterval(hoverTimer);
+    };
+  }, [isVeryClose]);
 
   React.useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
+      
+      // Trailing effect - smoothly follow cursor
+      setTrailingPos(prev => ({
+        x: prev.x + (e.clientX - prev.x) * 0.15,
+        y: prev.y + (e.clientY - prev.y) * 0.15,
+      }));
       
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
@@ -108,7 +133,10 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
         );
         
         const isClose = distance < proximityRadius;
+        const veryClose = distance < 100; // Very close for swirl effect
+        
         setIsInProximity(isClose);
+        setIsVeryClose(veryClose);
         
         if (isClose) {
           // Calculate proximity factor (0 = far, 1 = very close)
@@ -116,8 +144,8 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
           setProximityFactor(factor);
           
           // Add randomness that changes based on proximity
-          const randomness = 0.5 + Math.random() * 1.5; // 0.5x to 2x speed
-          const proximityBoost = 1 + factor * 2; // Up to 3x speed when very close
+          const randomness = 0.3 + Math.random() * 1.8; // Faster variations
+          const proximityBoost = 1 + factor * 3; // Even more speed boost
           setRandomSpeedMultiplier(randomness * proximityBoost);
         } else {
           setProximityFactor(0);
@@ -132,10 +160,20 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
 
   const currentSpeed = baseSpeed / randomSpeedMultiplier;
   
-  const maskRadius = Math.max(60, proximityRadius * proximityFactor * 0.8);
+  // Much larger mask radius
+  const maskRadius = Math.max(150, proximityRadius * proximityFactor * 1.2);
+  const trailingRadius = Math.max(100, maskRadius * 0.6);
+  
+  // Dynamic swirl intensity based on hover time
+  const swirlIntensity = Math.min(hoverTime * 20, 100); // Gradual increase
   
   const gradientStyle = {
     backgroundImage: `linear-gradient(45deg, ${colors.join(", ")})`,
+    backgroundSize: "400% 400%", // Larger for more dynamic movement
+  };
+
+  const swirlGradientStyle = {
+    backgroundImage: `conic-gradient(from ${swirlIntensity}deg, ${colors.join(", ")})`,
     backgroundSize: "300% 300%",
   };
 
@@ -146,22 +184,76 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
         {children}
       </h2>
       
-      {/* Animated gradient text with cursor mask */}
+      {/* Primary gradient text with main cursor mask */}
       <motion.div
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
           WebkitMask: containerRef.current 
-            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 70%, transparent 100%)`
+            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
             : 'none',
           mask: containerRef.current 
-            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 70%, transparent 100%)`
+            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
             : 'none',
         }}
         animate={{
           opacity: isInProximity ? 1 : 0,
         }}
         transition={{
-          duration: 0.3,
+          duration: 0.2,
+          ease: "easeOut"
+        }}
+      >
+        <motion.h2
+          className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-transparent"
+          style={{
+            ...(isVeryClose ? swirlGradientStyle : gradientStyle),
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+          }}
+          animate={isVeryClose ? {
+            // Swirl animation when very close
+            backgroundPosition: [
+              "0% 0%", 
+              "100% 100%", 
+              "0% 200%",
+              "100% 0%",
+              "0% 0%"
+            ],
+            rotate: [0, swirlIntensity * 0.1, 0],
+          } : {
+            // Regular linear movement
+            backgroundPosition: [
+              "0% 50%", 
+              "100% 50%", 
+              "0% 50%"
+            ],
+          }}
+          transition={{
+            duration: currentSpeed,
+            repeat: Infinity,
+            ease: isVeryClose ? "easeInOut" : "linear",
+          }}
+        >
+          {children}
+        </motion.h2>
+      </motion.div>
+
+      {/* Trailing gradient effect */}
+      <motion.div
+        className="absolute inset-0 z-19 pointer-events-none"
+        style={{
+          WebkitMask: containerRef.current 
+            ? `radial-gradient(circle ${trailingRadius}px at ${trailingPos.x - containerRef.current.getBoundingClientRect().left}px ${trailingPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 40%, transparent 100%)`
+            : 'none',
+          mask: containerRef.current 
+            ? `radial-gradient(circle ${trailingRadius}px at ${trailingPos.x - containerRef.current.getBoundingClientRect().left}px ${trailingPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 40%, transparent 100%)`
+            : 'none',
+        }}
+        animate={{
+          opacity: isInProximity ? 0.4 : 0,
+        }}
+        transition={{
+          duration: 0.4,
           ease: "easeOut"
         }}
       >
@@ -174,38 +266,44 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
           }}
           animate={{
             backgroundPosition: [
-              "0% 50%", 
-              "100% 50%", 
-              "0% 50%"
+              "50% 0%", 
+              "150% 100%", 
+              "50% 0%"
             ],
           }}
           transition={{
-            duration: currentSpeed,
+            duration: currentSpeed * 1.5,
             repeat: Infinity,
             ease: "linear",
           }}
         >
           {children}
         </motion.h2>
-        
-        {/* Dynamic shimmer effect */}
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,${0.2 + proximityFactor * 0.3}) 50%, transparent 100%)`,
-            transform: "translateX(-100%)",
-          }}
-          animate={isInProximity ? {
-            transform: ["translateX(-100%)", "translateX(100%)"],
-          } : {}}
-          transition={{
-            duration: currentSpeed * 0.6,
-            repeat: isInProximity ? Infinity : 0,
-            repeatDelay: currentSpeed * 0.3,
-            ease: "easeInOut",
-          }}
-        />
       </motion.div>
+      
+      {/* Enhanced shimmer effect */}
+      <motion.div
+        className="absolute inset-0 z-21 pointer-events-none"
+        style={{
+          WebkitMask: containerRef.current 
+            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
+            : 'none',
+          mask: containerRef.current 
+            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
+            : 'none',
+          background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,${0.3 + proximityFactor * 0.4 + hoverTime * 0.1}) 50%, transparent 100%)`,
+          transform: "translateX(-100%)",
+        }}
+        animate={isInProximity ? {
+          transform: ["translateX(-100%)", "translateX(100%)"],
+        } : {}}
+        transition={{
+          duration: currentSpeed * 0.4, // Faster shimmer
+          repeat: isInProximity ? Infinity : 0,
+          repeatDelay: currentSpeed * 0.2,
+          ease: "easeInOut",
+        }}
+      />
     </div>
   );
 };
@@ -430,9 +528,9 @@ export default function Home() {
               {/* Animated Headline */}
               <div className="mb-[3rem] h-[80px] relative">
                 <ProximityGradientText
-                  colors={["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#ffd93d", "#ff6b6b"]}
-                  baseSpeed={6}
-                  proximityRadius={250}
+                  colors={["#3b82f6", "#ffffff", "#ec4899", "#fbbf24", "#3b82f6"]}
+                  baseSpeed={2}
+                  proximityRadius={500}
                 >
                   LET'S CREATE
                 </ProximityGradientText>
