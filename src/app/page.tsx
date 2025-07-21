@@ -275,6 +275,75 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section 4: Contact/Partnership */}
+      <section className="relative min-h-screen bg-white" style={{ scrollSnapAlign: 'start' }}>
+        <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
+          
+          {/* D/S/L Stacked Letters - Bottom Left */}
+          <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center">
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">D</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">S</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">L</span>
+          </div>
+
+          {/* Main Content - Left Side */}
+          <div className="absolute left-[4vw] top-[12rem]">
+            <div className="max-w-[50vw]">
+              
+              {/* Animated Headline */}
+              <div className="mb-[3rem]">
+                <TextSplit
+                  className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter text-left"
+                  topClassName="text-black"
+                  bottomClassName="text-black/40"
+                  maxMove={80}
+                  falloff={0.25}
+                >
+                  LET'S CREATE
+                </TextSplit>
+              </div>
+
+              {/* Supporting Text */}
+              <div className="space-y-[2rem] max-w-[400px]">
+                <p className="text-[18px] font-light text-black/80 leading-[1.6]">
+                  Ready to build something extraordinary? We partner with visionary founders 
+                  and companies to create digital experiences that redefine what's possible.
+                </p>
+                
+                <div className="space-y-[1rem]">
+                  <p className="text-[16px] font-medium text-black">
+                    Start the conversation
+                  </p>
+                  <a 
+                    href="mailto:hello@digitalstudiolabs.com"
+                    className="text-[16px] font-normal text-black/70 hover:text-black transition-colors duration-300 border-b border-black/20 hover:border-black/40"
+                  >
+                    hello@digitalstudiolabs.com
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Right Side - Image Anchor */}
+          <div className="absolute right-[4vw] top-[12rem] w-[380px] h-[500px]">
+            <div className="w-full h-full bg-black/5 rounded-lg flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-black/10 rounded-full mx-auto flex items-center justify-center">
+                  <div className="w-8 h-8 bg-black/20 rounded-lg"></div>
+                </div>
+                <p className="text-black/40 text-sm">
+                  Professional Image<br />
+                  Placeholder
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   );
 }
