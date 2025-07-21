@@ -73,6 +73,86 @@ const TextSplit: React.FC<TextSplitProps> = ({
   );
 };
 
+interface RevealTextProps {
+  text: string;
+  className?: string;
+  duration?: number;
+}
+
+const RevealText: React.FC<RevealTextProps> = ({
+  text,
+  className,
+  duration = 0.4,
+}) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [ripplePosition, setRipplePosition] = useState({ cx: "50%", cy: "50%" });
+
+  React.useEffect(() => {
+    if (containerRef.current && cursor.x !== null && cursor.y !== null) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const cxPercentage = ((cursor.x - containerRect.left) / containerRect.width) * 100;
+      const cyPercentage = ((cursor.y - containerRect.top) / containerRect.height) * 100;
+
+      setRipplePosition({
+        cx: `${Math.max(0, Math.min(100, cxPercentage))}%`,
+        cy: `${Math.max(0, Math.min(100, cyPercentage))}%`,
+      });
+    }
+  }, [cursor]);
+
+  return (
+    <div ref={containerRef} className={cn("relative w-full h-full", className)}>
+      {/* Base text - visible by default with low opacity */}
+      <h2 className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-black/20 relative z-10">
+        {text}
+      </h2>
+      
+      {/* Interactive reveal overlay */}
+      <div 
+        className="absolute inset-0 z-20"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
+        style={{ cursor: 'none' }}
+      >
+        <motion.div
+          className="absolute inset-0 bg-black"
+          style={{
+            WebkitMask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
+            mask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
+          }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+          }}
+          transition={{
+            duration: 0.2,
+            ease: "easeOut"
+          }}
+        />
+        
+        <motion.h2 
+          className="absolute inset-0 text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-black"
+          style={{
+            WebkitMask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
+            mask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
+          }}
+          animate={{
+            opacity: isHovered ? 1 : 0,
+          }}
+          transition={{
+            duration: 0.2,
+            ease: "easeOut"
+          }}
+        >
+          {text}
+        </motion.h2>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
@@ -291,16 +371,11 @@ export default function Home() {
             <div className="max-w-[35vw]">
               
               {/* Animated Headline */}
-              <div className="mb-[3rem]">
-                <TextSplit
-                  className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left"
-                  topClassName="text-black"
-                  bottomClassName="text-black/40"
-                  maxMove={80}
-                  falloff={0.25}
-                >
-                  LET'S CREATE
-                </TextSplit>
+              <div className="mb-[3rem] h-[80px] relative">
+                <RevealText
+                  text="LET'S CREATE"
+                  duration={0.3}
+                />
               </div>
 
               {/* Supporting Text */}
