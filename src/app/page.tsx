@@ -461,18 +461,35 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Side - Image Anchor (better positioned) */}
-          <div className="absolute right-[12vw] top-[12rem] w-[280px] h-[350px]">
-            <div className="w-full h-full bg-black/5 rounded-lg flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <div className="w-12 h-12 bg-black/10 rounded-full mx-auto flex items-center justify-center">
-                  <div className="w-6 h-6 bg-black/20 rounded-lg"></div>
-                </div>
-                <p className="text-black/40 text-xs">
-                  Professional Image<br />
-                  Placeholder
-                </p>
-              </div>
+          {/* Image - San Francisco Downtown */}
+          <div className="absolute left-[45vw] top-[10rem] w-[320px] h-[320px]">
+            <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg bg-black/5">
+              <img 
+                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center&auto=format&q=80" 
+                alt="San Francisco Downtown Skyline"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback if image fails to load
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    parent.innerHTML = `
+                      <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                        <div class="text-center space-y-2">
+                          <div class="w-16 h-16 bg-black/10 rounded-full mx-auto flex items-center justify-center">
+                            <div class="w-8 h-8 bg-black/20 rounded-lg"></div>
+                          </div>
+                          <p class="text-black/40 text-sm font-light">
+                            San Francisco<br />
+                            Downtown
+                          </p>
+                        </div>
+                      </div>
+                    `;
+                  }
+                }}
+              />
             </div>
           </div>
 
