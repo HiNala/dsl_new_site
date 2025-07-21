@@ -213,7 +213,7 @@ export default function Home() {
           </div>
 
           {/* Our Work Headline - Right Side (mirroring About Us) */}
-          <div className="absolute right-[4vw] top-[8rem]">
+          <div className="absolute right-[4vw] top-[12rem]">
             <div className="text-right mb-[3rem]">
               <TextSplit
                 className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
@@ -228,7 +228,7 @@ export default function Home() {
           </div>
 
           {/* Work Content Grid - Exactly mirroring About Us but right-aligned */}
-          <div className="absolute right-[4vw] top-[17rem] flex justify-end">
+          <div className="absolute right-[4vw] top-[21rem] flex justify-end">
             <div className="max-w-[75vw]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
               
