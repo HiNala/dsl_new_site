@@ -286,14 +286,14 @@ export default function Home() {
             <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">L</span>
           </div>
 
-          {/* Main Content - Left Side */}
+          {/* Main Content - Left Side (narrower to avoid image overlap) */}
           <div className="absolute left-[4vw] top-[12rem]">
-            <div className="max-w-[50vw]">
+            <div className="max-w-[35vw]">
               
               {/* Animated Headline */}
               <div className="mb-[3rem]">
                 <TextSplit
-                  className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter text-left"
+                  className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left"
                   topClassName="text-black"
                   bottomClassName="text-black/40"
                   maxMove={80}
@@ -304,19 +304,19 @@ export default function Home() {
               </div>
 
               {/* Supporting Text */}
-              <div className="space-y-[2rem] max-w-[400px]">
-                <p className="text-[18px] font-light text-black/80 leading-[1.6]">
+              <div className="space-y-[2rem] max-w-[320px]">
+                <p className="text-[16px] font-light text-black/80 leading-[1.6]">
                   Ready to build something extraordinary? We partner with visionary founders 
                   and companies to create digital experiences that redefine what's possible.
                 </p>
                 
                 <div className="space-y-[1rem]">
-                  <p className="text-[16px] font-medium text-black">
+                  <p className="text-[14px] font-medium text-black">
                     Start the conversation
                   </p>
                   <a 
                     href="mailto:hello@digitalstudiolabs.com"
-                    className="text-[16px] font-normal text-black/70 hover:text-black transition-colors duration-300 border-b border-black/20 hover:border-black/40"
+                    className="text-[14px] font-normal text-black/70 hover:text-black transition-colors duration-300 border-b border-black/20 hover:border-black/40"
                   >
                     hello@digitalstudiolabs.com
                   </a>
@@ -326,14 +326,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Side - Image Anchor (moved left to avoid D/S/L overlap) */}
-          <div className="absolute right-[8vw] top-[12rem] w-[300px] h-[400px]">
+          {/* Right Side - Image Anchor (better positioned) */}
+          <div className="absolute right-[12vw] top-[12rem] w-[280px] h-[350px]">
             <div className="w-full h-full bg-black/5 rounded-lg flex items-center justify-center">
               <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-black/10 rounded-full mx-auto flex items-center justify-center">
-                  <div className="w-8 h-8 bg-black/20 rounded-lg"></div>
+                <div className="w-12 h-12 bg-black/10 rounded-full mx-auto flex items-center justify-center">
+                  <div className="w-6 h-6 bg-black/20 rounded-lg"></div>
                 </div>
-                <p className="text-black/40 text-sm">
+                <p className="text-black/40 text-xs">
                   Professional Image<br />
                   Placeholder
                 </p>
@@ -355,29 +355,29 @@ export default function Home() {
             <span className="text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8]">L</span>
           </div>
 
-          {/* Main Footer Content */}
-          <div className="absolute left-[4vw] right-[4vw] top-[12rem]">
+          {/* Main Footer Content (moved right to avoid D/S/L overlap) */}
+          <div className="absolute left-[16vw] right-[4vw] top-[8rem]">
             
             {/* Footer Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-[3rem] max-w-[90vw]">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-[2.5rem] max-w-[80vw]">
               
               {/* Column 1: Services */}
               <div className="space-y-[1rem]">
-                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Services</h3>
-                <div className="space-y-[0.75rem]">
-                  <a href="/web-development" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Services</h3>
+                <div className="space-y-[0.6rem]">
+                  <a href="/web-development" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Web Development
                   </a>
-                  <a href="/mobile-apps" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/mobile-apps" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Mobile Applications
                   </a>
-                  <a href="/design" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/design" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     UI/UX Design
                   </a>
-                  <a href="/strategy" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/strategy" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Digital Strategy
                   </a>
-                  <a href="/branding" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/branding" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Brand Identity
                   </a>
                 </div>
@@ -385,21 +385,21 @@ export default function Home() {
 
               {/* Column 2: Solutions */}
               <div className="space-y-[1rem]">
-                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Solutions</h3>
-                <div className="space-y-[0.75rem]">
-                  <a href="/startups" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Solutions</h3>
+                <div className="space-y-[0.6rem]">
+                  <a href="/startups" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Startups
                   </a>
-                  <a href="/enterprise" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/enterprise" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Enterprise
                   </a>
-                  <a href="/saas" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/saas" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     SaaS Products
                   </a>
-                  <a href="/ecommerce" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/ecommerce" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     E-commerce
                   </a>
-                  <a href="/fintech" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/fintech" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Fintech
                   </a>
                 </div>
@@ -407,21 +407,21 @@ export default function Home() {
 
               {/* Column 3: Company */}
               <div className="space-y-[1rem]">
-                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Company</h3>
-                <div className="space-y-[0.75rem]">
-                  <a href="/about" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Company</h3>
+                <div className="space-y-[0.6rem]">
+                  <a href="/about" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     About Us
                   </a>
-                  <a href="/team" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/team" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Our Team
                   </a>
-                  <a href="/careers" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/careers" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Careers
                   </a>
-                  <a href="/case-studies" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/case-studies" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Case Studies
                   </a>
-                  <a href="/contact" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                  <a href="/contact" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
                     Contact
                   </a>
                 </div>
@@ -429,21 +429,21 @@ export default function Home() {
 
               {/* Column 4: Contact */}
               <div className="space-y-[1rem]">
-                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Connect</h3>
-                <div className="space-y-[1rem]">
+                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Connect</h3>
+                <div className="space-y-[0.8rem]">
                   <a 
                     href="mailto:hello@digitalstudiolabs.com"
-                    className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300"
+                    className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300"
                   >
                     hello@digitalstudiolabs.com
                   </a>
                   <a 
                     href="tel:+15551234567"
-                    className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300"
+                    className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300"
                   >
                     +1 (555) 123-4567
                   </a>
-                  <p className="text-[14px] font-light text-white/50 leading-[1.5]">
+                  <p className="text-[13px] font-light text-white/50 leading-[1.4]">
                     San Francisco, CA<br />
                     Innovation District
                   </p>
@@ -453,23 +453,23 @@ export default function Home() {
             </div>
 
             {/* Bottom Section */}
-            <div className="absolute top-[25rem] left-0 right-0 border-t border-white/10 pt-[2rem]">
+            <div className="absolute top-[21rem] left-0 right-0 border-t border-white/10 pt-[2rem]">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                 
                 {/* Copyright */}
-                <p className="text-[14px] font-light text-white/50">
+                <p className="text-[12px] font-light text-white/50">
                   © 2024 Digital Studio Labs. All rights reserved.
                 </p>
                 
                 {/* Legal Links */}
-                <div className="flex space-x-6">
-                  <a href="/privacy" className="text-[14px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
+                <div className="flex space-x-4">
+                  <a href="/privacy" className="text-[12px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
                     Privacy Policy
                   </a>
-                  <a href="/terms" className="text-[14px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
+                  <a href="/terms" className="text-[12px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
                     Terms of Service
                   </a>
-                  <a href="/cookies" className="text-[14px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
+                  <a href="/cookies" className="text-[12px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
                     Cookies
                   </a>
                 </div>
