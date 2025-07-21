@@ -85,43 +85,17 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
   children,
   className,
   colors = ["#3b82f6", "#ffffff", "#ec4899", "#fbbf24", "#3b82f6"], // Blue, white, pink, yellow
-  baseSpeed = 3, // Much faster base speed
+  baseSpeed = 8, // Slower, elegant base speed
   proximityRadius = 400, // Larger detection radius
 }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [trailingPos, setTrailingPos] = useState({ x: 0, y: 0 });
   const [isInProximity, setIsInProximity] = useState(false);
   const [proximityFactor, setProximityFactor] = useState(0);
-  const [randomSpeedMultiplier, setRandomSpeedMultiplier] = useState(1);
-  const [hoverTime, setHoverTime] = useState(0);
-  const [isVeryClose, setIsVeryClose] = useState(false);
-
-  React.useEffect(() => {
-    let hoverTimer: NodeJS.Timeout;
-    
-    if (isVeryClose) {
-      hoverTimer = setInterval(() => {
-        setHoverTime(prev => Math.min(prev + 0.1, 5)); // Max 5 seconds
-      }, 100);
-    } else {
-      setHoverTime(0);
-    }
-
-    return () => {
-      if (hoverTimer) clearInterval(hoverTimer);
-    };
-  }, [isVeryClose]);
 
   React.useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
-      
-      // Trailing effect - smoothly follow cursor
-      setTrailingPos(prev => ({
-        x: prev.x + (e.clientX - prev.x) * 0.15,
-        y: prev.y + (e.clientY - prev.y) * 0.15,
-      }));
       
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
@@ -133,23 +107,15 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
         );
         
         const isClose = distance < proximityRadius;
-        const veryClose = distance < 100; // Very close for swirl effect
         
         setIsInProximity(isClose);
-        setIsVeryClose(veryClose);
         
         if (isClose) {
           // Calculate proximity factor (0 = far, 1 = very close)
           const factor = Math.max(0, 1 - (distance / proximityRadius));
           setProximityFactor(factor);
-          
-          // Add randomness that changes based on proximity
-          const randomness = 0.3 + Math.random() * 1.8; // Faster variations
-          const proximityBoost = 1 + factor * 3; // Even more speed boost
-          setRandomSpeedMultiplier(randomness * proximityBoost);
         } else {
           setProximityFactor(0);
-          setRandomSpeedMultiplier(1);
         }
       }
     };
@@ -158,23 +124,12 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [proximityRadius]);
 
-  const currentSpeed = baseSpeed / randomSpeedMultiplier;
-  
-  // Much larger mask radius
-  const maskRadius = Math.max(150, proximityRadius * proximityFactor * 1.2);
-  const trailingRadius = Math.max(100, maskRadius * 0.6);
-  
-  // Dynamic swirl intensity based on hover time
-  const swirlIntensity = Math.min(hoverTime * 20, 100); // Gradual increase
+  // Simple mask radius based on proximity
+  const maskRadius = Math.max(200, proximityRadius * proximityFactor);
   
   const gradientStyle = {
-    backgroundImage: `linear-gradient(45deg, ${colors.join(", ")})`,
-    backgroundSize: "400% 400%", // Larger for more dynamic movement
-  };
-
-  const swirlGradientStyle = {
-    backgroundImage: `conic-gradient(from ${swirlIntensity}deg, ${colors.join(", ")})`,
-    backgroundSize: "300% 300%",
+    backgroundImage: `linear-gradient(45deg, ${colors.join(", ")}, ${colors[0]})`,
+    backgroundSize: "400% 400%",
   };
 
   return (
@@ -184,7 +139,7 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
         {children}
       </h2>
       
-      {/* Primary gradient text with main cursor mask */}
+      {/* Animated gradient text with cursor mask - colors moving and swirling */}
       <motion.div
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
@@ -199,61 +154,7 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
           opacity: isInProximity ? 1 : 0,
         }}
         transition={{
-          duration: 0.2,
-          ease: "easeOut"
-        }}
-      >
-        <motion.h2
-          className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-transparent"
-          style={{
-            ...(isVeryClose ? swirlGradientStyle : gradientStyle),
-            backgroundClip: "text",
-            WebkitBackgroundClip: "text",
-          }}
-          animate={isVeryClose ? {
-            // Swirl animation when very close
-            backgroundPosition: [
-              "0% 0%", 
-              "100% 100%", 
-              "0% 200%",
-              "100% 0%",
-              "0% 0%"
-            ],
-            rotate: [0, swirlIntensity * 0.1, 0],
-          } : {
-            // Regular linear movement
-            backgroundPosition: [
-              "0% 50%", 
-              "100% 50%", 
-              "0% 50%"
-            ],
-          }}
-          transition={{
-            duration: currentSpeed,
-            repeat: Infinity,
-            ease: isVeryClose ? "easeInOut" : "linear",
-          }}
-        >
-          {children}
-        </motion.h2>
-      </motion.div>
-
-      {/* Trailing gradient effect */}
-      <motion.div
-        className="absolute inset-0 z-19 pointer-events-none"
-        style={{
-          WebkitMask: containerRef.current 
-            ? `radial-gradient(circle ${trailingRadius}px at ${trailingPos.x - containerRef.current.getBoundingClientRect().left}px ${trailingPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 40%, transparent 100%)`
-            : 'none',
-          mask: containerRef.current 
-            ? `radial-gradient(circle ${trailingRadius}px at ${trailingPos.x - containerRef.current.getBoundingClientRect().left}px ${trailingPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 40%, transparent 100%)`
-            : 'none',
-        }}
-        animate={{
-          opacity: isInProximity ? 0.4 : 0,
-        }}
-        transition={{
-          duration: 0.4,
+          duration: 0.3,
           ease: "easeOut"
         }}
       >
@@ -266,13 +167,16 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
           }}
           animate={{
             backgroundPosition: [
-              "50% 0%", 
-              "150% 100%", 
-              "50% 0%"
+              "0% 0%",
+              "100% 0%",
+              "100% 100%", 
+              "0% 100%",
+              "50% 50%",
+              "0% 0%"
             ],
           }}
           transition={{
-            duration: currentSpeed * 1.5,
+            duration: 12,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -280,30 +184,7 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
           {children}
         </motion.h2>
       </motion.div>
-      
-      {/* Enhanced shimmer effect */}
-      <motion.div
-        className="absolute inset-0 z-21 pointer-events-none"
-        style={{
-          WebkitMask: containerRef.current 
-            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
-            : 'none',
-          mask: containerRef.current 
-            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
-            : 'none',
-          background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,${0.3 + proximityFactor * 0.4 + hoverTime * 0.1}) 50%, transparent 100%)`,
-          transform: "translateX(-100%)",
-        }}
-        animate={isInProximity ? {
-          transform: ["translateX(-100%)", "translateX(100%)"],
-        } : {}}
-        transition={{
-          duration: currentSpeed * 0.4, // Faster shimmer
-          repeat: isInProximity ? Infinity : 0,
-          repeatDelay: currentSpeed * 0.2,
-          ease: "easeInOut",
-        }}
-      />
+
     </div>
   );
 };
@@ -315,42 +196,42 @@ interface ImageMosaicProps {
 const DESIGN_IMAGES = [
   // Left column images (8 total, 3 portrait)
   {
-    src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=600&fit=crop",
     alt: "Modern architecture",
     aspectRatio: "aspect-[4/3]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=800&fit=crop",
     alt: "Interior design",
     aspectRatio: "aspect-[3/4]", // portrait
   },
   {
-    src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop",
     alt: "Minimalist design",
     aspectRatio: "aspect-[16/9]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?w=600&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?w=600&h=800&fit=crop",
     alt: "Product design",
     aspectRatio: "aspect-[3/4]", // portrait
   },
   {
-    src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop",
     alt: "Graphic design",
     aspectRatio: "aspect-[4/3]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&h=800&fit=crop",
     alt: "UI design",
     aspectRatio: "aspect-[3/4]", // portrait
   },
   {
-    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=480&fit=crop",
     alt: "Brand design",
     aspectRatio: "aspect-[5/3]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop",
     alt: "Web design",
     aspectRatio: "aspect-[4/3]", // landscape
   },
@@ -359,42 +240,42 @@ const DESIGN_IMAGES = [
 const RIGHT_COLUMN_IMAGES = [
   // Right column images (8 total, 2 portrait)
   {
-    src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=800&h=450&fit=crop",
     alt: "Creative workspace",
     aspectRatio: "aspect-[16/9]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=600&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=600&h=800&fit=crop",
     alt: "Design tools",
     aspectRatio: "aspect-[3/4]", // portrait
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&h=600&fit=crop",
     alt: "Typography",
     aspectRatio: "aspect-[4/3]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&h=800&fit=crop",
     alt: "Color palette",
     aspectRatio: "aspect-[3/4]", // portrait
   },
   {
-    src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=480&fit=crop",
     alt: "Digital art",
     aspectRatio: "aspect-[5/3]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&h=600&fit=crop",
     alt: "Design process",
     aspectRatio: "aspect-[4/3]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1600607687920-4f2c19665e92?w=800&h=450&fit=crop",
     alt: "Creative concept",
     aspectRatio: "aspect-[16/9]", // landscape
   },
   {
-    src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=600&fit=crop",
     alt: "Design inspiration",
     aspectRatio: "aspect-[4/3]", // landscape
   },
@@ -408,24 +289,22 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
 
   React.useEffect(() => {
     const animate = () => {
-      // Smooth infinite scrolling
-      leftScrollY.current += 0.5; // scroll down
-      rightScrollY.current -= 0.5; // scroll up
+      // Smooth infinite scrolling - left travels down slowly, right travels up 10% faster
+      leftScrollY.current -= 0.3; // scroll up slowly  
+      rightScrollY.current += 0.33; // scroll down 10% faster than left
 
       if (leftColumnRef.current) {
         const leftHeight = leftColumnRef.current.scrollHeight / 2;
-        if (leftScrollY.current >= leftHeight) {
-          leftScrollY.current = 0;
-        }
+        // Continuous loop using modulo for seamless transition
+        leftScrollY.current = ((leftScrollY.current % leftHeight) + leftHeight) % leftHeight;
         leftColumnRef.current.style.transform = `translateY(-${leftScrollY.current}px)`;
       }
 
       if (rightColumnRef.current) {
         const rightHeight = rightColumnRef.current.scrollHeight / 2;
-        if (Math.abs(rightScrollY.current) >= rightHeight) {
-          rightScrollY.current = 0;
-        }
-        rightColumnRef.current.style.transform = `translateY(${rightScrollY.current}px)`;
+        // Continuous loop using modulo for seamless transition
+        rightScrollY.current = rightScrollY.current % rightHeight;
+        rightColumnRef.current.style.transform = `translateY(-${rightScrollY.current}px)`;
       }
 
       requestAnimationFrame(animate);
@@ -436,22 +315,22 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
 
   return (
     <div className={cn("w-full h-full overflow-hidden bg-transparent", className)}>
-      <div className="flex h-full gap-3">
-        {/* Left Column - Scrolling Down */}
+      <div className="flex h-full gap-4">
+        {/* Left Column - Scrolling Up */}
         <div className="w-1/2 overflow-hidden">
           <motion.div
             ref={leftColumnRef}
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            {/* Duplicate images for infinite scroll */}
-            {[...DESIGN_IMAGES, ...DESIGN_IMAGES].map((image, index) => (
+            {/* Triple images for smoother infinite scroll */}
+            {[...DESIGN_IMAGES, ...DESIGN_IMAGES, ...DESIGN_IMAGES].map((image, index) => (
               <motion.div
                 key={`left-${index}`}
                 className={cn(
-                  "relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300",
+                  "relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300",
                   image.aspectRatio,
                   "w-full"
                 )}
@@ -470,21 +349,21 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
           </motion.div>
         </div>
 
-        {/* Right Column - Scrolling Up */}
+        {/* Right Column - Scrolling Down */}
         <div className="w-1/2 overflow-hidden">
           <motion.div
             ref={rightColumnRef}
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            {/* Duplicate images for infinite scroll */}
-            {[...RIGHT_COLUMN_IMAGES, ...RIGHT_COLUMN_IMAGES].map((image, index) => (
+            {/* Triple images for smoother infinite scroll */}
+            {[...RIGHT_COLUMN_IMAGES, ...RIGHT_COLUMN_IMAGES, ...RIGHT_COLUMN_IMAGES].map((image, index) => (
               <motion.div
                 key={`right-${index}`}
                 className={cn(
-                  "relative overflow-hidden rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300",
+                  "relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300",
                   image.aspectRatio,
                   "w-full"
                 )}
@@ -728,7 +607,6 @@ export default function Home() {
               <div className="mb-[3rem] h-[80px] relative">
                 <ProximityGradientText
                   colors={["#3b82f6", "#ffffff", "#ec4899", "#fbbf24", "#3b82f6"]}
-                  baseSpeed={2}
                   proximityRadius={500}
                 >
                   LET'S CREATE
@@ -740,6 +618,12 @@ export default function Home() {
                 <p className="text-[16px] font-light text-black/80 leading-[1.6]">
                   Ready to build something extraordinary? We partner with visionary founders 
                   and companies to create digital experiences that redefine what's possible.
+                </p>
+                
+                <p className="text-[16px] font-light text-black/80 leading-[1.6]">
+                 From breakthrough startups to Fortune 500 enterprises, we bring together 
+                 strategic thinking, cutting-edge technology, and exceptional design to 
+                 transform ambitious ideas into reality.
                 </p>
                 
                 <div className="space-y-[1rem]">
@@ -759,7 +643,7 @@ export default function Home() {
           </div>
 
           {/* Dynamic Image Mosaic */}
-          <div className="absolute left-[42vw] top-[8rem] w-[450px] h-[400px]">
+          <div className="absolute left-[46vw] top-0 bottom-0 w-[550px] h-full">
             <ImageMosaic />
           </div>
 
