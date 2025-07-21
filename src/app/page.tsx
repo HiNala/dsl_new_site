@@ -73,82 +73,139 @@ const TextSplit: React.FC<TextSplitProps> = ({
   );
 };
 
-interface RevealTextProps {
-  text: string;
+interface ProximityGradientTextProps {
+  children: string;
   className?: string;
-  duration?: number;
+  colors?: string[];
+  baseSpeed?: number;
+  proximityRadius?: number;
 }
 
-const RevealText: React.FC<RevealTextProps> = ({
-  text,
+const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
+  children,
   className,
-  duration = 0.4,
+  colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#ffd93d", "#ff6b6b"],
+  baseSpeed = 8,
+  proximityRadius = 200,
 }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [ripplePosition, setRipplePosition] = useState({ cx: "50%", cy: "50%" });
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [isInProximity, setIsInProximity] = useState(false);
+  const [proximityFactor, setProximityFactor] = useState(0);
+  const [randomSpeedMultiplier, setRandomSpeedMultiplier] = useState(1);
 
   React.useEffect(() => {
-    if (containerRef.current && cursor.x !== null && cursor.y !== null) {
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const cxPercentage = ((cursor.x - containerRect.left) / containerRect.width) * 100;
-      const cyPercentage = ((cursor.y - containerRect.top) / containerRect.height) * 100;
+    const handleMouseMove = (e: MouseEvent) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+      
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const distance = Math.sqrt(
+          Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2)
+        );
+        
+        const isClose = distance < proximityRadius;
+        setIsInProximity(isClose);
+        
+        if (isClose) {
+          // Calculate proximity factor (0 = far, 1 = very close)
+          const factor = Math.max(0, 1 - (distance / proximityRadius));
+          setProximityFactor(factor);
+          
+          // Add randomness that changes based on proximity
+          const randomness = 0.5 + Math.random() * 1.5; // 0.5x to 2x speed
+          const proximityBoost = 1 + factor * 2; // Up to 3x speed when very close
+          setRandomSpeedMultiplier(randomness * proximityBoost);
+        } else {
+          setProximityFactor(0);
+          setRandomSpeedMultiplier(1);
+        }
+      }
+    };
 
-      setRipplePosition({
-        cx: `${Math.max(0, Math.min(100, cxPercentage))}%`,
-        cy: `${Math.max(0, Math.min(100, cyPercentage))}%`,
-      });
-    }
-  }, [cursor]);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [proximityRadius]);
+
+  const currentSpeed = baseSpeed / randomSpeedMultiplier;
+  
+  const maskRadius = Math.max(60, proximityRadius * proximityFactor * 0.8);
+  
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(45deg, ${colors.join(", ")})`,
+    backgroundSize: "300% 300%",
+  };
 
   return (
     <div ref={containerRef} className={cn("relative w-full h-full", className)}>
-      {/* Base text - visible by default with low opacity */}
-      <h2 className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-black/20 relative z-10">
-        {text}
+      {/* Base black text - always visible */}
+      <h2 className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-black relative z-10">
+        {children}
       </h2>
       
-      {/* Interactive reveal overlay */}
-      <div 
-        className="absolute inset-0 z-20"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
-        style={{ cursor: 'none' }}
+      {/* Animated gradient text with cursor mask */}
+      <motion.div
+        className="absolute inset-0 z-20 pointer-events-none"
+        style={{
+          WebkitMask: containerRef.current 
+            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 70%, transparent 100%)`
+            : 'none',
+          mask: containerRef.current 
+            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 70%, transparent 100%)`
+            : 'none',
+        }}
+        animate={{
+          opacity: isInProximity ? 1 : 0,
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeOut"
+        }}
       >
-        <motion.div
-          className="absolute inset-0 bg-black"
+        <motion.h2
+          className="text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-transparent"
           style={{
-            WebkitMask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
-            mask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
+            ...gradientStyle,
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
           }}
           animate={{
-            opacity: isHovered ? 1 : 0,
+            backgroundPosition: [
+              "0% 50%", 
+              "100% 50%", 
+              "0% 50%"
+            ],
           }}
           transition={{
-            duration: 0.2,
-            ease: "easeOut"
-          }}
-        />
-        
-        <motion.h2 
-          className="absolute inset-0 text-[clamp(32px,5vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-black"
-          style={{
-            WebkitMask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
-            mask: `radial-gradient(circle 120px at ${ripplePosition.cx} ${ripplePosition.cy}, black 0%, black 60%, transparent 100%)`,
-          }}
-          animate={{
-            opacity: isHovered ? 1 : 0,
-          }}
-          transition={{
-            duration: 0.2,
-            ease: "easeOut"
+            duration: currentSpeed,
+            repeat: Infinity,
+            ease: "linear",
           }}
         >
-          {text}
+          {children}
         </motion.h2>
-      </div>
+        
+        {/* Dynamic shimmer effect */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,${0.2 + proximityFactor * 0.3}) 50%, transparent 100%)`,
+            transform: "translateX(-100%)",
+          }}
+          animate={isInProximity ? {
+            transform: ["translateX(-100%)", "translateX(100%)"],
+          } : {}}
+          transition={{
+            duration: currentSpeed * 0.6,
+            repeat: isInProximity ? Infinity : 0,
+            repeatDelay: currentSpeed * 0.3,
+            ease: "easeInOut",
+          }}
+        />
+      </motion.div>
     </div>
   );
 };
@@ -372,10 +429,13 @@ export default function Home() {
               
               {/* Animated Headline */}
               <div className="mb-[3rem] h-[80px] relative">
-                <RevealText
-                  text="LET'S CREATE"
-                  duration={0.3}
-                />
+                <ProximityGradientText
+                  colors={["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#ffd93d", "#ff6b6b"]}
+                  baseSpeed={6}
+                  proximityRadius={250}
+                >
+                  LET'S CREATE
+                </ProximityGradientText>
               </div>
 
               {/* Supporting Text */}
