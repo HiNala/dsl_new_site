@@ -326,8 +326,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Side - Image Anchor */}
-          <div className="absolute right-[4vw] top-[12rem] w-[380px] h-[500px]">
+          {/* Right Side - Image Anchor (moved left to avoid D/S/L overlap) */}
+          <div className="absolute right-[8vw] top-[12rem] w-[300px] h-[400px]">
             <div className="w-full h-full bg-black/5 rounded-lg flex items-center justify-center">
               <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-black/10 rounded-full mx-auto flex items-center justify-center">
@@ -339,6 +339,144 @@ export default function Home() {
                 </p>
               </div>
             </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Section 5: Footer/Directory */}
+      <section className="relative min-h-screen bg-black" style={{ scrollSnapAlign: 'start' }}>
+        <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
+          
+          {/* D/S/L Stacked Letters - Top Left */}
+          <div className="absolute left-[4vw] top-[4rem] flex flex-col items-center">
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8]">D</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8]">S</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8]">L</span>
+          </div>
+
+          {/* Main Footer Content */}
+          <div className="absolute left-[4vw] right-[4vw] top-[12rem]">
+            
+            {/* Footer Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-[3rem] max-w-[90vw]">
+              
+              {/* Column 1: Services */}
+              <div className="space-y-[1rem]">
+                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Services</h3>
+                <div className="space-y-[0.75rem]">
+                  <a href="/web-development" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Web Development
+                  </a>
+                  <a href="/mobile-apps" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Mobile Applications
+                  </a>
+                  <a href="/design" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    UI/UX Design
+                  </a>
+                  <a href="/strategy" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Digital Strategy
+                  </a>
+                  <a href="/branding" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Brand Identity
+                  </a>
+                </div>
+              </div>
+
+              {/* Column 2: Solutions */}
+              <div className="space-y-[1rem]">
+                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Solutions</h3>
+                <div className="space-y-[0.75rem]">
+                  <a href="/startups" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Startups
+                  </a>
+                  <a href="/enterprise" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Enterprise
+                  </a>
+                  <a href="/saas" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    SaaS Products
+                  </a>
+                  <a href="/ecommerce" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    E-commerce
+                  </a>
+                  <a href="/fintech" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Fintech
+                  </a>
+                </div>
+              </div>
+
+              {/* Column 3: Company */}
+              <div className="space-y-[1rem]">
+                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Company</h3>
+                <div className="space-y-[0.75rem]">
+                  <a href="/about" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    About Us
+                  </a>
+                  <a href="/team" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Our Team
+                  </a>
+                  <a href="/careers" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Careers
+                  </a>
+                  <a href="/case-studies" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Case Studies
+                  </a>
+                  <a href="/contact" className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300">
+                    Contact
+                  </a>
+                </div>
+              </div>
+
+              {/* Column 4: Contact */}
+              <div className="space-y-[1rem]">
+                <h3 className="text-[18px] font-medium text-white mb-[1.5rem]">Connect</h3>
+                <div className="space-y-[1rem]">
+                  <a 
+                    href="mailto:hello@digitalstudiolabs.com"
+                    className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300"
+                  >
+                    hello@digitalstudiolabs.com
+                  </a>
+                  <a 
+                    href="tel:+15551234567"
+                    className="block text-[14px] font-light text-white/70 hover:text-white transition-colors duration-300"
+                  >
+                    +1 (555) 123-4567
+                  </a>
+                  <p className="text-[14px] font-light text-white/50 leading-[1.5]">
+                    San Francisco, CA<br />
+                    Innovation District
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Section */}
+            <div className="absolute top-[25rem] left-0 right-0 border-t border-white/10 pt-[2rem]">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                
+                {/* Copyright */}
+                <p className="text-[14px] font-light text-white/50">
+                  © 2024 Digital Studio Labs. All rights reserved.
+                </p>
+                
+                {/* Legal Links */}
+                <div className="flex space-x-6">
+                  <a href="/privacy" className="text-[14px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
+                    Privacy Policy
+                  </a>
+                  <a href="/terms" className="text-[14px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
+                    Terms of Service
+                  </a>
+                  <a href="/cookies" className="text-[14px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
+                    Cookies
+                  </a>
+                </div>
+                
+              </div>
+            </div>
+
           </div>
 
         </div>
