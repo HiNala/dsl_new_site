@@ -279,8 +279,8 @@ export default function Home() {
       <section className="relative min-h-screen bg-white" style={{ scrollSnapAlign: 'start' }}>
         <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
           
-          {/* D/S/L Stacked Letters - Bottom Left */}
-          <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center">
+          {/* D/S/L Stacked Letters - Bottom Right */}
+          <div className="absolute right-[4vw] bottom-[4rem] flex flex-col items-center">
             <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">D</span>
             <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">S</span>
             <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">L</span>
