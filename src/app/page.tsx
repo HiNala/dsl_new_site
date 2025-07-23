@@ -2,14 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
-}
-
-interface ScoreboardTextProps {
-  words: string[]
-  className?: string
 }
 
 const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0011001100110011"
@@ -21,8 +17,6 @@ function ScoreboardHeader({ letters, className = "" }: { letters: string[], clas
   
   const [displayText, setDisplayText] = useState([...allLetters])
   const animationRef = React.useRef<{ [key: string]: NodeJS.Timeout }>({})
-
-
 
   const startAnimation = () => {
     // Clear any existing animations
@@ -185,7 +179,6 @@ interface ProximityGradientTextProps {
   children: string;
   className?: string;
   colors?: string[];
-  baseSpeed?: number;
   proximityRadius?: number;
 }
 
@@ -193,7 +186,6 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
   children,
   className,
   colors = ["#3b82f6", "#ffffff", "#ec4899", "#fbbf24", "#3b82f6"], // Blue, white, pink, yellow
-  baseSpeed = 8, // Slower, elegant base speed
   proximityRadius = 400, // Larger detection radius
 }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -307,41 +299,57 @@ const DESIGN_IMAGES = [
     src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=600&fit=crop",
     alt: "Modern architecture",
     aspectRatio: "aspect-[4/3]", // landscape
+    width: 800,
+    height: 600,
   },
   {
     src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=800&fit=crop",
     alt: "Interior design",
     aspectRatio: "aspect-[3/4]", // portrait
+    width: 600,
+    height: 800,
   },
   {
     src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop",
     alt: "Minimalist design",
     aspectRatio: "aspect-[16/9]", // landscape
+    width: 800,
+    height: 450,
   },
   {
     src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?w=600&h=800&fit=crop",
     alt: "Product design",
     aspectRatio: "aspect-[3/4]", // portrait
+    width: 600,
+    height: 800,
   },
   {
     src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop",
     alt: "Graphic design",
     aspectRatio: "aspect-[4/3]", // landscape
+    width: 800,
+    height: 600,
   },
   {
     src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&h=800&fit=crop",
     alt: "UI design",
     aspectRatio: "aspect-[3/4]", // portrait
+    width: 600,
+    height: 800,
   },
   {
     src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=480&fit=crop",
     alt: "Brand design",
     aspectRatio: "aspect-[5/3]", // landscape
+    width: 800,
+    height: 480,
   },
   {
     src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop",
     alt: "Web design",
     aspectRatio: "aspect-[4/3]", // landscape
+    width: 800,
+    height: 600,
   },
 ];
 
@@ -351,41 +359,57 @@ const RIGHT_COLUMN_IMAGES = [
     src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=800&h=450&fit=crop",
     alt: "Creative workspace",
     aspectRatio: "aspect-[16/9]", // landscape
+    width: 800,
+    height: 450,
   },
   {
     src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=600&h=800&fit=crop",
     alt: "Design tools",
     aspectRatio: "aspect-[3/4]", // portrait
+    width: 600,
+    height: 800,
   },
   {
     src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&h=600&fit=crop",
     alt: "Typography",
     aspectRatio: "aspect-[4/3]", // landscape
+    width: 800,
+    height: 600,
   },
   {
     src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&h=800&fit=crop",
     alt: "Color palette",
     aspectRatio: "aspect-[3/4]", // portrait
+    width: 600,
+    height: 800,
   },
   {
     src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=480&fit=crop",
     alt: "Digital art",
     aspectRatio: "aspect-[5/3]", // landscape
+    width: 800,
+    height: 480,
   },
   {
     src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&h=600&fit=crop",
     alt: "Design process",
     aspectRatio: "aspect-[4/3]", // landscape
+    width: 800,
+    height: 600,
   },
   {
     src: "https://images.unsplash.com/photo-1600607687920-4f2c19665e92?w=800&h=450&fit=crop",
     alt: "Creative concept",
     aspectRatio: "aspect-[16/9]", // landscape
+    width: 800,
+    height: 450,
   },
   {
     src: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=600&fit=crop",
     alt: "Design inspiration",
     aspectRatio: "aspect-[4/3]", // landscape
+    width: 800,
+    height: 600,
   },
 ];
 
@@ -445,9 +469,11 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <img
+                <Image
                   src={image.src}
                   alt={image.alt}
+                  width={image.width}
+                  height={image.height}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -478,9 +504,11 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <img
+                <Image
                   src={image.src}
                   alt={image.alt}
+                  width={image.width}
+                  height={image.height}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -553,9 +581,6 @@ const DSLAnimation = () => {
 
   const getLetterAnimation = (letterIndex: number, stage: number) => {
     // D = index 0, S = index 1, L = index 2
-    const isD = letterIndex === 0;
-    const isS = letterIndex === 1;
-    const isL = letterIndex === 2;
 
     // Invisible baseline - bottom of letters when horizontal (about 60px below center)
     const baseline = -240;
@@ -563,13 +588,6 @@ const DSLAnimation = () => {
     // Base stacked positions with proper spacing to avoid overlap
       const stackedY = (2 - letterIndex) * -85; // D at -170, S at -85, L at 0
     const baseX = 0;
-
-    // Final DSL positions with proper spacing to avoid overlap
-    const finalPositions = {
-      0: { x: -100, y: baseline }, // D - at D line level
-      1: { x: 0, y: baseline }, // S - at D line level
-      2: { x: 100, y: baseline }, // L - at D line level
-    };
 
     // Ensure no letter goes below baseline
     const respectBaseline = (y: number) => Math.max(baseline, y);
@@ -675,7 +693,7 @@ export default function Home() {
           <div className="absolute left-[4vw] top-[70px]">
             <h1 className="text-[clamp(38px,5.0vw,105px)] font-light leading-[1.1] text-[#4A90E2] max-w-[65vw]">
               We believe in the<br />
-              value of what can't<br />
+              value of what can&apos;t<br />
               be measured.
             </h1>
           </div>
@@ -685,7 +703,7 @@ export default function Home() {
             <p className="text-[15px] font-normal leading-[1.65] text-[#4A90E2] opacity-90">
               Digital Studio Labs is a San Francisco-based venture studio that 
               invests in founders and builds companies in the creator economy. 
-              We believe in the value of what can't be measured: traits like 
+              We believe in the value of what can&apos;t be measured: traits like 
               creativity, authenticity, and community. We are builders, dreamers, 
               artists & engineers with a shared vision of the future that is driven by 
               creators and innovation.
@@ -896,7 +914,7 @@ export default function Home() {
                 <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Innovation Labs</h3>
                 <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
                   Experimental projects and research initiatives that push the 
-                  boundaries of what's possible in technology.
+                  boundaries of what&apos;s possible in technology.
                 </p>
               </div>
 
@@ -949,7 +967,7 @@ export default function Home() {
                   colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                   proximityRadius={500}
                 >
-                  LET'S CREATE
+                  LET&apos;S CREATE
                 </ProximityGradientText>
               </div>
 
@@ -957,7 +975,7 @@ export default function Home() {
               <div className="space-y-[2rem] max-w-[320px]">
                 <p className="text-[16px] font-light text-black/80 leading-[1.6]">
                   Ready to build something extraordinary? We partner with visionary founders 
-                  and companies to create digital experiences that redefine what's possible.
+                  and companies to create digital experiences that redefine what&apos;s possible.
                 </p>
                 
                 <p className="text-[16px] font-light text-black/80 leading-[1.6]">
