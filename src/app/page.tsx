@@ -661,47 +661,44 @@ export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
   return (
-    <div className="relative w-full" style={{ 
-      scrollSnapType: 'y mandatory',
-      scrollBehavior: 'smooth'
-    }}>
+    <div className="scroll-container">
       
       {/* Section 1: Hero */}
-      <section className="relative min-h-screen bg-[#F8F9FA]" style={{ scrollSnapAlign: 'start' }}>
+      <section className="section-container bg-[#F8F9FA]">
         
         {/* Header Letters with Scoreboard Effect */}
         <ScoreboardHeader letters={brandLetters} />
 
-        <div className="relative min-h-[calc(100vh-100px)]">
+        <div className="relative flex-1">
           
-          {/* Main Headline - smaller and refined like reference */}
+          {/* Main Headline - positioned exactly like reference */}
           <div className="absolute left-[4vw] top-[70px]">
-            <h1 className="text-[clamp(40px,5.2vw,110px)] font-light leading-[1.1] text-[#4A90E2] max-w-[65vw]">
+            <h1 className="text-[clamp(38px,5.0vw,105px)] font-light leading-[1.1] text-[#4A90E2] max-w-[65vw]">
               We believe in the<br />
               value of what can't<br />
               be measured.
             </h1>
           </div>
 
-          {/* Body Text Paragraph - positioned like reference */}
-          <div className="absolute right-[64px] top-[390px] w-[380px]">
-            <p className="text-[16px] font-normal leading-[1.6] text-[#4A90E2]">
+          {/* Body Text Paragraph - positioned exactly like reference */}
+          <div className="absolute right-[4vw] top-[390px] w-[min(380px,35vw)]">
+            <p className="text-[15px] font-normal leading-[1.65] text-[#4A90E2] opacity-90">
               Digital Studio Labs is a San Francisco-based venture studio that 
               invests in founders and builds companies in the creator economy. 
               We believe in the value of what can't be measured: traits like 
-              creativity, authenticity, and community. We are builders dreamers 
+              creativity, authenticity, and community. We are builders, dreamers, 
               artists & engineers with a shared vision of the future that is driven by 
               creators and innovation.
             </p>
           </div>
 
-          {/* Navigation - positioned like reference */}
+          {/* Navigation - positioned exactly like reference */}
           <nav className="absolute left-[4vw] bottom-[80px]">
-            <ul className="space-y-[6px]">
-              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Home</a></li>
-              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Companies</a></li>
-              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">About</a></li>
-              <li><a href="#about" className="text-[16px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Contact</a></li>
+            <ul className="space-y-[8px]">
+              <li><a href="#home" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Home</a></li>
+              <li><a href="#companies" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Companies</a></li>
+              <li><a href="#about" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">About</a></li>
+              <li><a href="#contact" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Contact</a></li>
             </ul>
           </nav>
 
@@ -709,8 +706,8 @@ export default function Home() {
       </section>
 
       {/* Section 2: About Us */}
-      <section id="about" className="relative min-h-screen bg-[#1a1a1a]" style={{ scrollSnapAlign: 'start' }}>
-        <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
+      <section id="about" className="section-container bg-[#1a1a1a]">
+        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Top Right */}
           <div className="absolute right-[4vw] top-[4rem] flex flex-col items-center">
@@ -805,8 +802,8 @@ export default function Home() {
       </section>
 
       {/* Section 3: Our Work */}
-      <section className="relative min-h-screen bg-[#4A90E2]" style={{ scrollSnapAlign: 'start' }}>
-        <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
+      <section className="section-container bg-[#4A90E2]">
+        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Bottom Left */}
           <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center">
@@ -911,8 +908,8 @@ export default function Home() {
       </section>
 
       {/* Section 4: Contact/Partnership */}
-      <section className="relative min-h-screen bg-white" style={{ scrollSnapAlign: 'start' }}>
-        <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
+      <section className="section-container bg-white">
+        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Bottom Right */}
           <div className="absolute right-[4vw] bottom-[4rem] flex flex-col items-center">
@@ -986,7 +983,7 @@ export default function Home() {
           </div>
 
           {/* Dynamic Image Mosaic */}
-          <div className="absolute left-[46vw] top-0 bottom-0 w-[550px] h-full">
+          <div className="absolute left-[46vw] top-0 bottom-0 w-[min(550px,50vw)] h-full">
             <ImageMosaic />
           </div>
 
@@ -994,8 +991,8 @@ export default function Home() {
       </section>
 
             {/* Section 5: Footer/Directory */}
-      <section className="relative min-h-screen bg-black" style={{ scrollSnapAlign: 'start' }}>
-        <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
+      <section className="section-container bg-black">
+        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Animated Letters - Top Left */}
           <DSLAnimation />
