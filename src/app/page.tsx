@@ -1,10 +1,118 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
+}
+
+interface ScoreboardTextProps {
+  words: string[]
+  className?: string
+}
+
+const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0011001100110011"
+
+function ScoreboardHeader({ letters, className = "" }: { letters: string[], className?: string }) {
+  // Convert letters to words with spaces: DIGITAL STUDIO LABS
+  const words = ["DIGITAL", "STUDIO", "LABS"]
+  const allLetters = words.join(" ").split("")
+  
+  const [displayText, setDisplayText] = useState([...allLetters])
+  const animationRef = React.useRef<{ [key: string]: NodeJS.Timeout }>({})
+
+
+
+  const startAnimation = () => {
+    // Clear any existing animations
+    Object.values(animationRef.current).forEach((timeout) => clearTimeout(timeout))
+    animationRef.current = {}
+
+    // Calculate total animation duration
+    const baseDelay = 60 // Base delay between letter animations (slower stagger)
+    const letterDuration = 1200 // How long each letter takes to settle
+
+    // Animate all letters
+    allLetters.forEach((targetChar, index) => {
+      // Skip spaces
+      if (targetChar === " ") {
+        setDisplayText((prev) => {
+          const newText = [...prev]
+          newText[index] = " "
+          return newText
+        })
+        return
+      }
+
+      // Add random variation to settle time (±400ms)
+      const randomVariation = (Math.random() - 0.5) * 800
+      const settleTime = index * baseDelay + letterDuration + randomVariation
+      let startTime: number | null = null
+
+      const animate = (timestamp: number) => {
+        if (!startTime) startTime = timestamp
+        const elapsed = timestamp - startTime
+
+        // If we've reached the settle time, show the final letter
+        if (elapsed >= settleTime) {
+          setDisplayText((prev) => {
+            const newText = [...prev]
+            newText[index] = targetChar
+            return newText
+          })
+          return
+        }
+
+        // Otherwise show a random character
+        setDisplayText((prev) => {
+          const newText = [...prev]
+          newText[index] = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]
+          return newText
+        })
+
+        // Continue animation
+        animationRef.current[index] = setTimeout(() => {
+          requestAnimationFrame(animate)
+        }, 45)
+      }
+
+      // Start the animation
+      requestAnimationFrame(animate)
+    })
+  }
+
+  const handleMouseEnter = () => {
+    startAnimation()
+  }
+
+  return (
+    <div 
+      className={`h-[100px] flex justify-between items-center px-[4vw] bg-[#F8F9FA] cursor-pointer ${className}`}
+      onMouseEnter={handleMouseEnter}
+    >
+      {displayText.map((char, index) => {
+        // Map original letter positions to new positions for D, S, L emphasis
+        const originalDIndex = 0; // D in DIGITAL
+        const originalSIndex = 8; // S in STUDIO (D-I-G-I-T-A-L-SPACE-S)
+        const originalLIndex = 14; // L in LABS (D-I-G-I-T-A-L-SPACE-S-T-U-D-I-O-SPACE-L)
+        const isFirstLetter = index === originalDIndex || index === originalSIndex || index === originalLIndex;
+        
+        return (
+          <span 
+            key={index}
+            className={`
+              text-[clamp(14px,1.0vw,22px)] text-[#4A90E2] transition-all duration-100
+              text-center
+              ${isFirstLetter ? 'font-medium' : 'font-light'}
+            `}
+          >
+            {char}
+          </span>
+        );
+      })}
+    </div>
+  )
 }
 
 interface TextSplitProps {
@@ -386,6 +494,169 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
   );
 };
 
+// DSL Animation Component for Footer
+const DSLAnimation = () => {
+  const [isHovering, setIsHovering] = useState(false);
+  const [animationStage, setAnimationStage] = useState(0);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Get the DSL area position (updated for new positioning)
+      const dslAreaX = window.innerWidth * 0.02; // 2vw
+      const dslAreaY = 256; // 16rem = 256px
+
+      // Define the vertical DSL area (where stacked letters occupy)
+      const verticalDSLArea = {
+        left: dslAreaX - 80, // Wider area for easier interaction
+        right: dslAreaX + 80,
+        top: dslAreaY - 100, // Taller area to encompass all letters
+        bottom: dslAreaY + 200, // Extended down for better hover detection
+      };
+
+      // Check if cursor is directly over the vertical DSL area
+      const isOverVerticalDSL =
+        e.clientX >= verticalDSLArea.left &&
+        e.clientX <= verticalDSLArea.right &&
+        e.clientY >= verticalDSLArea.top &&
+        e.clientY <= verticalDSLArea.bottom;
+
+      setIsHovering(isOverVerticalDSL);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Animation sequence on hover
+  useEffect(() => {
+    if (isHovering) {
+      // Start the full animation sequence
+      setAnimationStage(1); // Start falling
+      
+      const timer1 = setTimeout(() => setAnimationStage(2), 200); // Fall phase
+      const timer2 = setTimeout(() => setAnimationStage(3), 400); // Bounce phase
+      const timer3 = setTimeout(() => setAnimationStage(4), 600); // Final position
+      
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      };
+    } else {
+      // Return to stacked position
+      setAnimationStage(0);
+    }
+  }, [isHovering]);
+
+  // Use animation stage for positioning
+  const currentStage = animationStage;
+
+  const getLetterAnimation = (letterIndex: number, stage: number) => {
+    // D = index 0, S = index 1, L = index 2
+    const isD = letterIndex === 0;
+    const isS = letterIndex === 1;
+    const isL = letterIndex === 2;
+
+    // Invisible baseline - bottom of letters when horizontal (about 60px below center)
+    const baseline = -240;
+
+    // Base stacked positions with proper spacing to avoid overlap
+      const stackedY = (2 - letterIndex) * -85; // D at -170, S at -85, L at 0
+    const baseX = 0;
+
+    // Final DSL positions with proper spacing to avoid overlap
+    const finalPositions = {
+      0: { x: -100, y: baseline }, // D - at D line level
+      1: { x: 0, y: baseline }, // S - at D line level
+      2: { x: 100, y: baseline }, // L - at D line level
+    };
+
+    // Ensure no letter goes below baseline
+    const respectBaseline = (y: number) => Math.max(baseline, y);
+
+    // Animation stages
+    if (stage === 0) {
+      // Initial stacked position
+      return { x: baseX, y: stackedY, rotate: 0 };
+    }
+
+    // Animation sequence positions for each letter
+    const letterAnimations = [
+            {
+        // D positions through animation - stays in original X position
+        fall1: { x: baseX, y: stackedY + 30, rotate: -3 }, // Start falling gently, no X movement
+        fall2: { x: baseX, y: respectBaseline(baseline + 15), rotate: -1 }, // Continue falling smoothly, no X movement
+        bounce: { x: baseX, y: respectBaseline(baseline - 5), rotate: 0.5 }, // Gentle bounce up, no X movement
+        final: { x: baseX, y: respectBaseline(baseline), rotate: 0 }, // Settle in original X position
+      },
+      {
+        // S positions through animation - moves to align with D  
+        fall1: { x: -3, y: stackedY + 20, rotate: 4 }, // Start falling gently
+        fall2: { x: 20, y: respectBaseline(baseline + 10), rotate: 2 }, // Gradual horizontal movement
+        bounce: { x: 75, y: respectBaseline(baseline - 3), rotate: -1 }, // Near final position with gentle bounce
+        final: { x: 80, y: respectBaseline(baseline), rotate: 0 }, // Settle with proper spacing from D
+      },
+      {
+        // L positions through animation - moves to align with D and S
+        fall1: { x: 5, y: stackedY + 25, rotate: -6 }, // Start falling gently
+        fall2: { x: 60, y: respectBaseline(baseline + 12), rotate: -3 }, // Gradual horizontal movement
+        bounce: { x: 155, y: respectBaseline(baseline - 4), rotate: 2 }, // Near final position with gentle bounce
+        final: { x: 160, y: respectBaseline(baseline), rotate: 0 }, // Settle with consistent spacing
+      },
+    ];
+
+    const letterAnim = letterAnimations[letterIndex];
+
+    if (stage === 1) return letterAnim.fall1;
+    if (stage === 2) return letterAnim.fall2;
+    if (stage === 3) return letterAnim.bounce;
+    if (stage === 4) {
+      // Minimal continuous bounce in final position for smoothness
+      const bounceOffset = Math.sin(Date.now() * 0.005 + letterIndex) * 0.8;
+      return {
+        x: letterAnim.final.x + bounceOffset * 0.1,
+        y: letterAnim.final.y + Math.abs(bounceOffset) * 0.1,
+        rotate: letterAnim.final.rotate,
+      };
+    }
+
+    // Default fallback
+    return { x: baseX, y: stackedY, rotate: 0 };
+  };
+
+  const letters = ["D", "S", "L"];
+
+  return (
+    <div className="absolute left-[2vw] top-[16rem] z-20">
+      <div className="relative">
+        {letters.map((letter, index) => (
+          <motion.div
+            key={letter}
+            className="absolute text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8] select-none"
+            style={{
+              width: "120px",
+              height: "120px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transform: "translate(-50%, -50%)",
+            }}
+            animate={getLetterAnimation(index, currentStage)}
+            transition={{
+              type: "spring",
+              stiffness: 90,
+              damping: 30,
+              duration: 0.6,
+            }}
+          >
+            {letter}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
@@ -398,21 +669,8 @@ export default function Home() {
       {/* Section 1: Hero */}
       <section className="relative min-h-screen bg-[#F8F9FA]" style={{ scrollSnapAlign: 'start' }}>
         
-        {/* Header Letters - refined like reference */}
-        <div className="h-[100px] flex justify-between items-center px-[4vw] bg-[#F8F9FA]">
-          {brandLetters.map((letter, index) => {
-            // First letters: D (index 0), S (index 7), L (index 13)
-            const isFirstLetter = index === 0 || index === 7 || index === 13;
-            return (
-              <span 
-                key={index}
-                className={`text-[clamp(14px,1.0vw,22px)] text-[#4A90E2] ${isFirstLetter ? 'font-medium underline decoration-1 underline-offset-2 decoration-[#4A90E2]/40' : 'font-light'}`}
-              >
-                {letter}
-              </span>
-            );
-          })}
-        </div>
+        {/* Header Letters with Scoreboard Effect */}
+        <ScoreboardHeader letters={brandLetters} />
 
         <div className="relative min-h-[calc(100vh-100px)]">
           
@@ -473,36 +731,68 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
               
               {/* Our Mission */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#4A90E2] mb-[0.75rem]">Our Mission</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Our Mission clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Mission</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
                   To empower creators and innovators by building companies that 
                   challenge conventional thinking and celebrate human creativity.
                 </p>
               </div>
 
               {/* Our Approach */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#4A90E2] mb-[0.75rem]">Our Approach</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Our Approach clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Approach</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
                   We combine deep technical expertise with creative vision, 
                   fostering environments where breakthrough ideas can flourish.
                 </p>
               </div>
 
-              {/* Our Values */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#4A90E2] mb-[0.75rem]">Our Values</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              {/* Our Team */}
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Our Team clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Team</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
                   Authenticity, creativity, and community drive everything we do. 
                   We believe the best solutions emerge from diverse perspectives.
                 </p>
               </div>
 
-              {/* Our Impact */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#4A90E2] mb-[0.75rem]">Our Impact</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              {/* Our Values */}
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Our Values clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Values</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
                   Building sustainable companies that create meaningful change 
                   in the creator economy and beyond.
                 </p>
@@ -546,36 +836,68 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
               
               {/* Portfolio Companies */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Portfolio Companies</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Portfolio Companies clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Portfolio Companies</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
                   Building and investing in innovative startups that are reshaping 
                   industries and creating the future of technology.
                 </p>
               </div>
 
               {/* Emerging Tech */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Emerging Tech</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Emerging Tech clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Emerging Tech</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
                   Exploring cutting-edge technologies like AI, blockchain, and 
                   quantum computing to unlock new possibilities.
                 </p>
               </div>
 
               {/* Creator Tools */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Creator Tools</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Creator Tools clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Creator Tools</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
                   Developing platforms and tools that empower creators to build, 
                   monetize, and scale their creative endeavors.
                 </p>
               </div>
 
               {/* Innovation Labs */}
-              <div className="border-b border-white/20 pb-[1.5rem]">
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem]">Innovation Labs</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5]">
+              <div className="border-b border-white/20 pb-[1.5rem] relative">
+                <button 
+                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                  onClick={() => console.log('Innovation Labs clicked')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Innovation Labs</h3>
+                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
                   Experimental projects and research initiatives that push the 
                   boundaries of what's possible in technology.
                 </p>
@@ -594,9 +916,30 @@ export default function Home() {
           
           {/* D/S/L Stacked Letters - Bottom Right */}
           <div className="absolute right-[4vw] bottom-[4rem] flex flex-col items-center">
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">D</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">S</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-black leading-[0.8]">L</span>
+            <div className="h-[clamp(48px,6vw,80px)] leading-[0.8]">
+              <ProximityGradientText
+                colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
+                proximityRadius={300}
+              >
+                D
+              </ProximityGradientText>
+            </div>
+            <div className="h-[clamp(48px,6vw,80px)] leading-[0.8]">
+              <ProximityGradientText
+                colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
+                proximityRadius={300}
+              >
+                S
+              </ProximityGradientText>
+            </div>
+            <div className="h-[clamp(48px,6vw,80px)] leading-[0.8]">
+              <ProximityGradientText
+                colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
+                proximityRadius={300}
+              >
+                L
+              </ProximityGradientText>
+            </div>
           </div>
 
           {/* Main Content - Left Side (narrower to avoid image overlap) */}
@@ -606,7 +949,7 @@ export default function Home() {
               {/* Animated Headline */}
               <div className="mb-[3rem] h-[80px] relative">
                 <ProximityGradientText
-                  colors={["#3b82f6", "#ffffff", "#ec4899", "#fbbf24", "#3b82f6"]}
+                  colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                   proximityRadius={500}
                 >
                   LET'S CREATE
@@ -650,19 +993,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 5: Footer/Directory */}
+            {/* Section 5: Footer/Directory */}
       <section className="relative min-h-screen bg-black" style={{ scrollSnapAlign: 'start' }}>
         <div className="relative min-h-screen py-[4rem] px-[4vw] flex flex-col">
           
-          {/* D/S/L Stacked Letters - Top Left */}
-          <div className="absolute left-[4vw] top-[4rem] flex flex-col items-center">
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8]">D</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8]">S</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8]">L</span>
-          </div>
+          {/* D/S/L Animated Letters - Top Left */}
+          <DSLAnimation />
 
           {/* Main Footer Content (moved right to avoid D/S/L overlap) */}
-          <div className="absolute left-[16vw] right-[4vw] top-[8rem]">
+          <div className="absolute left-[18vw] right-[4vw] top-[16rem]">
             
             {/* Footer Grid Layout */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-[2.5rem] max-w-[80vw]">
