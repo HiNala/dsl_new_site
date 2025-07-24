@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
@@ -675,8 +675,174 @@ const DSLAnimation = () => {
   );
 };
 
+// Horizontal Scroll About Details Component
+interface AboutDetailsProps {
+  activeSection: string | null;
+  onClose: () => void;
+}
+
+const AboutDetails: React.FC<AboutDetailsProps> = ({ activeSection, onClose }) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [currentSection, setCurrentSection] = React.useState(0);
+
+  const sections = [
+    {
+      id: 'mission',
+      title: 'Our Mission',
+      content: 'To empower creators and innovators by building companies that challenge conventional thinking and celebrate human creativity.'
+    },
+    {
+      id: 'approach',
+      title: 'Our Approach', 
+      content: 'We combine deep technical expertise with creative vision, fostering environments where breakthrough ideas can flourish.'
+    },
+    {
+      id: 'team',
+      title: 'Our Team',
+      content: 'Authenticity, creativity, and community drive everything we do. We believe the best solutions emerge from diverse perspectives.'
+    },
+    {
+      id: 'values',
+      title: 'Our Values',
+      content: 'Building sustainable companies that create meaningful change in the creator economy and beyond.'
+    }
+  ];
+
+  // Navigate to specific section when activeSection changes
+  React.useEffect(() => {
+    if (activeSection) {
+      const sectionIndex = sections.findIndex(section => section.id === activeSection);
+      if (sectionIndex !== -1) {
+        setCurrentSection(sectionIndex);
+        if (containerRef.current) {
+          containerRef.current.scrollTo({
+            left: sectionIndex * window.innerWidth,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
+  }, [activeSection]);
+
+  // Track scroll position to update current section
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const scrollLeft = containerRef.current.scrollLeft;
+        const sectionIndex = Math.round(scrollLeft / window.innerWidth);
+        setCurrentSection(sectionIndex);
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
+  if (!activeSection) return null;
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 bg-[#1a1a1a]"
+      initial={{ x: '100%' }}
+      animate={{ x: 0 }}
+      exit={{ x: '100%' }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    >
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        className="absolute top-8 right-8 z-10 text-white hover:text-[#4A90E2] transition-colors duration-300"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+      </button>
+
+      {/* Horizontal Scroll Container */}
+      <div 
+        ref={containerRef}
+        className="horizontal-scroll-container flex h-full w-full"
+      >
+        {sections.map((section, index) => (
+          <div
+            key={section.id}
+            className="horizontal-scroll-section h-full flex items-center justify-center px-[8vw] py-[4rem]"
+          >
+            <div className="max-w-[800px] text-center">
+              <motion.h2
+                className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+              >
+                {section.title}
+              </motion.h2>
+              
+              <motion.p
+                className="text-[clamp(18px,2vw,24px)] font-light text-white/90 leading-[1.6] mb-12"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+              >
+                {section.content}
+              </motion.p>
+
+              {/* Navigation Dots */}
+              <motion.div 
+                className="flex justify-center space-x-3"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+              >
+                {sections.map((_, dotIndex) => (
+                  <button
+                    key={dotIndex}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      dotIndex === currentSection 
+                        ? 'bg-[#4A90E2] scale-125' 
+                        : 'bg-white/30 hover:bg-white/50'
+                    }`}
+                    onClick={() => {
+                      setCurrentSection(dotIndex);
+                      if (containerRef.current) {
+                        containerRef.current.scrollTo({
+                          left: dotIndex * window.innerWidth,
+                          behavior: 'smooth'
+                        });
+                      }
+                    }}
+                  />
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Section Progress Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div className="text-white/50 text-sm">
+          {currentSection + 1} / {sections.length}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
+  const [activeAboutSection, setActiveAboutSection] = useState<string | null>(null);
+
+  const handleAboutSectionClick = (sectionId: string) => {
+    setActiveAboutSection(sectionId);
+  };
+
+  const closeAboutDetails = () => {
+    setActiveAboutSection(null);
+  };
 
   return (
     <div className="scroll-container">
@@ -749,7 +915,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Our Mission clicked')}
+                  onClick={() => handleAboutSectionClick('mission')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -766,7 +932,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Our Approach clicked')}
+                  onClick={() => handleAboutSectionClick('approach')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -783,7 +949,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Our Team clicked')}
+                  onClick={() => handleAboutSectionClick('team')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -800,7 +966,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Our Values clicked')}
+                  onClick={() => handleAboutSectionClick('values')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1141,6 +1307,16 @@ export default function Home() {
 
         </div>
       </section>
+
+      {/* About Details Modal */}
+      <AnimatePresence>
+        {activeAboutSection && (
+          <AboutDetails
+            activeSection={activeAboutSection}
+            onClose={closeAboutDetails}
+          />
+        )}
+      </AnimatePresence>
 
     </div>
   );
