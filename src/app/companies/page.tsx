@@ -265,15 +265,7 @@ export default function CompaniesPage() {
             <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
           </div>
 
-          {/* Back Button */}
-          <button
-            onClick={() => window.location.href = '/'}
-            className="absolute top-8 left-8 text-white hover:text-[#4A90E2] transition-colors duration-300"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
+
 
           {/* Content Center */}
           <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
