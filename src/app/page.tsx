@@ -682,6 +682,10 @@ export default function Home() {
     window.location.href = `/about#${sectionId}`;
   };
 
+  const navigateToCompaniesSection = (sectionId: string) => {
+    window.location.href = `/companies#${sectionId}`;
+  };
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -865,7 +869,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Portfolio Companies clicked')}
+                  onClick={() => navigateToCompaniesSection('portfolio')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -882,7 +886,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Emerging Tech clicked')}
+                  onClick={() => navigateToCompaniesSection('emerging-tech')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -899,7 +903,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Creator Tools clicked')}
+                  onClick={() => navigateToCompaniesSection('creator-tools')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -916,7 +920,7 @@ export default function Home() {
               <div className="border-b border-white/20 pb-[1.5rem] relative">
                 <button 
                   className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => console.log('Innovation Labs clicked')}
+                  onClick={() => navigateToCompaniesSection('innovation-labs')}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
