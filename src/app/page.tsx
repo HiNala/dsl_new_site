@@ -696,9 +696,28 @@ export default function Home() {
 
   const scrollToCompaniesSection = (sectionId: string) => {
     const container = document.getElementById('companies-horizontal-container');
-    const targetSection = document.getElementById(`companies-${sectionId}`);
-    if (container && targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+    if (container) {
+      container.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
+      
+      // Then scroll to the specific section within the detail area
+      setTimeout(() => {
+        const detailContainer = document.querySelector('.work-detail-container');
+        const targetSection = document.getElementById(`companies-${sectionId}`);
+        if (detailContainer && targetSection) {
+          // Map section IDs to horizontal scroll positions
+          const sectionMap: { [key: string]: number } = {
+            'portfolio': 0,
+            'emerging-tech': 1,
+            'creator-tools': 2,
+            'innovation-labs': 3
+          };
+          const sectionIndex = sectionMap[sectionId] || 0;
+          detailContainer.scrollTo({
+            left: sectionIndex * window.innerWidth,
+            behavior: 'smooth'
+          });
+        }
+      }, 500);
     }
   };
 
@@ -1116,125 +1135,152 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Our Work Detail Sections - Horizontal Scroll Right (reversed order due to RTL) */}
-          <div id="companies-innovation-labs" className="horizontal-section bg-[#1a1a1a]" style={{ direction: 'ltr' }}>
-            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-              {/* D/S/L Stacked Letters - Top Left */}
-              <div className="absolute left-[3rem] top-[3rem] flex flex-col items-center space-y-4">
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">D</span>
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">S</span>
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">L</span>
-              </div>
+          {/* Our Work Detail Sections - Contained Horizontal Scroll */}
+          <div className="horizontal-section bg-[#4A90E2]">
+            <div className="work-detail-container">
+              
+              {/* Section 1: Portfolio Companies Detail */}
+              <div 
+                id="companies-portfolio" 
+                className="work-detail-section bg-[#1a1a1a]"
+              >
+                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+                  
+                  {/* D/S/L Stacked Letters - Bottom Left */}
+                  <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-4">
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">L</span>
+                  </div>
 
-              {/* Content Center */}
-              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Innovation Labs</h2>
-                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                  Experimental projects and research initiatives that push the boundaries of what&apos;s possible in technology.
-                </p>
-                <div className="text-white/50 text-sm">
-                  <button
-                    onClick={() => {
-                      const mainSection = document.getElementById('companies-horizontal-container');
-                      if (mainSection) {
-                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                      }
-                    }}
-                    className="hover:text-white transition-colors duration-300"
-                  >
-                    Back to Our Work →
-                  </button>
+                  {/* Content Center */}
+                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Portfolio Companies</h2>
+                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                      Building and investing in innovative startups that are reshaping industries and creating the future of technology.
+                    </p>
+                    <div className="text-white/50 text-sm flex space-x-8">
+                      <button
+                        onClick={() => {
+                          const mainSection = document.getElementById('companies-horizontal-container');
+                          if (mainSection) {
+                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                          }
+                        }}
+                        className="hover:text-white transition-colors duration-300"
+                      >
+                        ← Back to Our Work
+                      </button>
+                      <span>Scroll right to continue through sections</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div id="companies-creator-tools" className="horizontal-section bg-[#4A90E2]" style={{ direction: 'ltr' }}>
-            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-              {/* D/S/L Stacked Letters - Bottom Right */}
-              <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-4">
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#F8F9FA] leading-none">D</span>
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#F8F9FA] leading-none">S</span>
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#F8F9FA] leading-none">L</span>
-              </div>
-
-              {/* Content Center */}
-              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#F8F9FA] mb-8">Creator Tools</h2>
-                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                  Developing platforms and tools that empower creators to build, monetize, and scale their creative endeavors.
-                </p>
-                <div className="text-white/50 text-sm">
-                  <button
-                    onClick={() => {
-                      const mainSection = document.getElementById('companies-horizontal-container');
-                      if (mainSection) {
-                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                      }
-                    }}
-                    className="hover:text-white transition-colors duration-300"
-                  >
-                    Back to Our Work →
-                  </button>
+              {/* Section 2: Emerging Tech Detail */}
+              <div 
+                id="companies-emerging-tech" 
+                className="work-detail-section bg-white"
+              >
+                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+                  
+                  {/* Content Center */}
+                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Emerging Tech</h2>
+                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
+                      Exploring cutting-edge technologies like AI, blockchain, and quantum computing to unlock new possibilities.
+                    </p>
+                    <div className="text-black/50 text-sm">
+                      <button
+                        onClick={() => {
+                          const mainSection = document.getElementById('companies-horizontal-container');
+                          if (mainSection) {
+                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                          }
+                        }}
+                        className="hover:text-black transition-colors duration-300"
+                      >
+                        ← Back to Our Work
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div id="companies-emerging-tech" className="horizontal-section bg-white" style={{ direction: 'ltr' }}>
-            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-              {/* Content Center */}
-              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Emerging Tech</h2>
-                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
-                  Exploring cutting-edge technologies like AI, blockchain, and quantum computing to unlock new possibilities.
-                </p>
-                <div className="text-black/50 text-sm">
-                  <button
-                    onClick={() => {
-                      const mainSection = document.getElementById('companies-horizontal-container');
-                      if (mainSection) {
-                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                      }
-                    }}
-                    className="hover:text-black transition-colors duration-300"
-                  >
-                    Back to Our Work →
-                  </button>
+              {/* Section 3: Creator Tools Detail */}
+              <div 
+                id="companies-creator-tools" 
+                className="work-detail-section bg-[#4A90E2]"
+              >
+                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+                  
+                  {/* D/S/L Stacked Letters - Bottom Right */}
+                  <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-4">
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#F8F9FA] leading-none">D</span>
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#F8F9FA] leading-none">S</span>
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#F8F9FA] leading-none">L</span>
+                  </div>
+
+                  {/* Content Center */}
+                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#F8F9FA] mb-8">Creator Tools</h2>
+                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                      Developing platforms and tools that empower creators to build, monetize, and scale their creative endeavors.
+                    </p>
+                    <div className="text-white/50 text-sm">
+                      <button
+                        onClick={() => {
+                          const mainSection = document.getElementById('companies-horizontal-container');
+                          if (mainSection) {
+                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                          }
+                        }}
+                        className="hover:text-white transition-colors duration-300"
+                      >
+                        ← Back to Our Work
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div id="companies-portfolio" className="horizontal-section bg-[#1a1a1a]" style={{ direction: 'ltr' }}>
-            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-              {/* D/S/L Stacked Letters - Bottom Left */}
-              <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-4">
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">D</span>
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">S</span>
-                <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">L</span>
-              </div>
+              {/* Section 4: Innovation Labs Detail - Final Section */}
+              <div 
+                id="companies-innovation-labs" 
+                className="work-detail-section bg-[#1a1a1a]"
+              >
+                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+                  
+                  {/* D/S/L Stacked Letters - Top Left */}
+                  <div className="absolute left-[3rem] top-[3rem] flex flex-col items-center space-y-4">
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(64px,8vw,120px)] font-light text-[#4A90E2] leading-none">L</span>
+                  </div>
 
-              {/* Content Center */}
-              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Portfolio Companies</h2>
-                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                  Building and investing in innovative startups that are reshaping industries and creating the future of technology.
-                </p>
-                <div className="text-white/50 text-sm">
-                  <button
-                    onClick={() => {
-                      const mainSection = document.getElementById('companies-horizontal-container');
-                      if (mainSection) {
-                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                      }
-                    }}
-                    className="hover:text-white transition-colors duration-300"
-                  >
-                    Back to Our Work →
-                  </button>
+                  {/* Content Center */}
+                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Innovation Labs</h2>
+                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                      Experimental projects and research initiatives that push the boundaries of what&apos;s possible in technology.
+                    </p>
+                    <div className="text-white/50 text-sm">
+                      <button
+                        onClick={() => {
+                          const mainSection = document.getElementById('companies-horizontal-container');
+                          if (mainSection) {
+                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                          }
+                        }}
+                        className="hover:text-white transition-colors duration-300"
+                      >
+                        ← Back to Our Work
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
 
