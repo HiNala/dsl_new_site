@@ -57,6 +57,11 @@ section {
   overflow: hidden;
 }
 
+/* Contact section maintains normal flow */
+section#contact {
+  overflow: hidden;
+}
+
 /* Horizontal scroll containers for About and Our Work sections */
 .horizontal-scroll-container {
   scroll-snap-type: x mandatory;
@@ -197,6 +202,59 @@ section {
   .section-container {
     height: 100vh;
     height: 100dvh;
+  }
+  
+  /* Contact section mobile optimizations */
+  #contact {
+    padding: 2rem 1rem;
+  }
+  
+  /* Ensure text remains readable on mobile */
+  #contact .absolute {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    right: auto !important;
+    max-width: 100% !important;
+  }
+  
+  /* Stack content vertically on mobile */
+  #contact > div {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  #contact {
+    padding: 1.5rem 1rem;
+  }
+  
+  /* Ensure DSL letters don't overlap content */
+  #contact .absolute:last-child {
+    position: absolute !important;
+    right: 1rem !important;
+    bottom: 2rem !important;
+  }
+}
+
+/* Footer DSL animation positioning fixes */
+@media (max-width: 768px) {
+  /* Ensure footer DSL letters stay in bounds */
+  .section-container:last-child .absolute[class*="left-"] {
+    left: 1rem !important;
+    top: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens - tighter positioning */
+  .section-container:last-child .absolute[class*="left-"] {
+    left: 0.75rem !important;
+    top: 0.75rem !important;
   }
 }
 

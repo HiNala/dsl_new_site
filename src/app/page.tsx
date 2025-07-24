@@ -198,6 +198,7 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
       setCursorPos({ x: e.clientX, y: e.clientY });
       
       if (containerRef.current) {
+        // Get fresh bounds each time for accuracy
         const rect = containerRef.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
@@ -224,13 +225,17 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [proximityRadius]);
 
-  // Simple mask radius based on proximity
-  const maskRadius = Math.max(200, proximityRadius * proximityFactor);
+  // Enhanced mask radius calculation with better scaling and bounds checking
+  const maskRadius = Math.max(150, Math.min(proximityRadius * proximityFactor * 1.2, 300));
   
   const gradientStyle = {
     backgroundImage: `linear-gradient(45deg, ${colors.join(", ")}, ${colors[0]})`,
     backgroundSize: "400% 400%",
   };
+
+  // Calculate mask position with fresh bounds
+  const maskX = containerRef.current ? cursorPos.x - containerRef.current.getBoundingClientRect().left : 0;
+  const maskY = containerRef.current ? cursorPos.y - containerRef.current.getBoundingClientRect().top : 0;
 
   return (
     <div ref={containerRef} className={cn("relative w-full h-full", className)}>
@@ -241,14 +246,10 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
       
       {/* Animated gradient text with cursor mask - colors moving and swirling */}
       <motion.div
-        className="absolute inset-0 z-20 pointer-events-none"
+        className="absolute inset-0 z-30 pointer-events-none"
         style={{
-          WebkitMask: containerRef.current 
-            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
-            : 'none',
-          mask: containerRef.current 
-            ? `radial-gradient(circle ${maskRadius}px at ${cursorPos.x - containerRef.current.getBoundingClientRect().left}px ${cursorPos.y - containerRef.current.getBoundingClientRect().top}px, black 0%, black 60%, transparent 100%)`
-            : 'none',
+          WebkitMask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 50%, transparent 80%)`,
+          mask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 50%, transparent 80%)`,
         }}
         animate={{
           opacity: isInProximity ? 1 : 0,
@@ -276,6 +277,45 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
             ],
           }}
           transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          {children}
+        </motion.h2>
+      </motion.div>
+      
+      {/* Subtle always-on gradient effect for better visibility */}
+      <motion.div
+        className="absolute inset-0 z-20 pointer-events-none opacity-20"
+        initial={false}
+        animate={{
+          opacity: isInProximity ? 0 : 0.1,
+        }}
+        transition={{
+          duration: 0.5,
+          ease: "easeOut"
+        }}
+      >
+        <motion.h2
+          className="text-[clamp(48px,6vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-transparent"
+          style={{
+            ...gradientStyle,
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+          }}
+          animate={{
+            backgroundPosition: [
+              "0% 0%",
+              "25% 25%",
+              "50% 50%", 
+              "75% 75%",
+              "100% 100%",
+              "0% 0%"
+            ],
+          }}
+          transition={{
             duration: 12,
             repeat: Infinity,
             ease: "linear",
@@ -284,7 +324,6 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
           {children}
         </motion.h2>
       </motion.div>
-
     </div>
   );
 };
@@ -293,59 +332,211 @@ interface ImageMosaicProps {
   className?: string;
 }
 
+interface DSLLetterProps {
+  letter: string;
+}
+
+const DSLLetter: React.FC<DSLLetterProps> = ({ letter }) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [isInProximity, setIsInProximity] = useState(false);
+  const [proximityFactor, setProximityFactor] = useState(0);
+
+  const proximityRadius = 200;
+  const colors = ["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"];
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+      
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const distance = Math.sqrt(
+          Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2)
+        );
+        
+        const isClose = distance < proximityRadius;
+        setIsInProximity(isClose);
+        
+        if (isClose) {
+          const factor = Math.max(0, 1 - (distance / proximityRadius));
+          setProximityFactor(factor);
+        } else {
+          setProximityFactor(0);
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [proximityRadius]);
+
+  const maskRadius = Math.max(150, Math.min(proximityRadius * proximityFactor * 1.2, 300));
+  
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(45deg, ${colors.join(", ")}, ${colors[0]})`,
+    backgroundSize: "400% 400%",
+  };
+
+  const maskX = containerRef.current ? cursorPos.x - containerRef.current.getBoundingClientRect().left : 0;
+  const maskY = containerRef.current ? cursorPos.y - containerRef.current.getBoundingClientRect().top : 0;
+
+  return (
+    <div ref={containerRef} className="relative text-[clamp(48px,5vw,72px)] font-light leading-none">
+      {/* Base black text */}
+      <span className="block text-black relative z-10">
+        {letter}
+      </span>
+      
+      {/* Gradient mask overlay with enhanced coverage */}
+      <motion.div
+        className="absolute inset-0 z-30 pointer-events-none"
+        style={{
+          WebkitMask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 60%, transparent 85%)`,
+          mask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 60%, transparent 85%)`,
+          marginTop: '-2px',
+          marginBottom: '-2px',
+          marginLeft: '-1px',
+          marginRight: '-1px',
+        }}
+        animate={{
+          opacity: isInProximity ? 1 : 0,
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeOut"
+        }}
+      >
+        <motion.span
+          className="block text-[clamp(48px,5vw,72px)] font-light leading-none text-transparent"
+          style={{
+            ...gradientStyle,
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+          }}
+          animate={{
+            backgroundPosition: [
+              "0% 0%",
+              "100% 0%",
+              "100% 100%", 
+              "0% 100%",
+              "50% 50%",
+              "0% 0%"
+            ],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          {letter}
+        </motion.span>
+      </motion.div>
+      
+      {/* Subtle always-on gradient */}
+      <motion.div
+        className="absolute inset-0 z-20 pointer-events-none opacity-10"
+        style={{
+          marginTop: '-2px',
+          marginBottom: '-2px',
+          marginLeft: '-1px',
+          marginRight: '-1px',
+        }}
+        animate={{
+          opacity: isInProximity ? 0 : 0.1,
+        }}
+        transition={{
+          duration: 0.5,
+          ease: "easeOut"
+        }}
+      >
+        <motion.span
+          className="block text-[clamp(48px,5vw,72px)] font-light leading-none text-transparent"
+          style={{
+            ...gradientStyle,
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+          }}
+          animate={{
+            backgroundPosition: [
+              "0% 0%",
+              "25% 25%",
+              "50% 50%", 
+              "75% 75%",
+              "100% 100%",
+              "0% 0%"
+            ],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          {letter}
+        </motion.span>
+      </motion.div>
+    </div>
+  );
+};
+
 const DESIGN_IMAGES = [
   // Left column images (8 total, 3 portrait)
   {
-    src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=600&fit=crop",
+    src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=600&fit=crop&auto=format",
     alt: "Modern architecture",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=800&fit=crop",
+    src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=800&fit=crop&auto=format",
     alt: "Interior design",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop",
+    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop&auto=format",
     alt: "Minimalist design",
     aspectRatio: "aspect-[16/9]", // landscape
     width: 800,
     height: 450,
   },
   {
-    src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?w=600&h=800&fit=crop",
+    src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?w=600&h=800&fit=crop&auto=format",
     alt: "Product design",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop",
+    src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop&auto=format",
     alt: "Graphic design",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&h=800&fit=crop",
+    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&h=800&fit=crop&auto=format",
     alt: "UI design",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=480&fit=crop",
+    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=480&fit=crop&auto=format",
     alt: "Brand design",
     aspectRatio: "aspect-[5/3]", // landscape
     width: 800,
     height: 480,
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop",
+    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop&auto=format",
     alt: "Web design",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
@@ -356,56 +547,56 @@ const DESIGN_IMAGES = [
 const RIGHT_COLUMN_IMAGES = [
   // Right column images (8 total, 2 portrait)
   {
-    src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=800&h=450&fit=crop",
+    src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=800&h=450&fit=crop&auto=format",
     alt: "Creative workspace",
     aspectRatio: "aspect-[16/9]", // landscape
     width: 800,
     height: 450,
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=600&h=800&fit=crop",
+    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=600&h=800&fit=crop&auto=format",
     alt: "Design tools",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&h=600&fit=crop",
+    src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&h=600&fit=crop&auto=format",
     alt: "Typography",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&h=800&fit=crop",
+    src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&h=800&fit=crop&auto=format",
     alt: "Color palette",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=480&fit=crop",
+    src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=480&fit=crop&auto=format",
     alt: "Digital art",
     aspectRatio: "aspect-[5/3]", // landscape
     width: 800,
     height: 480,
   },
   {
-    src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&h=600&fit=crop",
+    src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&h=600&fit=crop&auto=format",
     alt: "Design process",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1600607687920-4f2c19665e92?w=800&h=450&fit=crop",
+    src: "https://images.unsplash.com/photo-1600607687920-4f2c19665e92?w=800&h=450&fit=crop&auto=format",
     alt: "Creative concept",
     aspectRatio: "aspect-[16/9]", // landscape
     width: 800,
     height: 450,
   },
   {
-    src: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=600&fit=crop",
+    src: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=600&fit=crop&auto=format",
     alt: "Design inspiration",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
@@ -422,20 +613,20 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
   React.useEffect(() => {
     const animate = () => {
       // Smooth infinite scrolling - left travels down slowly, right travels up 10% faster
-      leftScrollY.current -= 0.3; // scroll up slowly  
-      rightScrollY.current += 0.33; // scroll down 10% faster than left
+      leftScrollY.current += 0.3; // scroll down slowly  
+      rightScrollY.current -= 0.33; // scroll up 10% faster than left
 
       if (leftColumnRef.current) {
-        const leftHeight = leftColumnRef.current.scrollHeight / 2;
+        const leftHeight = leftColumnRef.current.scrollHeight / 3; // Divide by 3 since we have triple images
         // Continuous loop using modulo for seamless transition
-        leftScrollY.current = ((leftScrollY.current % leftHeight) + leftHeight) % leftHeight;
+        leftScrollY.current = leftScrollY.current % leftHeight;
         leftColumnRef.current.style.transform = `translateY(-${leftScrollY.current}px)`;
       }
 
       if (rightColumnRef.current) {
-        const rightHeight = rightColumnRef.current.scrollHeight / 2;
+        const rightHeight = rightColumnRef.current.scrollHeight / 3; // Divide by 3 since we have triple images
         // Continuous loop using modulo for seamless transition
-        rightScrollY.current = rightScrollY.current % rightHeight;
+        rightScrollY.current = ((rightScrollY.current % rightHeight) + rightHeight) % rightHeight;
         rightColumnRef.current.style.transform = `translateY(-${rightScrollY.current}px)`;
       }
 
@@ -446,10 +637,10 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
   }, []);
 
   return (
-    <div className={cn("w-full h-full overflow-hidden bg-transparent", className)}>
-      <div className="flex h-full gap-4">
-        {/* Left Column - Scrolling Up */}
-        <div className="w-1/2 overflow-hidden">
+    <div className={cn("w-full h-full bg-transparent relative", className)}>
+      <div className="flex h-full gap-4 relative" style={{ height: 'calc(100% + 20rem)', transform: 'translateY(-10rem)' }}>
+        {/* Left Column - Scrolling Down */}
+        <div className="w-1/2 relative">
           <motion.div
             ref={leftColumnRef}
             className="flex flex-col gap-4"
@@ -464,7 +655,7 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
                 className={cn(
                   "relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300",
                   image.aspectRatio,
-                  "w-full"
+                  "w-full flex-shrink-0"
                 )}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
@@ -483,8 +674,8 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
           </motion.div>
         </div>
 
-        {/* Right Column - Scrolling Down */}
-        <div className="w-1/2 overflow-hidden">
+        {/* Right Column - Scrolling Up */}
+        <div className="w-1/2 relative">
           <motion.div
             ref={rightColumnRef}
             className="flex flex-col gap-4"
@@ -499,7 +690,7 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
                 className={cn(
                   "relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300",
                   image.aspectRatio,
-                  "w-full"
+                  "w-full flex-shrink-0"
                 )}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
@@ -529,16 +720,16 @@ const DSLAnimation = () => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Get the DSL area position (updated for new positioning)
-      const dslAreaX = 48; // 3rem = 48px
-      const dslAreaY = 48; // 3rem = 48px
+      // Get the DSL area position (responsive to screen size) - moved further from edge
+      const dslAreaX = window.innerWidth <= 480 ? 60 : window.innerWidth <= 768 ? 80 : 120; // Further from edge
+      const dslAreaY = window.innerWidth <= 480 ? 80 : window.innerWidth <= 768 ? 100 : 120; // Further from edge
 
-      // Define the vertical DSL area (where stacked letters occupy)
+      // Define the vertical DSL area (where stacked letters occupy) - larger area for better interaction
       const verticalDSLArea = {
-        left: dslAreaX - 60, // Adjusted for smaller letters
-        right: dslAreaX + 60,
-        top: dslAreaY - 30, // Extended up to encompass all letters with proper bounds
-        bottom: dslAreaY + 180, // Extended down for better hover detection
+        left: dslAreaX - 40, // Larger hover area
+        right: dslAreaX + 40,
+        top: dslAreaY - 20, // More forgiving hover area
+        bottom: dslAreaY + 120, // Extended for 3 letters with comfortable spacing
       };
 
       // Check if cursor is directly over the vertical DSL area
@@ -583,89 +774,97 @@ const DSLAnimation = () => {
   const getLetterAnimation = (letterIndex: number, stage: number) => {
     // D = index 0, S = index 1, L = index 2
 
-    // Invisible baseline - bottom of letters when horizontal
-    const baseline = -240;
+    // Base stacked positions - properly spaced vertically
+    const stackedPositions = [
+      { x: 0, y: 0 },   // D at top
+      { x: 0, y: 80 },  // S in middle  
+      { x: 0, y: 160 }  // L at bottom
+    ];
 
-    // Base stacked positions with proper spacing to match screenshot (100px between letters)
-    const stackedY = (2 - letterIndex) * -100; // D at -200, S at -100, L at 0
-    const baseX = 0;
-
-    // Ensure no letter goes below baseline
-    const respectBaseline = (y: number) => Math.max(baseline, y);
+    // Horizontal positions for final animated state
+    const horizontalPositions = [
+      { x: 0, y: 80 },   // D stays in middle row
+      { x: 80, y: 80 },  // S moves right 
+      { x: 160, y: 80 }  // L moves further right
+    ];
 
     // Animation stages
     if (stage === 0) {
       // Initial stacked position
-      return { x: baseX, y: stackedY, rotate: 0 };
+      return stackedPositions[letterIndex];
     }
 
-    // Animation sequence positions for each letter - matching 100px horizontal spacing
-    const letterAnimations = [
-      {
-        // D positions through animation - stays in original X position
-        fall1: { x: baseX, y: stackedY + 20, rotate: -2 }, // Gentler start
-        fall2: { x: baseX, y: respectBaseline(baseline + 10), rotate: -0.5 }, // Smoother fall
-        bounce: { x: baseX, y: respectBaseline(baseline - 3), rotate: 0.2 }, // Subtle bounce
-        final: { x: baseX, y: respectBaseline(baseline), rotate: 0 }, // Settle in original X position
-      },
-      {
-        // S positions through animation - moves to align with D (100px spacing)
-        fall1: { x: -2, y: stackedY + 15, rotate: 2 }, // Gentler start
-        fall2: { x: 30, y: respectBaseline(baseline + 8), rotate: 1 }, // Gradual horizontal movement
-        bounce: { x: 95, y: respectBaseline(baseline - 2), rotate: -0.5 }, // Near final position
-        final: { x: 100, y: respectBaseline(baseline), rotate: 0 }, // 100px spacing from D
-      },
-      {
-        // L positions through animation - moves to align with D and S (100px spacing each)
-        fall1: { x: 3, y: stackedY + 18, rotate: -3 }, // Gentler start
-        fall2: { x: 80, y: respectBaseline(baseline + 12), rotate: -1.5 }, // Gradual horizontal movement
-        bounce: { x: 195, y: respectBaseline(baseline - 2.5), rotate: 1 }, // Near final position
-        final: { x: 200, y: respectBaseline(baseline), rotate: 0 }, // 200px from D (100px from S)
-      },
-    ];
+    const stacked = stackedPositions[letterIndex];
+    const horizontal = horizontalPositions[letterIndex];
 
-    const letterAnim = letterAnimations[letterIndex];
-
-    if (stage === 1) return letterAnim.fall1;
-    if (stage === 2) return letterAnim.fall2;
-    if (stage === 3) return letterAnim.bounce;
-    if (stage === 4) {
-      // Very subtle continuous movement in final position
-      const bounceOffset = Math.sin(Date.now() * 0.003 + letterIndex) * 0.5;
+    // Animation sequence positions for each letter
+    if (stage === 1) {
+      // Start movement - slight shift
       return {
-        x: letterAnim.final.x + bounceOffset * 0.05,
-        y: letterAnim.final.y + Math.abs(bounceOffset) * 0.05,
-        rotate: letterAnim.final.rotate,
+        x: stacked.x + (horizontal.x - stacked.x) * 0.1,
+        y: stacked.y + (horizontal.y - stacked.y) * 0.1,
+        rotate: 0
       };
     }
 
-    // Default fallback
-    return { x: baseX, y: stackedY, rotate: 0 };
+    if (stage === 2) {
+      // Mid animation - 60% towards final position
+      return {
+        x: stacked.x + (horizontal.x - stacked.x) * 0.6,
+        y: stacked.y + (horizontal.y - stacked.y) * 0.6,
+        rotate: 0
+      };
+    }
+
+    if (stage === 3) {
+      // Near final - slight overshoot for bounce effect
+      const overshoot = letterIndex === 0 ? 1.0 : 1.05; // D doesn't overshoot, S and L do slightly
+      return {
+        x: stacked.x + (horizontal.x - stacked.x) * overshoot,
+        y: stacked.y + (horizontal.y - stacked.y) * overshoot,
+        rotate: 0
+      };
+    }
+
+    if (stage === 4) {
+      // Final position with subtle continuous movement
+      const bounceOffset = Math.sin(Date.now() * 0.003 + letterIndex) * 0.5;
+      return {
+        x: horizontal.x + bounceOffset * 0.02,
+        y: horizontal.y + Math.abs(bounceOffset) * 0.02,
+        rotate: 0
+      };
+    }
+
+    // Default fallback to stacked
+    return stackedPositions[letterIndex];
   };
 
   const letters = ["D", "S", "L"];
 
   return (
-    <div className="absolute left-[3rem] top-[3rem] z-20">
-      <div className="relative">
+    <div className="absolute left-[5rem] top-[5rem] z-30 
+                    md:left-[5rem] md:top-[5rem]
+                    sm:left-[3rem] sm:top-[3rem]
+                    xs:left-[2rem] xs:top-[2rem]">
+      <div className="relative w-[240px] h-[240px]">
         {letters.map((letter, index) => (
           <motion.div
             key={letter}
-            className="absolute text-[clamp(48px,5vw,72px)] font-light text-white leading-none select-none"
+            className="absolute text-[clamp(48px,5vw,72px)] font-light text-white leading-none select-none cursor-pointer"
             style={{
-              width: "100px",
-              height: "100px",
+              width: "70px",
+              height: "70px", 
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transform: "translate(-50%, -50%)",
             }}
             animate={getLetterAnimation(index, currentStage)}
             transition={{
               type: "spring",
-              stiffness: 60, // Reduced for smoother animation
-              damping: 25, // Reduced for less bounce
-              duration: 0.8, // Slightly longer for smoothness
+              stiffness: 60,
+              damping: 25,
+              duration: 0.8,
             }}
           >
             {letter}
@@ -689,54 +888,56 @@ export default function Home() {
 
   const scrollToAboutSection = (sectionId: string) => {
     const container = document.getElementById('about-horizontal-container');
-    if (container) {
-      container.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
+    const detailContainer = document.querySelector('.about-detail-container');
+    
+    if (container && detailContainer) {
+      // Map section IDs to vertical scroll positions
+      const sectionMap: { [key: string]: number } = {
+        'mission': 0,
+        'approach': 1,
+        'team': 2,
+        'values': 3
+      };
+      const sectionIndex = sectionMap[sectionId] || 0;
       
-      // Then scroll to the specific section within the detail area
-      setTimeout(() => {
-        const detailContainer = document.querySelector('.about-detail-container');
-        if (detailContainer) {
-          // Map section IDs to vertical scroll positions
-          const sectionMap: { [key: string]: number } = {
-            'mission': 0,
-            'approach': 1,
-            'team': 2,
-            'values': 3
-          };
-          const sectionIndex = sectionMap[sectionId] || 0;
-          detailContainer.scrollTo({
-            top: sectionIndex * window.innerHeight,
-            behavior: 'smooth'
-          });
-        }
-      }, 500);
+      // Pre-position the vertical scroll to the target section
+      detailContainer.scrollTo({
+        top: sectionIndex * window.innerHeight,
+        behavior: 'auto'
+      });
+      
+      // Then smoothly scroll horizontally to reveal the positioned section
+      container.scrollTo({ 
+        left: window.innerWidth, 
+        behavior: 'smooth' 
+      });
     }
   };
 
   const scrollToCompaniesMain = () => {
     const container = document.getElementById('companies-horizontal-container');
     if (container) {
-      // Scroll to the main Our Work section (position 0 = main overview)
-      container.scrollTo({ left: 0, behavior: 'smooth' });
+      // Scroll to the main Our Work section (position 1 = main overview on the right)
+      container.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
     }
   };
 
   const scrollToCompaniesSection = (sectionId: string) => {
     const container = document.getElementById('companies-horizontal-container');
     if (container) {
-      container.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
+      // First scroll to the detail sections area (to the left)
+      container.scrollTo({ left: 0, behavior: 'smooth' });
       
       // Then scroll to the specific section within the detail area
       setTimeout(() => {
         const detailContainer = document.getElementById('work-detail-scroll-container');
-        const targetSection = document.getElementById(`companies-${sectionId}`);
-        if (detailContainer && targetSection) {
-          // Map section IDs to horizontal scroll positions
+        if (detailContainer) {
+          // Map section IDs to horizontal scroll positions (reversed order)
           const sectionMap: { [key: string]: number } = {
-            'portfolio': 0,
-            'emerging-tech': 1,
-            'creator-tools': 2,
-            'innovation-labs': 3
+            'portfolio': 3,
+            'emerging-tech': 2,
+            'creator-tools': 1,
+            'innovation-labs': 0
           };
           const sectionIndex = sectionMap[sectionId] || 0;
           detailContainer.scrollTo({
@@ -895,9 +1096,9 @@ export default function Home() {
               
               {/* D/S/L Stacked Letters - Top Right */}
               <div className="absolute right-[3rem] top-[3rem] flex flex-col items-center space-y-2">
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">D</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">S</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">L</span>
               </div>
 
               {/* About Us Headline - moved down */}
@@ -1139,115 +1340,9 @@ export default function Home() {
 
       {/* Section 3: Our Work with Horizontal Scroll */}
       <section id="companies" className="section-container">
-        <div id="companies-horizontal-container" className="horizontal-scroll-container" style={{ direction: 'rtl' }}>
+        <div id="companies-horizontal-container" className="horizontal-scroll-container">
           
-          {/* Main Our Work Section - First in RTL means rightmost/default position */}
-          <div className="horizontal-section bg-[#4A90E2]" style={{ direction: 'ltr' }}>
-            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
-              
-              {/* D/S/L Stacked Letters - Bottom Left */}
-              <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
-              </div>
-
-              {/* Our Work Headline - Right Side (mirroring About Us) */}
-              <div className="absolute right-[4vw] top-[12rem]">
-                <div className="text-right mb-[3rem]">
-                  <TextSplit
-                    className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
-                    topClassName="text-[#F8F9FA]"
-                    bottomClassName="text-white/60"
-                    maxMove={100}
-                    falloff={0.2}
-                  >
-                    OUR WORK
-                  </TextSplit>
-                </div>
-              </div>
-
-              {/* Work Content Grid - Exactly mirroring About Us but right-aligned */}
-              <div className="absolute right-[4vw] top-[21rem] flex justify-end">
-                <div className="max-w-[75vw]">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
-                  
-                  {/* Portfolio Companies */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToCompaniesSection('portfolio')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Portfolio Companies</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                      Building and investing in innovative startups that are reshaping 
-                      industries and creating the future of technology.
-                    </p>
-                  </div>
-
-                  {/* Emerging Tech */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToCompaniesSection('emerging-tech')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Emerging Tech</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                      Exploring cutting-edge technologies like AI, blockchain, and 
-                      quantum computing to unlock new possibilities.
-                    </p>
-                  </div>
-
-                  {/* Creator Tools */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToCompaniesSection('creator-tools')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Creator Tools</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                      Developing platforms and tools that empower creators to build, 
-                      monetize, and scale their creative endeavors.
-                    </p>
-                  </div>
-
-                  {/* Innovation Labs */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToCompaniesSection('innovation-labs')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Innovation Labs</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                      Experimental projects and research initiatives that push the 
-                      boundaries of what&apos;s possible in technology.
-                    </p>
-                  </div>
-
-                   </div>
-                 </div>
-               </div>
-
-            </div>
-          </div>
-
-          {/* Our Work Detail Sections - Contained Horizontal Scroll */}
+          {/* Our Work Detail Sections - Now positioned left (first) */}
           <div className="horizontal-section bg-[#4A90E2]">
             <div className="work-detail-container" id="work-detail-scroll-container">
               
@@ -1491,40 +1586,28 @@ export default function Home() {
       <section id="contact" className="section-container bg-white">
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
-          {/* D/S/L Stacked Letters - Bottom Right */}
-          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
-            <div className="h-[clamp(48px,5vw,72px)] leading-none">
-              <ProximityGradientText
-                colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
-                proximityRadius={300}
-              >
-                D
-              </ProximityGradientText>
-            </div>
-            <div className="h-[clamp(48px,5vw,72px)] leading-none">
-              <ProximityGradientText
-                colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
-                proximityRadius={300}
-              >
-                S
-              </ProximityGradientText>
-            </div>
-            <div className="h-[clamp(48px,5vw,72px)] leading-none">
-              <ProximityGradientText
-                colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
-                proximityRadius={300}
-              >
-                L
-              </ProximityGradientText>
-            </div>
+          {/* D/S/L Stacked Letters - Bottom Right (matching other sections) */}
+          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2 z-20
+                          md:right-[3rem] md:bottom-[3rem]
+                          sm:right-[2rem] sm:bottom-[2rem]
+                          xs:right-[1rem] xs:bottom-[1rem]">
+            <DSLLetter letter="D" />
+            <DSLLetter letter="S" />
+            <DSLLetter letter="L" />
           </div>
 
-          {/* Main Content - Left Side (narrower to avoid image overlap) */}
-          <div className="absolute left-[4vw] top-[12rem]">
-            <div className="max-w-[35vw]">
+          {/* Main Content - Mobile Responsive Layout */}
+          <div className="absolute left-[4vw] top-[12rem] 
+                          md:left-[4vw] md:top-[12rem] md:max-w-[35vw]
+                          sm:left-[4vw] sm:top-[8rem] sm:max-w-[85vw]
+                          xs:left-[4vw] xs:top-[6rem] xs:max-w-[90vw]">
+            <div className="max-w-[35vw] md:max-w-[35vw] sm:max-w-[85vw] xs:max-w-[90vw]">
               
               {/* Animated Headline */}
-              <div className="mb-[3rem] h-[80px] relative">
+              <div className="mb-[3rem] h-[80px] relative 
+                              md:mb-[3rem] md:h-[80px]
+                              sm:mb-[2rem] sm:h-[60px]
+                              xs:mb-[1.5rem] xs:h-[50px]">
                 <ProximityGradientText
                   colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                   proximityRadius={500}
@@ -1534,25 +1617,43 @@ export default function Home() {
               </div>
 
               {/* Supporting Text */}
-              <div className="space-y-[2rem] max-w-[320px]">
-                <p className="text-[16px] font-light text-black/80 leading-[1.6]">
+              <div className="space-y-[2rem] max-w-[320px] 
+                              md:space-y-[2rem] md:max-w-[320px]
+                              sm:space-y-[1.5rem] sm:max-w-[100%]
+                              xs:space-y-[1rem] xs:max-w-[100%]">
+                <p className="text-[16px] font-light text-black/80 leading-[1.6]
+                              md:text-[16px]
+                              sm:text-[15px]
+                              xs:text-[14px]">
                   Ready to build something extraordinary? We partner with visionary founders 
                   and companies to create digital experiences that redefine what&apos;s possible.
                 </p>
                 
-                <p className="text-[16px] font-light text-black/80 leading-[1.6]">
+                <p className="text-[16px] font-light text-black/80 leading-[1.6]
+                              md:text-[16px]
+                              sm:text-[15px]
+                              xs:text-[14px]">
                   From startups to Fortune 500 enterprises, we bring together strategic 
                   thinking, cutting-edge technology, and exceptional design to transform 
                   ambitious ideas into reality.
                 </p>
                 
-                <div className="space-y-[1rem]">
-                  <p className="text-[14px] font-medium text-black">
+                <div className="space-y-[1rem]
+                                md:space-y-[1rem]
+                                sm:space-y-[0.75rem]
+                                xs:space-y-[0.5rem]">
+                  <p className="text-[14px] font-medium text-black
+                                md:text-[14px]
+                                sm:text-[13px]
+                                xs:text-[12px]">
                     Start the conversation
                   </p>
                   <a 
                     href="mailto:hello@digitalstudiolabs.com"
-                    className="text-[14px] font-normal text-black/70 hover:text-black transition-colors duration-300 border-b border-black/20 hover:border-black/40"
+                    className="text-[14px] font-normal text-black/70 hover:text-black transition-colors duration-300 border-b border-black/20 hover:border-black/40
+                              md:text-[14px]
+                              sm:text-[13px]
+                              xs:text-[12px]"
                   >
                     hello@digitalstudiolabs.com
                   </a>
@@ -1562,9 +1663,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Dynamic Image Mosaic */}
-          <div className="absolute left-[46vw] top-0 bottom-0 w-[min(550px,50vw)] h-full">
-            <ImageMosaic />
+          {/* Dynamic Image Mosaic - Extending to section edges */}
+          <div className="absolute left-[45vw] top-0 bottom-0 w-[550px] z-10 overflow-hidden
+                          lg:left-[45vw] lg:w-[550px]
+                          md:left-[42vw] md:w-[480px] md:top-0 md:bottom-0
+                          sm:left-[38vw] sm:w-[400px] sm:top-0 sm:bottom-0
+                          xs:hidden"
+               style={{backgroundColor: 'transparent'}}>
+            <ImageMosaic className="w-full h-full" />
           </div>
 
         </div>
@@ -1577,8 +1683,8 @@ export default function Home() {
           {/* D/S/L Animated Letters - Top Left */}
           <DSLAnimation />
 
-          {/* Main Footer Content (moved right to avoid D/S/L overlap) */}
-          <div className="absolute left-[18vw] right-[4vw] top-[16rem]">
+          {/* Main Footer Content (positioned to avoid D/S/L overlap) */}
+          <div className="absolute left-[16vw] right-[4vw] top-[12rem]">
             
             {/* Footer Grid Layout */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-[2.5rem] max-w-[80vw]">
@@ -1675,7 +1781,7 @@ export default function Home() {
             </div>
 
             {/* Bottom Section */}
-            <div className="absolute top-[21rem] left-0 right-0 border-t border-white/10 pt-[2rem]">
+            <div className="absolute top-[17rem] left-0 right-0 border-t border-white/10 pt-[2rem]">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                 
                 {/* Copyright */}
