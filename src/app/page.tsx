@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
@@ -1342,46 +1342,7 @@ export default function Home() {
           <div className="horizontal-section bg-[#1a1a1a]">
             <div className="about-detail-container">
               
-              {/* Up Navigation - Top Center */}
-              <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-30">
-                <button
-                  onClick={() => {
-                    const container = document.querySelector('.about-detail-container');
-                    if (container) {
-                      const currentScroll = container.scrollTop;
-                      const targetScroll = Math.max(0, currentScroll - window.innerHeight);
-                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
-                  id="about-nav-up"
-                >
-                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M3 10L8 5L13 10" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              
-              {/* Down Navigation - Bottom Center */}
-              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-                <button
-                  onClick={() => {
-                    const container = document.querySelector('.about-detail-container');
-                    if (container) {
-                      const currentScroll = container.scrollTop;
-                      const maxScroll = container.scrollHeight - container.clientHeight;
-                      const targetScroll = Math.min(maxScroll, currentScroll + window.innerHeight);
-                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
-                  id="about-nav-down"
-                >
-                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
+
               
               {/* Back Navigation - Right Center */}
               <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-30">
@@ -1408,12 +1369,7 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                  {/* D/S/L Stacked Letters - Top Right */}
-                  <div className="absolute right-[3rem] top-[3rem] flex flex-col items-center space-y-2">
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
-                  </div>
+
 
                   {/* Down Navigation - Bottom Center */}
                   <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
@@ -1525,12 +1481,7 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                  {/* D/S/L Stacked Letters - Bottom Right */}
-                  <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
-                  </div>
+
 
                   {/* Back Navigation - Left Center */}
                   <div className="absolute left-8 top-1/2 transform -translate-y-1/2 z-50">
@@ -1573,64 +1524,7 @@ export default function Home() {
           <div className="horizontal-section bg-[#4A90E2]">
             <div className="work-detail-container" id="work-detail-scroll-container">
               
-              {/* Up Navigation - Top Center */}
-              <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-40" style={{ display: 'none' }}>
-                <button
-                  onClick={() => {
-                    const container = document.getElementById('work-detail-scroll-container');
-                    if (container) {
-                      const currentScroll = container.scrollTop;
-                      const targetScroll = Math.max(0, currentScroll - window.innerHeight);
-                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 pointer-events-auto"
-                  id="work-nav-up"
-                >
-                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M3 10L8 5L13 10" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              
-              {/* Down Navigation - Bottom Center */}
-              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40" style={{ display: 'flex' }}>
-                <button
-                  onClick={() => {
-                    const container = document.getElementById('work-detail-scroll-container');
-                    if (container) {
-                      const currentScroll = container.scrollTop;
-                      const maxScroll = container.scrollHeight - container.clientHeight;
-                      const targetScroll = Math.min(maxScroll, currentScroll + window.innerHeight);
-                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 pointer-events-auto"
-                  id="work-nav-down"
-                >
-                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              
-              {/* Back Navigation - Left Center */}
-              <div className="absolute left-8 top-1/2 transform -translate-y-1/2 z-40" style={{ display: 'none' }}>
-                <button
-                  onClick={() => {
-                    const mainSection = document.getElementById('companies-horizontal-container');
-                    if (mainSection) {
-                      mainSection.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 pointer-events-auto"
-                  id="work-nav-back"
-                >
-                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
+
               
 
               
@@ -1658,12 +1552,7 @@ export default function Home() {
                     </button>
                   </div>
                   
-                  {/* D/S/L Stacked Letters - Bottom Left */}
-                  <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
-                  </div>
+
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1735,12 +1624,7 @@ export default function Home() {
                     </button>
                   </div>
                   
-                  {/* D/S/L Stacked Letters - Bottom Right */}
-                  <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
-                  </div>
+
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1777,12 +1661,7 @@ export default function Home() {
                     </button>
                   </div>
                   
-                  {/* D/S/L Stacked Letters - Top Left */}
-                  <div className="absolute left-[3rem] top-[3rem] flex flex-col items-center space-y-2">
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
-                  </div>
+
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1802,12 +1681,7 @@ export default function Home() {
           <div className="horizontal-section bg-[#4A90E2]">
             <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
               
-              {/* D/S/L Stacked Letters - Bottom Left */}
-              <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
-              </div>
+
 
               {/* Our Work Headline - Right Side (mirroring About Us) */}
               <div className="absolute right-[4vw] top-[12rem]">
@@ -2002,133 +1876,340 @@ export default function Home() {
       </section>
 
             {/* Section 5: Footer/Directory */}
-      <section id="footer" className="section-container bg-black">
-        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
+      <section id="footer" className="section-container bg-black relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div 
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(74, 144, 226, 0.3) 1px, transparent 0)`,
+              backgroundSize: '32px 32px'
+            }}
+          />
+        </div>
+
+        <div className="relative w-full h-full py-[6rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Animated Letters - Top Left */}
           <DSLAnimation />
 
-          {/* Main Footer Content (positioned to avoid D/S/L overlap) */}
-          <div className="absolute left-[16vw] right-[4vw] top-[12rem]">
+          {/* Animated Welcome Section */}
+          <motion.div 
+            className="mt-[8rem] mb-[6rem] text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.div
+              className="relative inline-block"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-[clamp(36px,5vw,72px)] font-light leading-[1.1] text-white mb-[2rem] tracking-wide">
+                Let&apos;s Create
+                <motion.span 
+                  className="text-[#4A90E2] ml-4"
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.8, type: "spring" }}
+                  viewport={{ once: true }}
+                >
+                  Together
+                </motion.span>
+              </h2>
+            </motion.div>
+            <motion.p 
+              className="text-[16px] font-light text-white/70 leading-[1.6] max-w-[560px] mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Ready to transform your vision into reality? Join us in building the future of the creator economy.
+            </motion.p>
+          </motion.div>
+
+          {/* Main Footer Content */}
+          <div className="max-w-[1200px] mx-auto w-full">
             
-            {/* Footer Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-[2.5rem] max-w-[80vw]">
+            <motion.div 
+              className="grid grid-cols-1 lg:grid-cols-12 gap-[4rem] lg:gap-[6rem] mb-[6rem]"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, staggerChildren: 0.1 }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
               
-              {/* Column 1: Services */}
-              <div className="space-y-[1rem]">
-                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Services</h3>
-                <div className="space-y-[0.6rem]">
-                  <a href="/web-development" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Web Development
-                  </a>
-                  <a href="/mobile-apps" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Mobile Applications
-                  </a>
-                  <a href="/design" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    UI/UX Design
-                  </a>
-                  <a href="/strategy" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Digital Strategy
-                  </a>
-                  <a href="/branding" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Brand Identity
-                  </a>
-                </div>
-              </div>
+              {/* Newsletter & Company Info */}
+              <motion.div 
+                className="lg:col-span-5"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="space-y-[3rem]">
+                  <div>
+                    <h3 className="text-[clamp(24px,3vw,32px)] font-light text-white mb-[1.5rem] tracking-wide">
+                      Digital Studio Labs
+                    </h3>
+                    <p className="text-[15px] font-light text-white/70 leading-[1.6] max-w-[420px]">
+                      We believe in the power of creativity and innovation to transform industries and inspire meaningful change in the creator economy.
+                    </p>
+                  </div>
 
-              {/* Column 2: Solutions */}
-              <div className="space-y-[1rem]">
-                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Solutions</h3>
-                <div className="space-y-[0.6rem]">
-                  <a href="/startups" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Startups
-                  </a>
-                  <a href="/enterprise" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Enterprise
-                  </a>
-                  <a href="/saas" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    SaaS Products
-                  </a>
-                  <a href="/ecommerce" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    E-commerce
-                  </a>
-                  <a href="/fintech" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Fintech
-                  </a>
+                  {/* Newsletter Signup */}
+                  <div className="space-y-[1.5rem]">
+                    <h4 className="text-[18px] font-light text-white tracking-wide">
+                      Stay in the Loop
+                    </h4>
+                    <div className="relative group max-w-[400px]">
+                      <input
+                        type="email"
+                        placeholder="Enter your email address"
+                        className="w-full bg-transparent border border-white/20 rounded-none px-4 py-3 text-white placeholder:text-white/40 text-[14px] font-light focus:outline-none focus:border-[#4A90E2] transition-all duration-300"
+                      />
+                      <motion.button
+                        className="absolute right-0 top-0 h-full px-6 bg-[#4A90E2] text-white text-[14px] font-light hover:bg-[#357ABD] transition-all duration-300"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Subscribe
+                      </motion.button>
+                    </div>
+                    <p className="text-[12px] font-light text-white/50">
+                      Get insights on innovation, design trends, and creator economy updates.
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Column 3: Company */}
-              <div className="space-y-[1rem]">
-                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Company</h3>
-                <div className="space-y-[0.6rem]">
-                  <a href="/about" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    About Us
-                  </a>
-                  <a href="/team" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Our Team
-                  </a>
-                  <a href="/careers" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Careers
-                  </a>
-                  <a href="/case-studies" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Case Studies
-                  </a>
-                  <a href="/contact" className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300">
-                    Contact
-                  </a>
-                </div>
-              </div>
-
-              {/* Column 4: Contact */}
-              <div className="space-y-[1rem]">
-                <h3 className="text-[16px] font-medium text-white mb-[1.25rem]">Connect</h3>
-                <div className="space-y-[0.8rem]">
-                  <a 
-                    href="mailto:hello@digitalstudiolabs.com"
-                    className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300"
+              {/* Navigation Grid */}
+              <div className="lg:col-span-7">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-[3rem]">
+                  
+                  {/* Services */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.1 }}
+                    viewport={{ once: true }}
                   >
-                    hello@digitalstudiolabs.com
-                  </a>
-                  <a 
-                    href="tel:+15551234567"
-                    className="block text-[13px] font-light text-white/70 hover:text-white transition-colors duration-300"
+                    <h3 className="text-[14px] font-medium text-[#4A90E2] mb-[2rem] tracking-wide uppercase">
+                      Services
+                    </h3>
+                    <div className="space-y-[1.2rem]">
+                      {[
+                        { name: "Web Development", href: "/web-development" },
+                        { name: "Mobile Applications", href: "/mobile-apps" },
+                        { name: "UI/UX Design", href: "/design" },
+                        { name: "Digital Strategy", href: "/strategy" },
+                        { name: "Brand Identity", href: "/branding" }
+                      ].map((item, index) => (
+                        <motion.a 
+                          key={index}
+                          href={item.href} 
+                          className="block text-[14px] font-light text-white/60 hover:text-white transition-all duration-300 group"
+                          whileHover={{ x: 4 }}
+                        >
+                          <span className="flex items-center">
+                            <span className="w-0 h-[1px] bg-[#4A90E2] group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
+                            {item.name}
+                          </span>
+                        </motion.a>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Solutions */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    viewport={{ once: true }}
                   >
-                    +1 (555) 123-4567
-                  </a>
-                  <p className="text-[13px] font-light text-white/50 leading-[1.4]">
-                    San Francisco, CA<br />
-                    Innovation District
-                  </p>
+                    <h3 className="text-[14px] font-medium text-[#4A90E2] mb-[2rem] tracking-wide uppercase">
+                      Solutions
+                    </h3>
+                    <div className="space-y-[1.2rem]">
+                      {[
+                        { name: "Startups", href: "/startups" },
+                        { name: "Enterprise", href: "/enterprise" },
+                        { name: "SaaS Products", href: "/saas" },
+                        { name: "E-commerce", href: "/ecommerce" },
+                        { name: "Fintech", href: "/fintech" }
+                      ].map((item, index) => (
+                        <motion.a 
+                          key={index}
+                          href={item.href} 
+                          className="block text-[14px] font-light text-white/60 hover:text-white transition-all duration-300 group"
+                          whileHover={{ x: 4 }}
+                        >
+                          <span className="flex items-center">
+                            <span className="w-0 h-[1px] bg-[#4A90E2] group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
+                            {item.name}
+                          </span>
+                        </motion.a>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* Company */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                    viewport={{ once: true }}
+                  >
+                    <h3 className="text-[14px] font-medium text-[#4A90E2] mb-[2rem] tracking-wide uppercase">
+                      Company
+                    </h3>
+                    <div className="space-y-[1.2rem]">
+                      {[
+                        { name: "About Us", href: "/about" },
+                        { name: "Our Team", href: "/team" },
+                        { name: "Careers", href: "/careers" },
+                        { name: "Case Studies", href: "/case-studies" },
+                        { name: "Contact", href: "/contact" }
+                      ].map((item, index) => (
+                        <motion.a 
+                          key={index}
+                          href={item.href} 
+                          className="block text-[14px] font-light text-white/60 hover:text-white transition-all duration-300 group"
+                          whileHover={{ x: 4 }}
+                        >
+                          <span className="flex items-center">
+                            <span className="w-0 h-[1px] bg-[#4A90E2] group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
+                            {item.name}
+                          </span>
+                        </motion.a>
+                      ))}
+                    </div>
+                  </motion.div>
+
                 </div>
               </div>
 
-            </div>
+            </motion.div>
+
+            {/* Contact & Social Section */}
+            <motion.div 
+              className="border-t border-white/[0.08] pt-[3rem] mb-[3rem]"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-[3rem] lg:gap-[6rem]">
+                
+                {/* Contact Info */}
+                <div>
+                  <h3 className="text-[18px] font-light text-white mb-[2rem] tracking-wide">
+                    Connect With Us
+                  </h3>
+                  <div className="space-y-[1.5rem]">
+                    <motion.a
+                      href="mailto:hello@digitalstudiolabs.com"
+                      className="group flex items-center space-x-3 text-white/70 hover:text-[#4A90E2] transition-colors duration-300"
+                      whileHover={{ x: 4 }}
+                    >
+                      <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#4A90E2] transition-colors duration-300">
+                        <span className="text-[10px]">@</span>
+                      </div>
+                      <span className="text-[14px] font-light">hello@digitalstudiolabs.com</span>
+                    </motion.a>
+                    <motion.a
+                      href="tel:+15551234567"
+                      className="group flex items-center space-x-3 text-white/70 hover:text-[#4A90E2] transition-colors duration-300"
+                      whileHover={{ x: 4 }}
+                    >
+                      <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#4A90E2] transition-colors duration-300">
+                        <span className="text-[10px]">📞</span>
+                      </div>
+                      <span className="text-[14px] font-light">+1 (555) 123-4567</span>
+                    </motion.a>
+                    <div className="flex items-start space-x-3 text-white/60">
+                      <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center mt-0.5">
+                        <span className="text-[10px]">📍</span>
+                      </div>
+                      <div className="text-[14px] font-light leading-[1.5]">
+                        San Francisco, CA<br />
+                        Innovation District
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Social Links */}
+                <div>
+                  <h3 className="text-[18px] font-light text-white mb-[2rem] tracking-wide">
+                    Follow Our Journey
+                  </h3>
+                  <div className="flex space-x-4">
+                    {[
+                      { name: "GitHub", href: "https://github.com", icon: "💻" },
+                      { name: "LinkedIn", href: "https://linkedin.com", icon: "💼" },
+                      { name: "Twitter", href: "https://twitter.com", icon: "🐦" },
+                      { name: "Dribbble", href: "https://dribbble.com", icon: "🎨" }
+                    ].map((social, index) => (
+                      <motion.a
+                        key={social.name}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative"
+                        whileHover={{ scale: 1.1, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-[#4A90E2] hover:border-[#4A90E2] transition-all duration-300">
+                          <span className="text-[16px]">{social.icon}</span>
+                        </div>
+                      </motion.a>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </motion.div>
 
             {/* Bottom Section */}
-            <div className="absolute top-[17rem] left-0 right-0 border-t border-white/10 pt-[2rem]">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+            <motion.div 
+              className="border-t border-white/[0.06] pt-[2rem]"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 
                 {/* Copyright */}
-                <p className="text-[12px] font-light text-white/50">
+                <p className="text-[13px] font-light text-white/40">
                   © 2024 Digital Studio Labs. All rights reserved.
                 </p>
                 
                 {/* Legal Links */}
-                <div className="flex space-x-4">
-                  <a href="/privacy" className="text-[12px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
-                    Privacy Policy
-                  </a>
-                  <a href="/terms" className="text-[12px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
-                    Terms of Service
-                  </a>
-                  <a href="/cookies" className="text-[12px] font-light text-white/50 hover:text-white/70 transition-colors duration-300">
-                    Cookies
-                  </a>
+                <div className="flex flex-wrap gap-6">
+                  {[
+                    { name: "Privacy Policy", href: "/privacy" },
+                    { name: "Terms of Service", href: "/terms" },
+                    { name: "Cookies", href: "/cookies" }
+                  ].map((link, index) => (
+                    <motion.a 
+                      key={index}
+                      href={link.href} 
+                      className="text-[13px] font-light text-white/40 hover:text-white/70 transition-colors duration-300"
+                      whileHover={{ y: -1 }}
+                    >
+                      {link.name}
+                    </motion.a>
+                  ))}
                 </div>
                 
               </div>
-            </div>
+            </motion.div>
 
           </div>
 
