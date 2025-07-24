@@ -1579,6 +1579,112 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Main Our Work Section - Now positioned right (second) */}
+          <div className="horizontal-section bg-[#4A90E2]">
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
+              
+              {/* D/S/L Stacked Letters - Bottom Left */}
+              <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
+              </div>
+
+              {/* Our Work Headline - Right Side (mirroring About Us) */}
+              <div className="absolute right-[4vw] top-[12rem]">
+                <div className="text-right mb-[3rem]">
+                  <TextSplit
+                    className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
+                    topClassName="text-[#F8F9FA]"
+                    bottomClassName="text-white/60"
+                    maxMove={100}
+                    falloff={0.2}
+                  >
+                    OUR WORK
+                  </TextSplit>
+                </div>
+              </div>
+
+              {/* Work Content Grid - Exactly mirroring About Us but right-aligned */}
+              <div className="absolute right-[4vw] top-[21rem] flex justify-end">
+                <div className="max-w-[75vw]">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
+                  
+                  {/* Portfolio Companies */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('portfolio')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Portfolio Companies</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Building and investing in innovative startups that are reshaping 
+                      industries and creating the future of technology.
+                    </p>
+                  </div>
+
+                  {/* Emerging Tech */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('emerging-tech')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Emerging Tech</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Exploring cutting-edge technologies like AI, blockchain, and 
+                      quantum computing to unlock new possibilities.
+                    </p>
+                  </div>
+
+                  {/* Creator Tools */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('creator-tools')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Creator Tools</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Developing platforms and tools that empower creators to build, 
+                      monetize, and scale their creative endeavors.
+                    </p>
+                  </div>
+
+                  {/* Innovation Labs */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('innovation-labs')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Innovation Labs</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Experimental projects and research initiatives that push the 
+                      boundaries of what&apos;s possible in technology.
+                    </p>
+                  </div>
+
+                   </div>
+                 </div>
+               </div>
+
+            </div>
+          </div>
+
         </div>
       </section>
 
