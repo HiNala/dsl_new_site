@@ -679,6 +679,14 @@ const DSLAnimation = () => {
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
+  const scrollToAboutMain = () => {
+    const container = document.getElementById('about-horizontal-container');
+    if (container) {
+      // Scroll to the main About Us section (position 0 = main overview)
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  };
+
   const scrollToAboutSection = (sectionId: string) => {
     const container = document.getElementById('about-horizontal-container');
     if (container) {
@@ -702,6 +710,14 @@ export default function Home() {
           });
         }
       }, 500);
+    }
+  };
+
+  const scrollToCompaniesMain = () => {
+    const container = document.getElementById('companies-horizontal-container');
+    if (container) {
+      // Scroll to the main Our Work section (position 0 = main overview)
+      container.scrollTo({ left: 0, behavior: 'smooth' });
     }
   };
 
@@ -846,8 +862,22 @@ export default function Home() {
           <nav className="absolute left-[4vw] bottom-[80px]">
             <ul className="space-y-[8px]">
               <li><a href="#home" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Home</a></li>
-              <li><a href="#companies" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Companies</a></li>
-              <li><a href="#about" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">About</a></li>
+              <li>
+                <button 
+                  onClick={scrollToCompaniesMain}
+                  className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity"
+                >
+                  Companies
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={scrollToAboutMain}
+                  className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity"
+                >
+                  About
+                </button>
+              </li>
               <li><a href="#contact" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Contact</a></li>
             </ul>
           </nav>
