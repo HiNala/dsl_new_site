@@ -235,7 +235,7 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
   return (
     <div ref={containerRef} className={cn("relative w-full h-full", className)}>
       {/* Base black text - always visible */}
-      <h2 className="text-[clamp(72px,9vw,140px)] font-light leading-[1.0] tracking-tighter text-left text-black relative z-10">
+      <h2 className="text-[clamp(48px,6vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-black relative z-10">
         {children}
       </h2>
       
@@ -259,7 +259,7 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
         }}
       >
         <motion.h2
-          className="text-[clamp(72px,9vw,140px)] font-light leading-[1.0] tracking-tighter text-left text-transparent"
+          className="text-[clamp(48px,6vw,80px)] font-light leading-[1.0] tracking-tighter text-left text-transparent"
           style={{
             ...gradientStyle,
             backgroundClip: "text",
