@@ -1006,7 +1006,7 @@ export default function Home() {
       
       // Force initial setup after a brief delay to ensure DOM is ready
       setTimeout(() => {
-        handleAboutScroll();
+      handleAboutScroll();
       }, 100);
       
       return () => {
@@ -1068,7 +1068,7 @@ export default function Home() {
       
       // Force initial setup with multiple attempts to ensure DOM is ready
       setTimeout(() => {
-        handleWorkScroll();
+      handleWorkScroll();
       }, 100);
       
       setTimeout(() => {
@@ -1092,175 +1092,72 @@ export default function Home() {
     }
   };
 
-  // Sophisticated Typing Animation Component with Micro-interactions
-  const TypingAnimation = () => {
-    const words = ['Together', 'Dreams', 'Reality'];
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [currentText, setCurrentText] = useState('');
-    const [isTyping, setIsTyping] = useState(true);
-    const [showCursor, setShowCursor] = useState(true);
-    const [isVisible, setIsVisible] = useState(false);
+  // Typing animation state
+  const words = ['Together', 'Dreams', 'Reality'];
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
+  const [typingStarted, setTypingStarted] = useState(false);
 
-    useEffect(() => {
-      // Start animation after initial delay
-      const initialDelay = setTimeout(() => {
-        setIsVisible(true);
-      }, 1200);
-
-      return () => clearTimeout(initialDelay);
-    }, []);
-
-    useEffect(() => {
-      if (!isVisible) return;
-
-      const currentWord = words[currentWordIndex];
-      let timeoutId: NodeJS.Timeout;
-
-      if (isTyping) {
-        // Typing forward
-        if (currentText.length < currentWord.length) {
-          timeoutId = setTimeout(() => {
-            setCurrentText(currentWord.slice(0, currentText.length + 1));
-          }, 80 + Math.random() * 60); // Variable typing speed for natural feel
-        } else {
-          // Pause at end of word with subtle breathing effect
-          timeoutId = setTimeout(() => {
-            setIsTyping(false);
-          }, 1800 + Math.random() * 400);
+  // Start typing animation after footer comes into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !typingStarted) {
+          setTimeout(() => {
+            setTypingStarted(true);
+          }, 800);
         }
-      } else {
-        // Typing backward
-        if (currentText.length > 0) {
-          timeoutId = setTimeout(() => {
-            setCurrentText(currentText.slice(0, -1));
-          }, 40 + Math.random() * 30); // Faster backspace
-        } else {
-          // Move to next word with anticipatory pause
-          timeoutId = setTimeout(() => {
-            setCurrentWordIndex((prev) => (prev + 1) % words.length);
-            setIsTyping(true);
-          }, 300 + Math.random() * 200);
-        }
-      }
-
-      return () => clearTimeout(timeoutId);
-    }, [currentText, isTyping, currentWordIndex, words, isVisible]);
-
-    // Cursor blinking with sophisticated timing
-    useEffect(() => {
-      const cursorInterval = setInterval(() => {
-        setShowCursor(prev => !prev);
-      }, isTyping ? 530 : 600); // Different blink rates for typing vs waiting
-
-      return () => clearInterval(cursorInterval);
-    }, [isTyping]);
-
-    return (
-      <motion.span 
-        className="text-[#4A90E2] ml-4 inline-block relative"
-        initial={{ opacity: 0, scale: 0.8, y: 20 }}
-        animate={{ 
-          opacity: isVisible ? 1 : 0, 
-          scale: isVisible ? 1 : 0.8,
-          y: isVisible ? 0 : 20
-        }}
-        transition={{ 
-          duration: 0.8, 
-          delay: 0.8, 
-          type: "spring",
-          stiffness: 100,
-          damping: 15
-        }}
-      >
-        {/* Main text with character-by-character entrance */}
-        <span className="relative">
-          {currentText.split('').map((char, index) => (
-            <motion.span
-              key={`${currentWordIndex}-${index}`}
-              className="inline-block"
-              initial={{ opacity: 0, y: 10, scale: 0.8 }}
-              animate={{ 
-                opacity: 1, 
-                y: 0, 
-                scale: 1,
-                color: ['#4A90E2', '#5BA3F5', '#4A90E2']
-              }}
-              transition={{ 
-                duration: 0.2,
-                delay: index * 0.03,
-                scale: { type: "spring", stiffness: 300, damping: 20 },
-                color: { duration: 0.8, repeat: Infinity, repeatType: "reverse" }
-              }}
-            >
-              {char}
-            </motion.span>
-          ))}
-          
-          {/* Sophisticated animated cursor */}
-          <motion.span
-            className="inline-block w-[3px] bg-[#4A90E2] ml-1"
-            animate={{
-              opacity: showCursor ? 1 : 0,
-              scaleY: showCursor ? [1, 1.2, 1] : 1,
-              height: isTyping ? '1.1em' : '1em'
-            }}
-            transition={{
-              opacity: { duration: 0.1 },
-              scaleY: { 
-                duration: 0.3, 
-                repeat: Infinity, 
-                repeatType: "reverse",
-                ease: "easeInOut"
-              },
-              height: { duration: 0.2, ease: "easeInOut" }
-            }}
-            style={{ 
-              height: '1em', 
-              borderRadius: '2px',
-              boxShadow: '0 0 8px rgba(74, 144, 226, 0.4)'
-            }}
-          />
-        </span>
-
-        {/* Subtle glow effect around the text */}
-        <motion.div
-          className="absolute inset-0 bg-[#4A90E2]/20 blur-xl rounded-lg"
-          animate={{
-            opacity: [0.2, 0.4, 0.2],
-            scale: [0.8, 1.1, 0.8]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-
-        {/* Sparkle particles for extra delight */}
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-[#4A90E2] rounded-full"
-            style={{
-              left: `${20 + i * 30}%`,
-              top: `${10 + i * 10}%`
-            }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 1, 0],
-              rotate: [0, 180, 360]
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              delay: i * 0.5,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </motion.span>
+      },
+      { threshold: 0.3 }
     );
-  };
+
+    const footerElement = document.getElementById('footer');
+    if (footerElement) {
+      observer.observe(footerElement);
+    }
+
+    return () => observer.disconnect();
+  }, [typingStarted]);
+
+  // Main typing logic
+  useEffect(() => {
+    if (!typingStarted) return;
+
+    const currentWord = words[currentWordIndex];
+    let timeoutId: NodeJS.Timeout;
+
+    if (isTyping) {
+      // Typing forward
+      if (currentText.length < currentWord.length) {
+        timeoutId = setTimeout(() => {
+          setCurrentText(currentWord.slice(0, currentText.length + 1));
+        }, 40 + Math.random() * 30);
+      } else {
+        // Pause at end of word
+        timeoutId = setTimeout(() => {
+          setIsTyping(false);
+        }, 900 + Math.random() * 200);
+      }
+    } else {
+      // Typing backward
+      if (currentText.length > 0) {
+        timeoutId = setTimeout(() => {
+          setCurrentText(currentText.slice(0, -1));
+        }, 20 + Math.random() * 15);
+      } else {
+        // Move to next word
+        timeoutId = setTimeout(() => {
+          setCurrentWordIndex((prev) => (prev + 1) % words.length);
+          setIsTyping(true);
+        }, 150 + Math.random() * 100);
+      }
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [currentText, isTyping, currentWordIndex, words, typingStarted]);
+
+
 
   // Ensure main sections are always the default view on page load
   useEffect(() => {
@@ -1662,8 +1559,8 @@ export default function Home() {
 
                   {/* Down Navigation - Bottom Center */}
                   <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                    <button
-                      onClick={() => {
+                      <button
+                        onClick={() => {
                         const container = document.querySelector('.about-detail-container');
                         if (container) {
                           container.scrollTo({ top: 2 * window.innerHeight, behavior: 'smooth' });
@@ -1674,8 +1571,8 @@ export default function Home() {
                       <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                    </button>
-                  </div>
+                      </button>
+                    </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1710,7 +1607,7 @@ export default function Home() {
                       </svg>
                     </button>
                   </div>
-
+                  
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
                     <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Team</h2>
@@ -1732,20 +1629,20 @@ export default function Home() {
 
                   {/* Back Navigation - Left Center */}
                   <div className="absolute left-8 top-1/2 transform -translate-y-1/2 z-50">
-                    <button
-                      onClick={() => {
-                        const mainSection = document.getElementById('about-horizontal-container');
-                        if (mainSection) {
-                          mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                        }
-                      }}
+                      <button
+                        onClick={() => {
+                          const mainSection = document.getElementById('about-horizontal-container');
+                          if (mainSection) {
+                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                          }
+                        }}
                       className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
-                    >
+                      >
                       <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                    </button>
-                  </div>
+                      </button>
+                    </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1821,8 +1718,8 @@ export default function Home() {
                   
                   {/* Down Navigation - Bottom Center */}
                   <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                    <button
-                      onClick={() => {
+                      <button
+                        onClick={() => {
                         const container = document.getElementById('work-detail-scroll-container');
                         if (container) {
                           container.scrollTo({ top: 2 * window.innerHeight, behavior: 'smooth' });
@@ -1833,8 +1730,8 @@ export default function Home() {
                       <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                    </button>
-                  </div>
+                      </button>
+                    </div>
                   
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1884,8 +1781,8 @@ export default function Home() {
                     </p>
 
                   </div>
-                </div>
-              </div>
+            </div>
+          </div>
 
               {/* Section 4: Innovation Labs Detail - Final Section */}
               <div 
@@ -1909,7 +1806,7 @@ export default function Home() {
                         <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
-                  </div>
+        </div>
                   
 
 
@@ -2024,6 +1921,13 @@ export default function Home() {
                    </div>
                  </div>
                </div>
+                  
+                  {/* D/S/L Stacked Letters - Bottom Left */}
+              <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center space-y-2 z-20">
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">D</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">S</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">L</span>
+                  </div>
 
             </div>
           </div>
@@ -2160,7 +2064,84 @@ export default function Home() {
             >
               <h2 className="text-[clamp(36px,5vw,72px)] font-light leading-[1.1] text-white mb-[2rem] tracking-wide">
                 Let&apos;s Create
-                <TypingAnimation />
+                <motion.span 
+                  className="text-[#4A90E2] ml-4 inline-block relative"
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ 
+                    opacity: typingStarted ? 1 : 0, 
+                    scale: typingStarted ? 1 : 0.8,
+                    y: typingStarted ? 0 : 20
+                  }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: 0.3, 
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15
+                  }}
+                >
+                  {/* Main text with character-by-character entrance */}
+                  <span className="relative">
+                    {currentText.split('').map((char, index) => (
+                      <motion.span
+                        key={`${currentWordIndex}-${index}`}
+                        className="inline-block"
+                        initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                        animate={{ 
+                          opacity: 1, 
+                          y: 0, 
+                          scale: 1,
+                          color: ['#4A90E2', '#5BA3F5', '#4A90E2']
+                        }}
+                        transition={{ 
+                          duration: 0.2,
+                          delay: index * 0.03,
+                          scale: { type: "spring", stiffness: 300, damping: 20 },
+                          color: { duration: 0.8, repeat: Infinity, repeatType: "reverse" }
+                        }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </span>
+
+                  {/* Subtle glow effect around the text */}
+                  <motion.div
+                    className="absolute inset-0 bg-[#4A90E2]/20 blur-xl rounded-lg"
+                    animate={{
+                      opacity: [0.2, 0.4, 0.2],
+                      scale: [0.8, 1.1, 0.8]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+
+                  {/* Sparkle particles for extra delight */}
+                  {[...Array(3)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute w-1 h-1 bg-[#4A90E2] rounded-full"
+                      style={{
+                        left: `${20 + i * 30}%`,
+                        top: `${10 + i * 10}%`
+                      }}
+                      animate={{
+                        scale: [0, 1, 0],
+                        opacity: [0, 1, 0],
+                        rotate: [0, 180, 360]
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        delay: i * 0.5,
+                        ease: "easeInOut"
+                      }}
+                    />
+                  ))}
+                </motion.span>
               </h2>
             </motion.div>
             <motion.p 
@@ -2204,7 +2185,7 @@ export default function Home() {
                   </div>
 
                   {/* Newsletter Signup */}
-                  <div className="space-y-[1rem]">
+              <div className="space-y-[1rem]">
                     <h4 className="text-[16px] font-light text-white tracking-wide">
                       Stay in the Loop
                     </h4>
@@ -2221,11 +2202,11 @@ export default function Home() {
                       >
                         Subscribe
                       </motion.button>
-                    </div>
+                </div>
                     <p className="text-[12px] font-light text-white/50">
                       Get insights on innovation, design trends, and creator economy updates.
                     </p>
-                  </div>
+              </div>
                 </div>
               </motion.div>
 
@@ -2263,7 +2244,7 @@ export default function Home() {
                           </span>
                         </motion.a>
                       ))}
-                    </div>
+                </div>
                   </motion.div>
 
                   {/* Solutions */}
@@ -2296,7 +2277,7 @@ export default function Home() {
                           </span>
                         </motion.a>
                       ))}
-                    </div>
+              </div>
                   </motion.div>
 
                   {/* Company */}
@@ -2354,7 +2335,7 @@ export default function Home() {
                   </h3>
                   <div className="space-y-[1.5rem]">
                     <motion.a
-                      href="mailto:hello@digitalstudiolabs.com"
+                    href="mailto:hello@digitalstudiolabs.com"
                       className="group flex items-center space-x-3 text-white/70 hover:text-[#4A90E2] transition-colors duration-300"
                       whileHover={{ x: 4 }}
                     >
@@ -2364,7 +2345,7 @@ export default function Home() {
                       <span className="text-[14px] font-light">hello@digitalstudiolabs.com</span>
                     </motion.a>
                     <motion.a
-                      href="tel:+15551234567"
+                    href="tel:+15551234567"
                       className="group flex items-center space-x-3 text-white/70 hover:text-[#4A90E2] transition-colors duration-300"
                       whileHover={{ x: 4 }}
                     >
@@ -2378,12 +2359,12 @@ export default function Home() {
                         <span className="text-[10px]">📍</span>
                       </div>
                       <div className="text-[14px] font-light leading-[1.5]">
-                        San Francisco, CA<br />
-                        Innovation District
+                    San Francisco, CA<br />
+                    Innovation District
                       </div>
                     </div>
-                  </div>
                 </div>
+              </div>
 
                 {/* Social Links */}
                 <div>
@@ -2412,7 +2393,7 @@ export default function Home() {
                       </motion.a>
                     ))}
                   </div>
-                </div>
+            </div>
 
               </div>
             </motion.div>
