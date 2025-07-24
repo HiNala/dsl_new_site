@@ -711,16 +711,16 @@ const DSLAnimation = () => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Get the DSL area position (responsive to screen size) - moved further from edge
-      const dslAreaX = window.innerWidth <= 480 ? 60 : window.innerWidth <= 768 ? 80 : 120; // Further from edge
-      const dslAreaY = window.innerWidth <= 480 ? 80 : window.innerWidth <= 768 ? 100 : 120; // Further from edge
+      // Get the DSL area position (responsive to screen size) - closer to edge to match About Us
+      const dslAreaX = window.innerWidth <= 480 ? 24 : window.innerWidth <= 768 ? 32 : 48; // Closer to edge
+      const dslAreaY = window.innerWidth <= 480 ? 24 : window.innerWidth <= 768 ? 32 : 48; // Closer to edge
 
-      // Define the vertical DSL area (where stacked letters occupy) - larger area for better interaction
+      // Define the vertical DSL area (where stacked letters occupy) - adjusted for tighter spacing
       const verticalDSLArea = {
-        left: dslAreaX - 40, // Larger hover area
-        right: dslAreaX + 40,
-        top: dslAreaY - 20, // More forgiving hover area
-        bottom: dslAreaY + 120, // Extended for 3 letters with comfortable spacing
+        left: dslAreaX - 30, // Adjusted hover area
+        right: dslAreaX + 30,
+        top: dslAreaY - 15, // More forgiving hover area
+        bottom: dslAreaY + 90, // Extended for 3 letters with tighter spacing
       };
 
       // Check if cursor is directly over the vertical DSL area
@@ -765,18 +765,18 @@ const DSLAnimation = () => {
   const getLetterAnimation = (letterIndex: number, stage: number) => {
     // D = index 0, S = index 1, L = index 2
 
-    // Base stacked positions - properly spaced vertically (keeping current placement)
+    // Base stacked positions - tighter spacing to match About Us section
     const stackedPositions = [
       { x: 0, y: 0 },   // D at top (FIXED ANCHOR POINT)
-      { x: 0, y: 80 },  // S in middle  
-      { x: 0, y: 160 }  // L at bottom
+      { x: 0, y: 60 },  // S in middle (reduced from 80 to 60)
+      { x: 0, y: 120 }  // L at bottom (reduced from 160 to 120)
     ];
 
     // Horizontal positions - D stays fixed, S and L move to align with D horizontally
     const horizontalPositions = [
       { x: 0, y: 0 },    // D NEVER MOVES - stays at anchor point
-      { x: 80, y: 0 },   // S moves right and up to align with D 
-      { x: 160, y: 0 }   // L moves right and up to align with D
+      { x: 60, y: 0 },   // S moves right and up to align with D (reduced from 80 to 60)
+      { x: 120, y: 0 }   // L moves right and up to align with D (reduced from 160 to 120)
     ];
 
     // Animation stages
@@ -839,18 +839,18 @@ const DSLAnimation = () => {
   const letters = ["D", "S", "L"];
 
   return (
-    <div className="absolute left-[5rem] top-[5rem] z-30 
-                    md:left-[5rem] md:top-[5rem]
-                    sm:left-[3rem] sm:top-[3rem]
-                    xs:left-[2rem] xs:top-[2rem]">
-      <div className="relative w-[240px] h-[240px]">
+    <div className="absolute left-[3rem] top-[3rem] z-30 
+                    md:left-[3rem] md:top-[3rem]
+                    sm:left-[2rem] sm:top-[2rem]
+                    xs:left-[1.5rem] xs:top-[1.5rem]">
+      <div className="relative w-[180px] h-[180px]">
         {letters.map((letter, index) => (
           <motion.div
             key={letter}
             className="absolute text-[clamp(48px,5vw,72px)] font-light text-white leading-none select-none cursor-pointer"
             style={{
-              width: "70px",
-              height: "70px", 
+              width: "60px",
+              height: "60px", 
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -1119,18 +1119,92 @@ export default function Home() {
       }
     };
 
+    const handleResize = () => {
+      resetToMainSections();
+      
+      // Force scroll snap recalculation on mobile for better performance
+      if (window.innerWidth <= 768) {
+        const scrollContainer = document.querySelector('.scroll-container') as HTMLElement;
+        if (scrollContainer) {
+          scrollContainer.style.scrollSnapType = 'none';
+          setTimeout(() => {
+            scrollContainer.style.scrollSnapType = 'y mandatory';
+          }, 50);
+        }
+      }
+    };
+
+    const handleOrientationChange = () => {
+      // Handle mobile orientation changes with delay
+      setTimeout(() => {
+        resetToMainSections();
+        
+        // Refresh viewport dimensions for mobile
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }, 100);
+    };
+
+    // Set initial viewport height for mobile
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+
     // Reset immediately
     resetToMainSections();
 
-    // Also reset on window load (in case of browser restoration)
+    // Add event listeners
     window.addEventListener('load', resetToMainSections);
-    
-    // Reset on window resize to handle viewport changes
-    window.addEventListener('resize', resetToMainSections);
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleOrientationChange);
 
     return () => {
       window.removeEventListener('load', resetToMainSections);
-      window.removeEventListener('resize', resetToMainSections);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleOrientationChange);
+    };
+  }, []);
+
+  // Enhanced mobile touch support
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      // Prevent zoom on double tap for interactive elements
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      // Prevent zoom on double tap
+      const now = Date.now();
+      if (now - (window as any).lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      (window as any).lastTouchEnd = now;
+    };
+
+    // Enhanced mobile scroll behavior
+    const handleTouchMove = (e: TouchEvent) => {
+      // Allow natural scrolling but prevent unwanted gestures
+      const target = e.target as Element;
+      if (target.closest('.scroll-container') || target.closest('.horizontal-scroll-container')) {
+        // Allow scrolling in scroll containers
+        return;
+      }
+    };
+
+    // Add touch event listeners for better mobile UX
+    if ('ontouchstart' in window) {
+      document.addEventListener('touchstart', handleTouchStart, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd, { passive: false });
+      document.addEventListener('touchmove', handleTouchMove, { passive: true });
+    }
+
+    return () => {
+      if ('ontouchstart' in window) {
+        document.removeEventListener('touchstart', handleTouchStart);
+        document.removeEventListener('touchend', handleTouchEnd);
+        document.removeEventListener('touchmove', handleTouchMove);
+      }
     };
   }, []);
 
@@ -1380,7 +1454,10 @@ export default function Home() {
                           container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
                         }
                       }}
-                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 
+                                 min-w-[44px] min-h-[44px] p-3 rounded-full 
+                                 active:scale-95 active:bg-white/10 
+                                 md:min-w-auto md:min-h-auto md:p-0 md:rounded-none md:bg-transparent"
                     >
                       <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1616,7 +1693,10 @@ export default function Home() {
                           container.scrollTo({ top: 3 * window.innerHeight, behavior: 'smooth' });
                         }
                       }}
-                      className="flex items-center justify-center text-white hover:text-blue-200 transition-all duration-300"
+                      className="flex items-center justify-center text-white hover:text-blue-200 transition-all duration-300 
+                                 min-w-[44px] min-h-[44px] p-3 rounded-full 
+                                 active:scale-95 active:bg-white/10 
+                                 md:min-w-auto md:min-h-auto md:p-0 md:rounded-none md:bg-transparent"
                     >
                       <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1888,14 +1968,14 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative w-full h-full py-[6rem] px-[4vw] flex flex-col">
+        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Animated Letters - Top Left */}
           <DSLAnimation />
 
           {/* Animated Welcome Section */}
           <motion.div 
-            className="mt-[8rem] mb-[6rem] text-center"
+            className="mt-[6rem] mb-[4rem] text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -1936,7 +2016,7 @@ export default function Home() {
           <div className="max-w-[1200px] mx-auto w-full">
             
             <motion.div 
-              className="grid grid-cols-1 lg:grid-cols-12 gap-[4rem] lg:gap-[6rem] mb-[6rem]"
+              className="grid grid-cols-1 lg:grid-cols-12 gap-[3rem] lg:gap-[4rem] mb-[4rem]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, staggerChildren: 0.1 }}
@@ -1951,19 +2031,19 @@ export default function Home() {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <div className="space-y-[3rem]">
+                <div className="space-y-[2rem]">
                   <div>
-                    <h3 className="text-[clamp(24px,3vw,32px)] font-light text-white mb-[1.5rem] tracking-wide">
+                    <h3 className="text-[clamp(20px,2.5vw,28px)] font-light text-white mb-[1rem] tracking-wide">
                       Digital Studio Labs
                     </h3>
-                    <p className="text-[15px] font-light text-white/70 leading-[1.6] max-w-[420px]">
+                    <p className="text-[14px] font-light text-white/70 leading-[1.5] max-w-[420px]">
                       We believe in the power of creativity and innovation to transform industries and inspire meaningful change in the creator economy.
                     </p>
                   </div>
 
                   {/* Newsletter Signup */}
-                  <div className="space-y-[1.5rem]">
-                    <h4 className="text-[18px] font-light text-white tracking-wide">
+                  <div className="space-y-[1rem]">
+                    <h4 className="text-[16px] font-light text-white tracking-wide">
                       Stay in the Loop
                     </h4>
                     <div className="relative group max-w-[400px]">
@@ -1989,7 +2069,7 @@ export default function Home() {
 
               {/* Navigation Grid */}
               <div className="lg:col-span-7">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-[3rem]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-[2rem]">
                   
                   {/* Services */}
                   <motion.div
@@ -2097,17 +2177,17 @@ export default function Home() {
 
             {/* Contact & Social Section */}
             <motion.div 
-              className="border-t border-white/[0.08] pt-[3rem] mb-[3rem]"
+              className="border-t border-white/[0.08] pt-[2rem] mb-[2rem]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-[3rem] lg:gap-[6rem]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-[2rem] lg:gap-[4rem]">
                 
                 {/* Contact Info */}
                 <div>
-                  <h3 className="text-[18px] font-light text-white mb-[2rem] tracking-wide">
+                  <h3 className="text-[16px] font-light text-white mb-[1.5rem] tracking-wide">
                     Connect With Us
                   </h3>
                   <div className="space-y-[1.5rem]">
@@ -2145,7 +2225,7 @@ export default function Home() {
 
                 {/* Social Links */}
                 <div>
-                  <h3 className="text-[18px] font-light text-white mb-[2rem] tracking-wide">
+                  <h3 className="text-[16px] font-light text-white mb-[1.5rem] tracking-wide">
                     Follow Our Journey
                   </h3>
                   <div className="flex space-x-4">
@@ -2177,7 +2257,7 @@ export default function Home() {
 
             {/* Bottom Section */}
             <motion.div 
-              className="border-t border-white/[0.06] pt-[2rem]"
+              className="border-t border-white/[0.06] pt-[1.5rem]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}

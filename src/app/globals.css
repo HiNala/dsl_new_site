@@ -35,6 +35,9 @@ html {
   height: 100%;
   scroll-restoration: manual; /* Prevent browser scroll restoration */
   scroll-snap-type: none; /* Only container should control snap */
+  /* Mobile Safari optimizations */
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -43,6 +46,14 @@ body {
   height: 100%;
   overflow-x: hidden;
   scroll-snap-type: none; /* Only container should control snap */
+  /* Enhanced mobile touch behavior */
+  touch-action: pan-y; /* Allow vertical scrolling only */
+  -webkit-touch-callout: none; /* Disable callout on long-press */
+  -webkit-user-select: none; /* Disable text selection for better UX */
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Perfect scroll snap container */
@@ -52,6 +63,7 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   scroll-padding: 0;
   scroll-padding-top: 0;
   scroll-margin: 0;
@@ -68,6 +80,13 @@ body {
   /* Ensure consistent snap behavior */
   scroll-snap-coordinate: 0 0; /* Legacy webkit */
   scroll-snap-destination: 0 0; /* Legacy webkit */
+  
+  /* Enhanced mobile touch and performance */
+  touch-action: pan-y; /* Allow only vertical scrolling */
+  -webkit-transform: translateZ(0); /* Force hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden; /* Prevent flickering */
+  perspective: 1000px; /* Enable 3D context */
 }
 
 /* Enhanced section snap behavior */
@@ -77,10 +96,18 @@ section {
   min-height: 100vh;
   height: 100vh;
   max-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  height: 100dvh;
+  max-height: 100dvh;
   position: relative;
   overflow: hidden;
   scroll-margin-top: 0;
   scroll-margin-bottom: 0;
+  /* Mobile optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint; /* Improve performance */
 }
 
 /* Specific section optimizations for perfect snapping */
@@ -113,6 +140,7 @@ section.section-container {
   display: flex;
   width: 100%;
   height: 100%;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   overscroll-behavior-x: contain; /* Only contain horizontal scroll */
@@ -121,6 +149,11 @@ section.section-container {
   pointer-events: auto; /* Ensure interactions work */
   contain: layout style; /* Performance optimization */
   isolation: isolate; /* Create stacking context */
+  /* Enhanced mobile support */
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Default positioning for About Us container (main section first) */
@@ -144,11 +177,17 @@ section.section-container {
   min-width: 100vw;
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   flex-shrink: 0;
   position: relative;
   overflow-y: hidden; /* Prevent vertical scroll interference */
   overflow-x: hidden;
   overscroll-behavior: contain;
+  /* Mobile optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  touch-action: pan-x pan-y; /* Allow both directions */
 }
 
 /* Vertical scroll within horizontal sections */
@@ -171,10 +210,19 @@ section.section-container {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   max-height: 100vh;
+  max-height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+  /* Enhanced mobile support */
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  touch-action: pan-y; /* Allow vertical scrolling only */
+  contain: layout style paint;
 }
 
 .about-detail-section {
@@ -184,8 +232,11 @@ section.section-container {
   min-width: 100vw;
   max-width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   min-height: 100vh;
+  min-height: 100dvh;
   max-height: 100vh;
+  max-height: 100dvh;
   flex-shrink: 0;
   flex-grow: 0;
   overscroll-behavior: contain;
@@ -193,6 +244,12 @@ section.section-container {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Mobile optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+  touch-action: pan-y;
 }
 
 /* Ensure About Us section content containers fit perfectly */
@@ -225,13 +282,23 @@ section.section-container {
   min-width: 100vw;
   max-width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   min-height: 100vh;
+  min-height: 100dvh;
   max-height: 100vh;
+  max-height: 100dvh;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
   display: flex;
   flex-direction: column;
+  /* Enhanced mobile support */
+  -webkit-overflow-scrolling: touch;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  touch-action: pan-y; /* Allow vertical scrolling only */
+  contain: layout style paint;
 }
 
 .work-detail-section {
@@ -241,8 +308,11 @@ section.section-container {
   min-width: 100vw;
   max-width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   min-height: 100vh;
+  min-height: 100dvh;
   max-height: 100vh;
+  max-height: 100dvh;
   flex-shrink: 0;
   flex-grow: 0;
   overscroll-behavior: contain;
@@ -250,6 +320,12 @@ section.section-container {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Mobile optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+  touch-action: pan-y;
 }
 
 /* Ensure Our Work section content containers fit perfectly */
@@ -348,7 +424,7 @@ section.section-container {
   flex-direction: column;
 }
 
-/* Mobile optimization */
+/* Comprehensive Mobile optimization */
 @media (max-width: 768px) {
   section {
     min-height: 100vh;
@@ -358,6 +434,20 @@ section.section-container {
   .section-container {
     height: 100vh;
     height: 100dvh;
+  }
+  
+  /* Enhanced mobile touch interactions */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  
+  /* Buttons and interactive elements */
+  button, a {
+    touch-action: manipulation; /* Prevent double-tap zoom */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   
   /* Contact section mobile optimizations */
@@ -381,6 +471,26 @@ section.section-container {
     gap: 2rem;
     align-items: flex-start;
   }
+  
+  /* Enhanced navigation arrows for mobile */
+  .absolute button {
+    min-width: 44px; /* Touch target size */
+    min-height: 44px;
+    padding: 12px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Mobile scroll optimizations */
+  .horizontal-scroll-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: y mandatory;
+  }
 }
 
 /* Extra small mobile devices */
@@ -394,6 +504,23 @@ section.section-container {
     position: absolute !important;
     right: 1rem !important;
     bottom: 2rem !important;
+  }
+  
+  /* Enhanced touch targets for very small screens */
+  .absolute button {
+    min-width: 48px; /* Larger touch targets */
+    min-height: 48px;
+    padding: 14px;
+  }
+  
+  /* Improved text sizing for readability */
+  .text-\[clamp\(\*\)\] {
+    font-size: clamp(14px, 4vw, 24px) !important;
+  }
+  
+  /* Better spacing for small screens */
+  .space-y-2 > * + * {
+    margin-top: 0.75rem;
   }
 }
 
@@ -418,4 +545,139 @@ section.section-container {
 body, html {
   max-width: 100vw;
   overflow-x: hidden;
+}
+
+/* Additional mobile performance optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch device specific optimizations */
+  .scroll-container {
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Improve touch scrolling performance */
+  .horizontal-scroll-container,
+  .work-detail-container,
+  .about-detail-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Enhanced touch interaction for navigation */
+  button:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .hover\:text-blue-300:hover,
+  .hover\:text-blue-600:hover,
+  .hover\:text-white:hover {
+    transition: none;
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  section {
+    min-height: 100vh;
+    height: 100vh;
+  }
+  
+  .section-container {
+    height: 100vh;
+  }
+  
+  /* Adjust DSL spacing for landscape */
+  .absolute.left-\[3rem\].top-\[3rem\] {
+    left: 1.5rem !important;
+    top: 1.5rem !important;
+  }
+  
+  /* Compress content spacing in landscape */
+  .space-y-2 > * + * {
+    margin-top: 0.5rem;
+  }
+}
+
+/* High DPI display optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .scroll-container,
+  .horizontal-scroll-container {
+    will-change: scroll-position;
+    transform: translateZ(0);
+  }
+  
+  /* Crisp text rendering on high DPI */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Ensure mobile navigation buttons are accessible */
+@media (max-width: 768px) {
+  .absolute button {
+    /* Ensure touch targets meet accessibility guidelines */
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 12px !important;
+    border-radius: 50% !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  .absolute button:active {
+    transform: scale(0.95) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  /* Better visual feedback on mobile */
+  .absolute button svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+}
+
+/* iOS Safari specific optimizations */
+@supports (-webkit-touch-callout: none) {
+  .scroll-container {
+    /* Fix bounce behavior on iOS */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Prevent iOS zoom on input focus */
+  input, textarea, select {
+    font-size: 16px !important;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  
+  /* Fix viewport units on iOS Safari */
+  section {
+    min-height: -webkit-fill-available;
+    height: -webkit-fill-available;
+  }
+}
+
+/* Android Chrome specific optimizations */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+  .scroll-container {
+    /* Improve scroll performance on Android */
+    will-change: scroll-position;
+    contain: layout style paint;
+  }
+  
+  /* Address bar compensation */
+  section {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
 }
