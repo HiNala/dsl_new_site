@@ -679,12 +679,20 @@ const DSLAnimation = () => {
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
-  const navigateToAboutSection = (sectionId: string) => {
-    window.location.href = `/about#${sectionId}`;
+  const scrollToAboutSection = (sectionId: string) => {
+    const container = document.getElementById('about-horizontal-container');
+    const targetSection = document.getElementById(`about-${sectionId}`);
+    if (container && targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+    }
   };
 
-  const navigateToCompaniesSection = (sectionId: string) => {
-    window.location.href = `/companies#${sectionId}`;
+  const scrollToCompaniesSection = (sectionId: string) => {
+    const container = document.getElementById('companies-horizontal-container');
+    const targetSection = document.getElementById(`companies-${sectionId}`);
+    if (container && targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+    }
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -739,204 +747,462 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 2: About Us */}
-      <section id="about" className="section-container bg-[#1a1a1a]">
-        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
+      {/* Section 2: About Us with Horizontal Scroll */}
+      <section id="about" className="section-container">
+        <div id="about-horizontal-container" className="horizontal-scroll-container">
           
-          {/* D/S/L Stacked Letters - Top Right */}
-          <div className="absolute right-[4vw] top-[4rem] flex flex-col items-center space-y-6">
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">D</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">S</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
-          </div>
-
-          {/* About Us Headline - moved down */}
-          <div className="mt-[8rem] mb-[3rem]">
-            <h2 className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] text-white max-w-[50vw]">
-              ABOUT US
-            </h2>
-          </div>
-
-          {/* About Content Grid - Responsive and Compact */}
-          <div className="flex-1 max-w-[75vw]">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
+          {/* Main About Us Section */}
+          <div className="horizontal-section bg-[#1a1a1a]">
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
               
-              {/* Our Mission */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToAboutSection('mission')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Mission</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                  To empower creators and innovators by building companies that 
-                  challenge conventional thinking and celebrate human creativity.
-                </p>
+              {/* D/S/L Stacked Letters - Top Right */}
+              <div className="absolute right-[4vw] top-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
               </div>
 
-              {/* Our Approach */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToAboutSection('approach')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Approach</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                  We combine deep technical expertise with creative vision, 
-                  fostering environments where breakthrough ideas can flourish.
-                </p>
+              {/* About Us Headline - moved down */}
+              <div className="mt-[8rem] mb-[3rem]">
+                <h2 className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] text-white max-w-[50vw]">
+                  ABOUT US
+                </h2>
               </div>
 
-              {/* Our Team */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToAboutSection('team')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Team</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                  Authenticity, creativity, and community drive everything we do. 
-                  We believe the best solutions emerge from diverse perspectives.
-                </p>
+              {/* About Content Grid - Responsive and Compact */}
+              <div className="flex-1 max-w-[75vw]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
+                  
+                  {/* Our Mission */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToAboutSection('mission')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Mission</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
+                      To empower creators and innovators by building companies that 
+                      challenge conventional thinking and celebrate human creativity.
+                    </p>
+                  </div>
+
+                  {/* Our Approach */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToAboutSection('approach')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Approach</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
+                      We combine deep technical expertise with creative vision, 
+                      fostering environments where breakthrough ideas can flourish.
+                    </p>
+                  </div>
+
+                  {/* Our Team */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToAboutSection('team')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Team</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
+                      Authenticity, creativity, and community drive everything we do. 
+                      We believe the best solutions emerge from diverse perspectives.
+                    </p>
+                  </div>
+
+                  {/* Our Values */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToAboutSection('values')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Values</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
+                      Building sustainable companies that create meaningful change 
+                      in the creator economy and beyond.
+                    </p>
+                  </div>
+
+                </div>
               </div>
 
-              {/* Our Values */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToAboutSection('values')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Values</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                  Building sustainable companies that create meaningful change 
-                  in the creator economy and beyond.
-                </p>
+            </div>
+          </div>
+
+          {/* About Detail Sections - Horizontal Scroll Left */}
+          <div id="about-mission" className="horizontal-section bg-[#1a1a1a]">
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* D/S/L Stacked Letters - Top Right */}
+              <div className="absolute right-[4vw] top-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
               </div>
 
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Mission</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                  To empower creators and innovators by building companies that challenge conventional thinking and celebrate human creativity.
+                </p>
+                <div className="text-white/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('about-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-white transition-colors duration-300"
+                  >
+                    ← Back to About Us
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="about-approach" className="horizontal-section bg-[#4A90E2]">
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* D/S/L Stacked Letters - Bottom Left */}
+              <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">L</span>
+              </div>
+
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#F8F9FA] mb-8">Our Approach</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                  We combine deep technical expertise with creative vision, fostering environments where breakthrough ideas can flourish.
+                </p>
+                <div className="text-white/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('about-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-white transition-colors duration-300"
+                  >
+                    ← Back to About Us
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="about-team" className="horizontal-section bg-white">
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Team</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
+                  Authenticity, creativity, and community drive everything we do. We believe the best solutions emerge from diverse perspectives.
+                </p>
+                <div className="text-black/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('about-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-black transition-colors duration-300"
+                  >
+                    ← Back to About Us
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="about-values" className="horizontal-section bg-[#1a1a1a]">
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* D/S/L Stacked Letters - Bottom Right */}
+              <div className="absolute right-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
+              </div>
+
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Values</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                  Building sustainable companies that create meaningful change in the creator economy and beyond.
+                </p>
+                <div className="text-white/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('about-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-white transition-colors duration-300"
+                  >
+                    ← Back to About Us
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* Section 3: Our Work */}
-      <section id="companies" className="section-container bg-[#4A90E2]">
-        <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
+      {/* Section 3: Our Work with Horizontal Scroll */}
+      <section id="companies" className="section-container">
+        <div id="companies-horizontal-container" className="horizontal-scroll-container" style={{ direction: 'rtl' }}>
           
-          {/* D/S/L Stacked Letters - Bottom Left */}
-          <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">D</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">S</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">L</span>
-          </div>
+          {/* Our Work Detail Sections - Horizontal Scroll Right (reversed order due to RTL) */}
+          <div id="companies-innovation-labs" className="horizontal-section bg-[#1a1a1a]" style={{ direction: 'ltr' }}>
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* D/S/L Stacked Letters - Top Left */}
+              <div className="absolute left-[4vw] top-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
+              </div>
 
-          {/* Our Work Headline - Right Side (mirroring About Us) */}
-          <div className="absolute right-[4vw] top-[12rem]">
-            <div className="text-right mb-[3rem]">
-              <TextSplit
-                className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
-                topClassName="text-[#F8F9FA]"
-                bottomClassName="text-white/60"
-                maxMove={100}
-                falloff={0.2}
-              >
-                OUR WORK
-              </TextSplit>
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Innovation Labs</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                  Experimental projects and research initiatives that push the boundaries of what's possible in technology.
+                </p>
+                <div className="text-white/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('companies-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-white transition-colors duration-300"
+                  >
+                    Back to Our Work →
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Work Content Grid - Exactly mirroring About Us but right-aligned */}
-          <div className="absolute right-[4vw] top-[21rem] flex justify-end">
-            <div className="max-w-[75vw]">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
+          <div id="companies-creator-tools" className="horizontal-section bg-[#4A90E2]" style={{ direction: 'ltr' }}>
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* D/S/L Stacked Letters - Bottom Right */}
+              <div className="absolute right-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">L</span>
+              </div>
+
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#F8F9FA] mb-8">Creator Tools</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                  Developing platforms and tools that empower creators to build, monetize, and scale their creative endeavors.
+                </p>
+                <div className="text-white/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('companies-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-white transition-colors duration-300"
+                  >
+                    Back to Our Work →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="companies-emerging-tech" className="horizontal-section bg-white" style={{ direction: 'ltr' }}>
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Emerging Tech</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
+                  Exploring cutting-edge technologies like AI, blockchain, and quantum computing to unlock new possibilities.
+                </p>
+                <div className="text-black/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('companies-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-black transition-colors duration-300"
+                  >
+                    Back to Our Work →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="companies-portfolio" className="horizontal-section bg-[#1a1a1a]" style={{ direction: 'ltr' }}>
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+              {/* D/S/L Stacked Letters - Bottom Left */}
+              <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
+              </div>
+
+              {/* Content Center */}
+              <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
+                <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Portfolio Companies</h2>
+                <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
+                  Building and investing in innovative startups that are reshaping industries and creating the future of technology.
+                </p>
+                <div className="text-white/50 text-sm">
+                  <button
+                    onClick={() => {
+                      const mainSection = document.getElementById('companies-horizontal-container');
+                      if (mainSection) {
+                        mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-white transition-colors duration-300"
+                  >
+                    Back to Our Work →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Our Work Section */}
+          <div className="horizontal-section bg-[#4A90E2]" style={{ direction: 'ltr' }}>
+            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
               
-              {/* Portfolio Companies */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToCompaniesSection('portfolio')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Portfolio Companies</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                  Building and investing in innovative startups that are reshaping 
-                  industries and creating the future of technology.
-                </p>
+              {/* D/S/L Stacked Letters - Bottom Left */}
+              <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">D</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">S</span>
+                <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">L</span>
               </div>
 
-              {/* Emerging Tech */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToCompaniesSection('emerging-tech')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Emerging Tech</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                  Exploring cutting-edge technologies like AI, blockchain, and 
-                  quantum computing to unlock new possibilities.
-                </p>
+              {/* Our Work Headline - Right Side (mirroring About Us) */}
+              <div className="absolute right-[4vw] top-[12rem]">
+                <div className="text-right mb-[3rem]">
+                  <TextSplit
+                    className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
+                    topClassName="text-[#F8F9FA]"
+                    bottomClassName="text-white/60"
+                    maxMove={100}
+                    falloff={0.2}
+                  >
+                    OUR WORK
+                  </TextSplit>
+                </div>
               </div>
 
-              {/* Creator Tools */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToCompaniesSection('creator-tools')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Creator Tools</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                  Developing platforms and tools that empower creators to build, 
-                  monetize, and scale their creative endeavors.
-                </p>
-              </div>
+              {/* Work Content Grid - Exactly mirroring About Us but right-aligned */}
+              <div className="absolute right-[4vw] top-[21rem] flex justify-end">
+                <div className="max-w-[75vw]">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
+                  
+                  {/* Portfolio Companies */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('portfolio')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Portfolio Companies</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Building and investing in innovative startups that are reshaping 
+                      industries and creating the future of technology.
+                    </p>
+                  </div>
 
-              {/* Innovation Labs */}
-              <div className="border-b border-white/20 pb-[1.5rem] relative">
-                <button 
-                  className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateToCompaniesSection('innovation-labs')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Innovation Labs</h3>
-                <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
-                  Experimental projects and research initiatives that push the 
-                  boundaries of what&apos;s possible in technology.
-                </p>
-              </div>
+                  {/* Emerging Tech */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('emerging-tech')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Emerging Tech</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Exploring cutting-edge technologies like AI, blockchain, and 
+                      quantum computing to unlock new possibilities.
+                    </p>
+                  </div>
 
+                  {/* Creator Tools */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('creator-tools')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Creator Tools</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Developing platforms and tools that empower creators to build, 
+                      monetize, and scale their creative endeavors.
+                    </p>
+                  </div>
+
+                  {/* Innovation Labs */}
+                  <div className="border-b border-white/20 pb-[1.5rem] relative">
+                    <button 
+                      className="peer absolute bottom-[1.5rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
+                      onClick={() => scrollToCompaniesSection('innovation-labs')}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <h3 className="text-[16px] font-medium text-[#F8F9FA] mb-[0.75rem] text-right transition-colors duration-300 peer-hover:text-black">Innovation Labs</h3>
+                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pl-8 text-right">
+                      Experimental projects and research initiatives that push the 
+                      boundaries of what&apos;s possible in technology.
+                    </p>
+                  </div>
+
+                   </div>
+                 </div>
                </div>
-             </div>
-           </div>
+
+            </div>
+          </div>
 
         </div>
       </section>
