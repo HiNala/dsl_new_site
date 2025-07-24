@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import AppleTeamSection from '../components/AppleTeamSection';
 import Image from 'next/image';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
@@ -1132,25 +1133,25 @@ export default function Home() {
       if (currentText.length < currentWord.length) {
         timeoutId = setTimeout(() => {
           setCurrentText(currentWord.slice(0, currentText.length + 1));
-        }, 40 + Math.random() * 30);
+        }, 80 + Math.random() * 60);
       } else {
         // Pause at end of word
         timeoutId = setTimeout(() => {
           setIsTyping(false);
-        }, 900 + Math.random() * 200);
+        }, 1200 + Math.random() * 400);
       }
     } else {
       // Typing backward
       if (currentText.length > 0) {
         timeoutId = setTimeout(() => {
           setCurrentText(currentText.slice(0, -1));
-        }, 20 + Math.random() * 15);
+        }, 40 + Math.random() * 30);
       } else {
         // Move to next word
         timeoutId = setTimeout(() => {
           setCurrentWordIndex((prev) => (prev + 1) % words.length);
           setIsTyping(true);
-        }, 150 + Math.random() * 100);
+        }, 300 + Math.random() * 200);
       }
     }
 
@@ -1608,12 +1609,10 @@ export default function Home() {
                     </button>
                   </div>
                   
-                  {/* Content Center */}
-                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Team</h2>
-                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
-                      Authenticity, creativity, and community drive everything we do. We believe the best solutions emerge from diverse perspectives.
-                    </p>
+                  {/* Content Center - Cards Only */}
+                  <div className="flex items-center justify-center h-full w-full">
+                    {/* Apple-inspired Team Section - Perfectly Centered */}
+                    <AppleTeamSection />
                   </div>
                 </div>
               </div>
@@ -2062,10 +2061,10 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-[clamp(36px,5vw,72px)] font-light leading-[1.1] text-white mb-[2rem] tracking-wide">
-                Let&apos;s Create
+              <h2 className="text-[clamp(36px,5vw,72px)] font-light leading-[1.1] text-white mb-[2rem] tracking-wide flex items-center">
+                <span className="mr-4">Let&apos;s Create</span>
                 <motion.span 
-                  className="text-[#4A90E2] ml-4 inline-block relative"
+                  className="text-[#4A90E2] inline-block relative min-w-[120px] text-left"
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   animate={{ 
                     opacity: typingStarted ? 1 : 0, 
@@ -2292,7 +2291,7 @@ export default function Home() {
                     </h3>
                     <div className="space-y-[1.2rem]">
                       {[
-                        { name: "About Us", href: "/about" },
+            
                         { name: "Our Team", href: "/team" },
                         { name: "Careers", href: "/careers" },
                         { name: "Case Studies", href: "/case-studies" },
