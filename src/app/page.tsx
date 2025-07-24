@@ -537,8 +537,8 @@ const DSLAnimation = () => {
       const verticalDSLArea = {
         left: dslAreaX - 80, // Wider area for easier interaction
         right: dslAreaX + 80,
-        top: dslAreaY - 100, // Taller area to encompass all letters
-        bottom: dslAreaY + 200, // Extended down for better hover detection
+        top: dslAreaY - 120, // Extended up to encompass all letters with new spacing
+        bottom: dslAreaY + 220, // Extended down for better hover detection
       };
 
       // Check if cursor is directly over the vertical DSL area
@@ -558,12 +558,12 @@ const DSLAnimation = () => {
   // Animation sequence on hover
   useEffect(() => {
     if (isHovering) {
-      // Start the full animation sequence
+      // Start the full animation sequence with smoother timing
       setAnimationStage(1); // Start falling
       
-      const timer1 = setTimeout(() => setAnimationStage(2), 200); // Fall phase
-      const timer2 = setTimeout(() => setAnimationStage(3), 400); // Bounce phase
-      const timer3 = setTimeout(() => setAnimationStage(4), 600); // Final position
+      const timer1 = setTimeout(() => setAnimationStage(2), 300); // Extended fall phase
+      const timer2 = setTimeout(() => setAnimationStage(3), 600); // Extended bounce phase  
+      const timer3 = setTimeout(() => setAnimationStage(4), 900); // Extended final position
       
       return () => {
         clearTimeout(timer1);
@@ -571,8 +571,9 @@ const DSLAnimation = () => {
         clearTimeout(timer3);
       };
     } else {
-      // Return to stacked position
-      setAnimationStage(0);
+      // Return to stacked position with delay to prevent glitches
+      const timer = setTimeout(() => setAnimationStage(0), 150);
+      return () => clearTimeout(timer);
     }
   }, [isHovering]);
 
@@ -582,11 +583,11 @@ const DSLAnimation = () => {
   const getLetterAnimation = (letterIndex: number, stage: number) => {
     // D = index 0, S = index 1, L = index 2
 
-    // Invisible baseline - bottom of letters when horizontal (about 60px below center)
+    // Invisible baseline - bottom of letters when horizontal
     const baseline = -240;
 
-    // Base stacked positions with proper spacing to avoid overlap
-      const stackedY = (2 - letterIndex) * -85; // D at -170, S at -85, L at 0
+    // Base stacked positions with proper spacing to match screenshot (100px between letters)
+    const stackedY = (2 - letterIndex) * -100; // D at -200, S at -100, L at 0
     const baseX = 0;
 
     // Ensure no letter goes below baseline
@@ -598,28 +599,28 @@ const DSLAnimation = () => {
       return { x: baseX, y: stackedY, rotate: 0 };
     }
 
-    // Animation sequence positions for each letter
+    // Animation sequence positions for each letter - matching 100px horizontal spacing
     const letterAnimations = [
-            {
+      {
         // D positions through animation - stays in original X position
-        fall1: { x: baseX, y: stackedY + 30, rotate: -3 }, // Start falling gently, no X movement
-        fall2: { x: baseX, y: respectBaseline(baseline + 15), rotate: -1 }, // Continue falling smoothly, no X movement
-        bounce: { x: baseX, y: respectBaseline(baseline - 5), rotate: 0.5 }, // Gentle bounce up, no X movement
+        fall1: { x: baseX, y: stackedY + 20, rotate: -2 }, // Gentler start
+        fall2: { x: baseX, y: respectBaseline(baseline + 10), rotate: -0.5 }, // Smoother fall
+        bounce: { x: baseX, y: respectBaseline(baseline - 3), rotate: 0.2 }, // Subtle bounce
         final: { x: baseX, y: respectBaseline(baseline), rotate: 0 }, // Settle in original X position
       },
       {
-        // S positions through animation - moves to align with D  
-        fall1: { x: -3, y: stackedY + 20, rotate: 4 }, // Start falling gently
-        fall2: { x: 20, y: respectBaseline(baseline + 10), rotate: 2 }, // Gradual horizontal movement
-        bounce: { x: 75, y: respectBaseline(baseline - 3), rotate: -1 }, // Near final position with gentle bounce
-        final: { x: 80, y: respectBaseline(baseline), rotate: 0 }, // Settle with proper spacing from D
+        // S positions through animation - moves to align with D (100px spacing)
+        fall1: { x: -2, y: stackedY + 15, rotate: 2 }, // Gentler start
+        fall2: { x: 30, y: respectBaseline(baseline + 8), rotate: 1 }, // Gradual horizontal movement
+        bounce: { x: 95, y: respectBaseline(baseline - 2), rotate: -0.5 }, // Near final position
+        final: { x: 100, y: respectBaseline(baseline), rotate: 0 }, // 100px spacing from D
       },
       {
-        // L positions through animation - moves to align with D and S
-        fall1: { x: 5, y: stackedY + 25, rotate: -6 }, // Start falling gently
-        fall2: { x: 60, y: respectBaseline(baseline + 12), rotate: -3 }, // Gradual horizontal movement
-        bounce: { x: 155, y: respectBaseline(baseline - 4), rotate: 2 }, // Near final position with gentle bounce
-        final: { x: 160, y: respectBaseline(baseline), rotate: 0 }, // Settle with consistent spacing
+        // L positions through animation - moves to align with D and S (100px spacing each)
+        fall1: { x: 3, y: stackedY + 18, rotate: -3 }, // Gentler start
+        fall2: { x: 80, y: respectBaseline(baseline + 12), rotate: -1.5 }, // Gradual horizontal movement
+        bounce: { x: 195, y: respectBaseline(baseline - 2.5), rotate: 1 }, // Near final position
+        final: { x: 200, y: respectBaseline(baseline), rotate: 0 }, // 200px from D (100px from S)
       },
     ];
 
@@ -629,11 +630,11 @@ const DSLAnimation = () => {
     if (stage === 2) return letterAnim.fall2;
     if (stage === 3) return letterAnim.bounce;
     if (stage === 4) {
-      // Minimal continuous bounce in final position for smoothness
-      const bounceOffset = Math.sin(Date.now() * 0.005 + letterIndex) * 0.8;
+      // Very subtle continuous movement in final position
+      const bounceOffset = Math.sin(Date.now() * 0.003 + letterIndex) * 0.5;
       return {
-        x: letterAnim.final.x + bounceOffset * 0.1,
-        y: letterAnim.final.y + Math.abs(bounceOffset) * 0.1,
+        x: letterAnim.final.x + bounceOffset * 0.05,
+        y: letterAnim.final.y + Math.abs(bounceOffset) * 0.05,
         rotate: letterAnim.final.rotate,
       };
     }
@@ -645,12 +646,12 @@ const DSLAnimation = () => {
   const letters = ["D", "S", "L"];
 
   return (
-    <div className="absolute left-[2vw] top-[16rem] z-20">
+    <div className="absolute left-[2vw] top-[14rem] z-20">
       <div className="relative">
         {letters.map((letter, index) => (
           <motion.div
             key={letter}
-            className="absolute text-[clamp(48px,6vw,80px)] font-light text-white leading-[0.8] select-none"
+            className="absolute text-[clamp(48px,6vw,80px)] font-light text-white leading-none select-none"
             style={{
               width: "120px",
               height: "120px",
@@ -662,9 +663,9 @@ const DSLAnimation = () => {
             animate={getLetterAnimation(index, currentStage)}
             transition={{
               type: "spring",
-              stiffness: 90,
-              damping: 30,
-              duration: 0.6,
+              stiffness: 60, // Reduced for smoother animation
+              damping: 25, // Reduced for less bounce
+              duration: 0.8, // Slightly longer for smoothness
             }}
           >
             {letter}
@@ -743,10 +744,10 @@ export default function Home() {
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Top Right */}
-          <div className="absolute right-[4vw] top-[4rem] flex flex-col items-center">
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-[0.8]">D</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-[0.8]">S</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-[0.8]">L</span>
+          <div className="absolute right-[4vw] top-[4rem] flex flex-col items-center space-y-6">
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">D</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">S</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#4A90E2] leading-none">L</span>
           </div>
 
           {/* About Us Headline - moved down */}
@@ -839,10 +840,10 @@ export default function Home() {
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Bottom Left */}
-          <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center">
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-[0.8]">D</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-[0.8]">S</span>
-            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-[0.8]">L</span>
+          <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">D</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">S</span>
+            <span className="text-[clamp(48px,6vw,80px)] font-light text-[#F8F9FA] leading-none">L</span>
           </div>
 
           {/* Our Work Headline - Right Side (mirroring About Us) */}
@@ -945,8 +946,8 @@ export default function Home() {
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Bottom Right */}
-          <div className="absolute right-[4vw] bottom-[4rem] flex flex-col items-center">
-            <div className="h-[clamp(48px,6vw,80px)] leading-[0.8]">
+          <div className="absolute right-[4vw] bottom-[4rem] flex flex-col items-center space-y-6">
+            <div className="h-[clamp(48px,6vw,80px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
@@ -954,7 +955,7 @@ export default function Home() {
                 D
               </ProximityGradientText>
             </div>
-            <div className="h-[clamp(48px,6vw,80px)] leading-[0.8]">
+            <div className="h-[clamp(48px,6vw,80px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
@@ -962,7 +963,7 @@ export default function Home() {
                 S
               </ProximityGradientText>
             </div>
-            <div className="h-[clamp(48px,6vw,80px)] leading-[0.8]">
+            <div className="h-[clamp(48px,6vw,80px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
