@@ -646,12 +646,12 @@ const DSLAnimation = () => {
   const letters = ["D", "S", "L"];
 
   return (
-    <div className="absolute left-[1.5rem] top-[1.5rem] z-20">
+    <div className="absolute left-[2rem] top-[2rem] z-20">
       <div className="relative">
         {letters.map((letter, index) => (
           <motion.div
             key={letter}
-            className="absolute text-[clamp(72px,9vw,140px)] font-light text-white leading-none select-none"
+            className="absolute text-[clamp(36px,4vw,60px)] font-light text-white leading-none select-none"
             style={{
               width: "120px",
               height: "120px",
@@ -701,7 +701,7 @@ export default function Home() {
       
       // Then scroll to the specific section within the detail area
       setTimeout(() => {
-        const detailContainer = document.querySelector('.work-detail-container');
+        const detailContainer = document.getElementById('work-detail-scroll-container');
         const targetSection = document.getElementById(`companies-${sectionId}`);
         if (detailContainer && targetSection) {
           // Map section IDs to horizontal scroll positions
@@ -720,6 +720,51 @@ export default function Home() {
       }, 500);
     }
   };
+
+  // Our Work horizontal scroll tracking
+  useEffect(() => {
+    const handleWorkScroll = () => {
+      const container = document.getElementById('work-detail-scroll-container');
+      if (!container) return;
+
+      const scrollLeft = container.scrollLeft;
+      const sectionWidth = window.innerWidth;
+      const currentSection = Math.round(scrollLeft / sectionWidth);
+
+      // Update navigation arrows visibility
+      const leftArrow = document.getElementById('work-nav-left');
+      const rightArrow = document.getElementById('work-nav-right');
+      
+      if (leftArrow) {
+        leftArrow.style.display = currentSection > 0 ? 'flex' : 'none';
+      }
+      
+      if (rightArrow) {
+        rightArrow.style.display = currentSection < 3 ? 'flex' : 'none';
+      }
+
+      // Update section indicators
+      for (let i = 0; i < 4; i++) {
+        const indicator = document.getElementById(`work-indicator-${i}`);
+        if (indicator) {
+          indicator.className = i === currentSection 
+            ? 'w-3 h-3 rounded-full bg-white hover:bg-white transition-colors duration-300'
+            : 'w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300';
+        }
+      }
+    };
+
+    const container = document.getElementById('work-detail-scroll-container');
+    if (container) {
+      container.addEventListener('scroll', handleWorkScroll);
+      // Initial call to set correct state
+      handleWorkScroll();
+      
+      return () => {
+        container.removeEventListener('scroll', handleWorkScroll);
+      };
+    }
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -782,10 +827,10 @@ export default function Home() {
             <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
               
               {/* D/S/L Stacked Letters - Top Right */}
-              <div className="absolute right-[1.5rem] top-[1.5rem] flex flex-col items-center space-y-3">
-                <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">D</span>
-                <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">S</span>
-                <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">L</span>
+              <div className="absolute right-[2rem] top-[2rem] flex flex-col items-center space-y-1">
+                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
+                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
+                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
               </div>
 
               {/* About Us Headline - moved down */}
@@ -885,10 +930,10 @@ export default function Home() {
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
                   {/* D/S/L Stacked Letters - Top Right */}
-                  <div className="absolute right-[1.5rem] top-[1.5rem] flex flex-col items-center space-y-3">
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">L</span>
+                  <div className="absolute right-[2rem] top-[2rem] flex flex-col items-center space-y-1">
+                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
                   </div>
 
                   {/* Content Center */}
@@ -990,10 +1035,10 @@ export default function Home() {
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
                   {/* D/S/L Stacked Letters - Bottom Right */}
-                  <div className="absolute right-[1.5rem] bottom-[1.5rem] flex flex-col items-center space-y-3">
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">L</span>
+                  <div className="absolute right-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
+                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
                   </div>
 
                   {/* Content Center */}
@@ -1034,10 +1079,10 @@ export default function Home() {
             <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
               
               {/* D/S/L Stacked Letters - Bottom Left */}
-              <div className="absolute left-[1.5rem] bottom-[1.5rem] flex flex-col items-center space-y-3">
-                <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">D</span>
-                <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">S</span>
-                <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">L</span>
+              <div className="absolute left-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
+                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">D</span>
+                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">S</span>
+                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">L</span>
               </div>
 
               {/* Our Work Headline - Right Side (mirroring About Us) */}
@@ -1137,7 +1182,94 @@ export default function Home() {
 
           {/* Our Work Detail Sections - Contained Horizontal Scroll */}
           <div className="horizontal-section bg-[#4A90E2]">
-            <div className="work-detail-container">
+            <div className="work-detail-container" id="work-detail-scroll-container">
+              
+              {/* Horizontal Navigation Controls */}
+              <div className="absolute top-1/2 left-4 z-30 transform -translate-y-1/2">
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('work-detail-scroll-container');
+                    if (container) {
+                      const currentScroll = container.scrollLeft;
+                      const targetScroll = Math.max(0, currentScroll - window.innerWidth);
+                      container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+                    }
+                  }}
+                  className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+                  style={{ display: 'none' }}
+                  id="work-nav-left"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="absolute top-1/2 right-4 z-30 transform -translate-y-1/2">
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('work-detail-scroll-container');
+                    if (container) {
+                      const currentScroll = container.scrollLeft;
+                      const maxScroll = container.scrollWidth - container.clientWidth;
+                      const targetScroll = Math.min(maxScroll, currentScroll + window.innerWidth);
+                      container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+                    }
+                  }}
+                  className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
+                  id="work-nav-right"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Horizontal Section Indicators */}
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => {
+                      const container = document.getElementById('work-detail-scroll-container');
+                      if (container) {
+                        container.scrollTo({ left: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="w-3 h-3 rounded-full bg-white/60 hover:bg-white transition-colors duration-300"
+                    id="work-indicator-0"
+                  ></button>
+                  <button
+                    onClick={() => {
+                      const container = document.getElementById('work-detail-scroll-container');
+                      if (container) {
+                        container.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
+                      }
+                    }}
+                    className="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300"
+                    id="work-indicator-1"
+                  ></button>
+                  <button
+                    onClick={() => {
+                      const container = document.getElementById('work-detail-scroll-container');
+                      if (container) {
+                        container.scrollTo({ left: 2 * window.innerWidth, behavior: 'smooth' });
+                      }
+                    }}
+                    className="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300"
+                    id="work-indicator-2"
+                  ></button>
+                  <button
+                    onClick={() => {
+                      const container = document.getElementById('work-detail-scroll-container');
+                      if (container) {
+                        container.scrollTo({ left: 3 * window.innerWidth, behavior: 'smooth' });
+                      }
+                    }}
+                    className="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300"
+                    id="work-indicator-3"
+                  ></button>
+                </div>
+              </div>
               
               {/* Section 1: Portfolio Companies Detail */}
               <div 
@@ -1146,12 +1278,12 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                                     {/* D/S/L Stacked Letters - Bottom Left */}
-                   <div className="absolute left-[1.5rem] bottom-[1.5rem] flex flex-col items-center space-y-3">
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">D</span>
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">S</span>
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">L</span>
-                   </div>
+                                                        {/* D/S/L Stacked Letters - Bottom Left */}
+                    <div className="absolute left-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
+                    </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1171,7 +1303,7 @@ export default function Home() {
                       >
                         ← Back to Our Work
                       </button>
-                      <span>Scroll right to continue through sections</span>
+                      <span>Scroll right or use navigation to explore all sections →</span>
                     </div>
                   </div>
                 </div>
@@ -1214,12 +1346,12 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                                     {/* D/S/L Stacked Letters - Bottom Right */}
-                   <div className="absolute right-[1.5rem] bottom-[1.5rem] flex flex-col items-center space-y-3">
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">D</span>
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">S</span>
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">L</span>
-                   </div>
+                                                        {/* D/S/L Stacked Letters - Bottom Right */}
+                    <div className="absolute right-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">D</span>
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">S</span>
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">L</span>
+                    </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1251,12 +1383,12 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                                     {/* D/S/L Stacked Letters - Top Left */}
-                   <div className="absolute left-[1.5rem] top-[1.5rem] flex flex-col items-center space-y-3">
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">D</span>
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">S</span>
-                     <span className="text-[clamp(72px,9vw,140px)] font-light text-[#4A90E2] leading-none">L</span>
-                   </div>
+                                                        {/* D/S/L Stacked Letters - Top Left */}
+                    <div className="absolute left-[2rem] top-[2rem] flex flex-col items-center space-y-1">
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
+                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
+                    </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1264,7 +1396,7 @@ export default function Home() {
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
                       Experimental projects and research initiatives that push the boundaries of what&apos;s possible in technology.
                     </p>
-                    <div className="text-white/50 text-sm">
+                    <div className="text-white/50 text-sm flex space-x-8">
                       <button
                         onClick={() => {
                           const mainSection = document.getElementById('companies-horizontal-container');
@@ -1276,6 +1408,7 @@ export default function Home() {
                       >
                         ← Back to Our Work
                       </button>
+                      <span>Final section - navigate back or return to main Our Work area</span>
                     </div>
                   </div>
                 </div>
@@ -1292,8 +1425,8 @@ export default function Home() {
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Bottom Right */}
-          <div className="absolute right-[1.5rem] bottom-[1.5rem] flex flex-col items-center space-y-3">
-            <div className="h-[clamp(72px,9vw,140px)] leading-none">
+          <div className="absolute right-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
+            <div className="h-[clamp(36px,4vw,60px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
@@ -1301,7 +1434,7 @@ export default function Home() {
                 D
               </ProximityGradientText>
             </div>
-            <div className="h-[clamp(72px,9vw,140px)] leading-none">
+            <div className="h-[clamp(36px,4vw,60px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
@@ -1309,7 +1442,7 @@ export default function Home() {
                 S
               </ProximityGradientText>
             </div>
-            <div className="h-[clamp(72px,9vw,140px)] leading-none">
+            <div className="h-[clamp(36px,4vw,60px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
