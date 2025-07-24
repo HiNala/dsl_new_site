@@ -122,22 +122,138 @@ const ProximityGradientText: React.FC<ProximityGradientTextProps> = ({
 };
 
 export default function AboutPage() {
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  
+  const sections = [
+    { id: 'mission', title: 'Our Mission' },
+    { id: 'approach', title: 'Our Approach' },
+    { id: 'team', title: 'Our Team' },
+    { id: 'values', title: 'Our Values' }
+  ];
+
   // Scroll to section based on hash on page load
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash.substring(1);
-      setTimeout(() => {
-        const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+      const sectionIndex = sections.findIndex(section => section.id === hash);
+      if (sectionIndex !== -1) {
+        setCurrentSectionIndex(sectionIndex);
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      }
     }
   }, []);
+
+  // Track scroll position to update current section
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const sectionIndex = Math.round(scrollPosition / windowHeight);
+      setCurrentSectionIndex(Math.max(0, Math.min(sectionIndex, sections.length - 1)));
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (index: number) => {
+    if (index >= 0 && index < sections.length) {
+      const element = document.getElementById(sections[index].id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setCurrentSectionIndex(index);
+      }
+    }
+  };
+
+  const canScrollUp = currentSectionIndex > 0;
+  const canScrollDown = currentSectionIndex < sections.length - 1;
 
   return (
     <div className="scroll-container">
       
+      {/* Dynamic Navigation Arrows */}
+      <div className="fixed left-8 top-1/2 transform -translate-y-1/2 z-30 flex flex-col space-y-4">
+        {/* Up Arrow */}
+        <motion.button
+          className={`w-12 h-12 flex items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all duration-300 ${
+            canScrollUp 
+              ? currentSectionIndex === 2 // Team section (white background)
+                ? 'border-black/20 text-black hover:border-[#4A90E2] hover:text-[#4A90E2] hover:bg-black/5' 
+                : 'border-white/30 text-white hover:border-[#4A90E2] hover:text-[#4A90E2] hover:bg-white/5'
+              : 'border-transparent text-transparent pointer-events-none'
+          }`}
+          onClick={() => scrollToSection(currentSectionIndex - 1)}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ 
+            opacity: canScrollUp ? 1 : 0, 
+            scale: canScrollUp ? 1 : 0.8,
+            y: canScrollUp ? 0 : 10
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          whileHover={{ scale: canScrollUp ? 1.1 : 0.8 }}
+          whileTap={{ scale: canScrollUp ? 0.95 : 0.8 }}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 7l-5 5 5-5 5 5-5-5z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </motion.button>
+
+        {/* Section Indicator */}
+        <motion.div 
+          className="flex flex-col items-center space-y-1 py-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          {sections.map((_, index) => (
+            <motion.div
+              key={index}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentSectionIndex
+                  ? currentSectionIndex === 2 // Team section (white background)
+                    ? 'bg-[#4A90E2] scale-125'
+                    : 'bg-[#4A90E2] scale-125'
+                  : currentSectionIndex === 2 // Team section (white background)
+                    ? 'bg-black/20 hover:bg-black/40'
+                    : 'bg-white/30 hover:bg-white/50'
+              }`}
+              whileHover={{ scale: index === currentSectionIndex ? 1.25 : 1.1 }}
+            />
+          ))}
+        </motion.div>
+
+        {/* Down Arrow */}
+        <motion.button
+          className={`w-12 h-12 flex items-center justify-center rounded-full border-2 backdrop-blur-sm transition-all duration-300 ${
+            canScrollDown 
+              ? currentSectionIndex === 2 // Team section (white background)
+                ? 'border-black/20 text-black hover:border-[#4A90E2] hover:text-[#4A90E2] hover:bg-black/5' 
+                : 'border-white/30 text-white hover:border-[#4A90E2] hover:text-[#4A90E2] hover:bg-white/5'
+              : 'border-transparent text-transparent pointer-events-none'
+          }`}
+          onClick={() => scrollToSection(currentSectionIndex + 1)}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ 
+            opacity: canScrollDown ? 1 : 0, 
+            scale: canScrollDown ? 1 : 0.8,
+            y: canScrollDown ? 0 : -10
+          }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          whileHover={{ scale: canScrollDown ? 1.1 : 0.8 }}
+          whileTap={{ scale: canScrollDown ? 0.95 : 0.8 }}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 13l5-5-5 5-5-5 5 5z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </motion.button>
+      </div>
+
       {/* Section 1: Our Mission Detail */}
       <section id="mission" className="section-container bg-[#1a1a1a]">
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
