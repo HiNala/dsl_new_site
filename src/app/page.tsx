@@ -646,12 +646,12 @@ const DSLAnimation = () => {
   const letters = ["D", "S", "L"];
 
   return (
-    <div className="absolute left-[2rem] top-[2rem] z-20">
+    <div className="absolute left-[3rem] top-[3rem] z-20">
       <div className="relative">
         {letters.map((letter, index) => (
           <motion.div
             key={letter}
-            className="absolute text-[clamp(36px,4vw,60px)] font-light text-white leading-none select-none"
+            className="absolute text-[clamp(48px,5vw,72px)] font-light text-white leading-none select-none"
             style={{
               width: "120px",
               height: "120px",
@@ -827,10 +827,10 @@ export default function Home() {
             <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
               
               {/* D/S/L Stacked Letters - Top Right */}
-              <div className="absolute right-[2rem] top-[2rem] flex flex-col items-center space-y-1">
-                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
-                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
-                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
+              <div className="absolute right-[3rem] top-[3rem] flex flex-col items-center space-y-2">
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
               </div>
 
               {/* About Us Headline - moved down */}
@@ -930,10 +930,10 @@ export default function Home() {
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
                   {/* D/S/L Stacked Letters - Top Right */}
-                  <div className="absolute right-[2rem] top-[2rem] flex flex-col items-center space-y-1">
-                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
+                  <div className="absolute right-[3rem] top-[3rem] flex flex-col items-center space-y-2">
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
                   </div>
 
                   {/* Content Center */}
@@ -1035,10 +1035,10 @@ export default function Home() {
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
                   {/* D/S/L Stacked Letters - Bottom Right */}
-                  <div className="absolute right-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
-                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
-                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
-                    <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
+                  <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
                   </div>
 
                   {/* Content Center */}
@@ -1079,10 +1079,10 @@ export default function Home() {
             <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
               
               {/* D/S/L Stacked Letters - Bottom Left */}
-              <div className="absolute left-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
-                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">D</span>
-                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">S</span>
-                <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">L</span>
+              <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
+                <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
               </div>
 
               {/* Our Work Headline - Right Side (mirroring About Us) */}
@@ -1278,12 +1278,12 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                                                        {/* D/S/L Stacked Letters - Bottom Left */}
-                    <div className="absolute left-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
-                    </div>
+                  {/* D/S/L Stacked Letters - Bottom Left */}
+                  <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
+                  </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1346,12 +1346,12 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                                                        {/* D/S/L Stacked Letters - Bottom Right */}
-                    <div className="absolute right-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">D</span>
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">S</span>
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#F8F9FA] leading-none">L</span>
-                    </div>
+                  {/* D/S/L Stacked Letters - Bottom Right */}
+                  <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
+                  </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1383,12 +1383,12 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
-                                                        {/* D/S/L Stacked Letters - Top Left */}
-                    <div className="absolute left-[2rem] top-[2rem] flex flex-col items-center space-y-1">
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">D</span>
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">S</span>
-                      <span className="text-[clamp(36px,4vw,60px)] font-light text-[#4A90E2] leading-none">L</span>
-                    </div>
+                  {/* D/S/L Stacked Letters - Top Left */}
+                  <div className="absolute left-[3rem] top-[3rem] flex flex-col items-center space-y-2">
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">D</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">S</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
+                  </div>
 
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
@@ -1425,8 +1425,8 @@ export default function Home() {
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Bottom Right */}
-          <div className="absolute right-[2rem] bottom-[2rem] flex flex-col items-center space-y-1">
-            <div className="h-[clamp(36px,4vw,60px)] leading-none">
+          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
+            <div className="h-[clamp(48px,5vw,72px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
@@ -1434,7 +1434,7 @@ export default function Home() {
                 D
               </ProximityGradientText>
             </div>
-            <div className="h-[clamp(36px,4vw,60px)] leading-none">
+            <div className="h-[clamp(48px,5vw,72px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
@@ -1442,7 +1442,7 @@ export default function Home() {
                 S
               </ProximityGradientText>
             </div>
-            <div className="h-[clamp(36px,4vw,60px)] leading-none">
+            <div className="h-[clamp(48px,5vw,72px)] leading-none">
               <ProximityGradientText
                 colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                 proximityRadius={300}
