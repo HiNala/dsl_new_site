@@ -530,15 +530,15 @@ const DSLAnimation = () => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       // Get the DSL area position (updated for new positioning)
-      const dslAreaX = window.innerWidth * 0.02; // 2vw
-      const dslAreaY = 256; // 16rem = 256px
+      const dslAreaX = 96; // 6rem = 96px
+      const dslAreaY = 96; // 6rem = 96px
 
       // Define the vertical DSL area (where stacked letters occupy)
       const verticalDSLArea = {
-        left: dslAreaX - 80, // Wider area for easier interaction
-        right: dslAreaX + 80,
-        top: dslAreaY - 120, // Extended up to encompass all letters with new spacing
-        bottom: dslAreaY + 220, // Extended down for better hover detection
+        left: dslAreaX - 60, // Adjusted for smaller letters
+        right: dslAreaX + 60,
+        top: dslAreaY - 50, // Extended up to encompass all letters with proper bounds
+        bottom: dslAreaY + 150, // Extended down for better hover detection
       };
 
       // Check if cursor is directly over the vertical DSL area
@@ -646,15 +646,15 @@ const DSLAnimation = () => {
   const letters = ["D", "S", "L"];
 
   return (
-    <div className="absolute left-[3rem] top-[3rem] z-20">
+    <div className="absolute left-[6rem] top-[6rem] z-20">
       <div className="relative">
         {letters.map((letter, index) => (
           <motion.div
             key={letter}
-            className="absolute text-[clamp(48px,5vw,72px)] font-light text-white leading-none select-none"
+            className="absolute text-[clamp(42px,4.5vw,60px)] font-light text-white leading-none select-none"
             style={{
-              width: "120px",
-              height: "120px",
+              width: "100px",
+              height: "100px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
