@@ -1035,10 +1035,10 @@ export default function Home() {
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
                   {/* D/S/L Stacked Letters - Bottom Left */}
-                  <div className="absolute left-[1.5rem] bottom-[1.5rem] flex flex-col items-center space-y-3">
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">D</span>
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">S</span>
-                    <span className="text-[clamp(72px,9vw,140px)] font-light text-[#F8F9FA] leading-none">L</span>
+                  <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
+                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
                   </div>
 
                   {/* Content Center */}
