@@ -101,6 +101,27 @@ section {
   overflow: hidden;
 }
 
+/* Enhanced scroll containment for About Us subsections */
+.about-detail-container {
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.about-detail-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100vh;
+  min-height: 100vh;
+  flex-shrink: 0;
+  overscroll-behavior: contain;
+}
+
 /* Prevent scroll momentum issues on mobile */
 @supports (-webkit-overflow-scrolling: touch) {
   .scroll-container {
