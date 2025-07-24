@@ -1092,6 +1092,176 @@ export default function Home() {
     }
   };
 
+  // Sophisticated Typing Animation Component with Micro-interactions
+  const TypingAnimation = () => {
+    const words = ['Together', 'Dreams', 'Reality'];
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [currentText, setCurrentText] = useState('');
+    const [isTyping, setIsTyping] = useState(true);
+    const [showCursor, setShowCursor] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+      // Start animation after initial delay
+      const initialDelay = setTimeout(() => {
+        setIsVisible(true);
+      }, 1200);
+
+      return () => clearTimeout(initialDelay);
+    }, []);
+
+    useEffect(() => {
+      if (!isVisible) return;
+
+      const currentWord = words[currentWordIndex];
+      let timeoutId: NodeJS.Timeout;
+
+      if (isTyping) {
+        // Typing forward
+        if (currentText.length < currentWord.length) {
+          timeoutId = setTimeout(() => {
+            setCurrentText(currentWord.slice(0, currentText.length + 1));
+          }, 80 + Math.random() * 60); // Variable typing speed for natural feel
+        } else {
+          // Pause at end of word with subtle breathing effect
+          timeoutId = setTimeout(() => {
+            setIsTyping(false);
+          }, 1800 + Math.random() * 400);
+        }
+      } else {
+        // Typing backward
+        if (currentText.length > 0) {
+          timeoutId = setTimeout(() => {
+            setCurrentText(currentText.slice(0, -1));
+          }, 40 + Math.random() * 30); // Faster backspace
+        } else {
+          // Move to next word with anticipatory pause
+          timeoutId = setTimeout(() => {
+            setCurrentWordIndex((prev) => (prev + 1) % words.length);
+            setIsTyping(true);
+          }, 300 + Math.random() * 200);
+        }
+      }
+
+      return () => clearTimeout(timeoutId);
+    }, [currentText, isTyping, currentWordIndex, words, isVisible]);
+
+    // Cursor blinking with sophisticated timing
+    useEffect(() => {
+      const cursorInterval = setInterval(() => {
+        setShowCursor(prev => !prev);
+      }, isTyping ? 530 : 600); // Different blink rates for typing vs waiting
+
+      return () => clearInterval(cursorInterval);
+    }, [isTyping]);
+
+    return (
+      <motion.span 
+        className="text-[#4A90E2] ml-4 inline-block relative"
+        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        animate={{ 
+          opacity: isVisible ? 1 : 0, 
+          scale: isVisible ? 1 : 0.8,
+          y: isVisible ? 0 : 20
+        }}
+        transition={{ 
+          duration: 0.8, 
+          delay: 0.8, 
+          type: "spring",
+          stiffness: 100,
+          damping: 15
+        }}
+      >
+        {/* Main text with character-by-character entrance */}
+        <span className="relative">
+          {currentText.split('').map((char, index) => (
+            <motion.span
+              key={`${currentWordIndex}-${index}`}
+              className="inline-block"
+              initial={{ opacity: 0, y: 10, scale: 0.8 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0, 
+                scale: 1,
+                color: ['#4A90E2', '#5BA3F5', '#4A90E2']
+              }}
+              transition={{ 
+                duration: 0.2,
+                delay: index * 0.03,
+                scale: { type: "spring", stiffness: 300, damping: 20 },
+                color: { duration: 0.8, repeat: Infinity, repeatType: "reverse" }
+              }}
+            >
+              {char}
+            </motion.span>
+          ))}
+          
+          {/* Sophisticated animated cursor */}
+          <motion.span
+            className="inline-block w-[3px] bg-[#4A90E2] ml-1"
+            animate={{
+              opacity: showCursor ? 1 : 0,
+              scaleY: showCursor ? [1, 1.2, 1] : 1,
+              height: isTyping ? '1.1em' : '1em'
+            }}
+            transition={{
+              opacity: { duration: 0.1 },
+              scaleY: { 
+                duration: 0.3, 
+                repeat: Infinity, 
+                repeatType: "reverse",
+                ease: "easeInOut"
+              },
+              height: { duration: 0.2, ease: "easeInOut" }
+            }}
+            style={{ 
+              height: '1em', 
+              borderRadius: '2px',
+              boxShadow: '0 0 8px rgba(74, 144, 226, 0.4)'
+            }}
+          />
+        </span>
+
+        {/* Subtle glow effect around the text */}
+        <motion.div
+          className="absolute inset-0 bg-[#4A90E2]/20 blur-xl rounded-lg"
+          animate={{
+            opacity: [0.2, 0.4, 0.2],
+            scale: [0.8, 1.1, 0.8]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+
+        {/* Sparkle particles for extra delight */}
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-[#4A90E2] rounded-full"
+            style={{
+              left: `${20 + i * 30}%`,
+              top: `${10 + i * 10}%`
+            }}
+            animate={{
+              scale: [0, 1, 0],
+              opacity: [0, 1, 0],
+              rotate: [0, 180, 360]
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              delay: i * 0.5,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </motion.span>
+    );
+  };
+
   // Ensure main sections are always the default view on page load
   useEffect(() => {
     const resetToMainSections = () => {
@@ -1990,15 +2160,7 @@ export default function Home() {
             >
               <h2 className="text-[clamp(36px,5vw,72px)] font-light leading-[1.1] text-white mb-[2rem] tracking-wide">
                 Let&apos;s Create
-                <motion.span 
-                  className="text-[#4A90E2] ml-4"
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.8, type: "spring" }}
-                  viewport={{ once: true }}
-                >
-                  Together
-                </motion.span>
+                <TypingAnimation />
               </h2>
             </motion.div>
             <motion.p 
