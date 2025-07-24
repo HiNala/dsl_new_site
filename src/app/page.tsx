@@ -686,9 +686,20 @@ export default function Home() {
       
       // Then scroll to the specific section within the detail area
       setTimeout(() => {
-        const targetSection = document.getElementById(`about-${sectionId}`);
-        if (targetSection) {
-          targetSection.scrollIntoView({ behavior: 'smooth' });
+        const detailContainer = document.querySelector('.about-detail-container');
+        if (detailContainer) {
+          // Map section IDs to vertical scroll positions
+          const sectionMap: { [key: string]: number } = {
+            'mission': 0,
+            'approach': 1,
+            'team': 2,
+            'values': 3
+          };
+          const sectionIndex = sectionMap[sectionId] || 0;
+          detailContainer.scrollTo({
+            top: sectionIndex * window.innerHeight,
+            behavior: 'smooth'
+          });
         }
       }, 500);
     }
@@ -720,6 +731,32 @@ export default function Home() {
       }, 500);
     }
   };
+
+  // About Us vertical scroll tracking
+  useEffect(() => {
+    const handleAboutScroll = () => {
+      const container = document.querySelector('.about-detail-container');
+      if (!container) return;
+
+      const scrollTop = container.scrollTop;
+      const sectionHeight = window.innerHeight;
+      const currentSection = Math.round(scrollTop / sectionHeight);
+
+      // Could add navigation arrows or indicators here if needed
+      // For now, just tracking the position for future enhancements
+    };
+
+    const container = document.querySelector('.about-detail-container');
+    if (container) {
+      container.addEventListener('scroll', handleAboutScroll);
+      // Initial call to set correct state
+      handleAboutScroll();
+      
+      return () => {
+        container.removeEventListener('scroll', handleAboutScroll);
+      };
+    }
+  }, []);
 
   // Our Work horizontal scroll tracking
   useEffect(() => {
