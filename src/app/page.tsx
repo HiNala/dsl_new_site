@@ -386,21 +386,17 @@ const DSLLetter: React.FC<DSLLetterProps> = ({ letter }) => {
 
   return (
     <div ref={containerRef} className="relative text-[clamp(48px,5vw,72px)] font-light leading-none">
-      {/* Base black text */}
+      {/* Base black text - always visible */}
       <span className="block text-black relative z-10">
         {letter}
       </span>
       
-      {/* Gradient mask overlay with enhanced coverage */}
+      {/* Animated gradient text with cursor mask - colors moving and swirling */}
       <motion.div
         className="absolute inset-0 z-30 pointer-events-none"
         style={{
-          WebkitMask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 60%, transparent 85%)`,
-          mask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 60%, transparent 85%)`,
-          marginTop: '-2px',
-          marginBottom: '-2px',
-          marginLeft: '-1px',
-          marginRight: '-1px',
+          WebkitMask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 50%, transparent 80%)`,
+          mask: `radial-gradient(circle ${maskRadius}px at ${maskX}px ${maskY}px, black 0%, black 50%, transparent 80%)`,
         }}
         animate={{
           opacity: isInProximity ? 1 : 0,
@@ -437,15 +433,10 @@ const DSLLetter: React.FC<DSLLetterProps> = ({ letter }) => {
         </motion.span>
       </motion.div>
       
-      {/* Subtle always-on gradient */}
+      {/* Subtle always-on gradient effect for better visibility */}
       <motion.div
-        className="absolute inset-0 z-20 pointer-events-none opacity-10"
-        style={{
-          marginTop: '-2px',
-          marginBottom: '-2px',
-          marginLeft: '-1px',
-          marginRight: '-1px',
-        }}
+        className="absolute inset-0 z-20 pointer-events-none opacity-20"
+        initial={false}
         animate={{
           opacity: isInProximity ? 0 : 0.1,
         }}
@@ -774,18 +765,18 @@ const DSLAnimation = () => {
   const getLetterAnimation = (letterIndex: number, stage: number) => {
     // D = index 0, S = index 1, L = index 2
 
-    // Base stacked positions - properly spaced vertically
+    // Base stacked positions - properly spaced vertically (keeping current placement)
     const stackedPositions = [
-      { x: 0, y: 0 },   // D at top
+      { x: 0, y: 0 },   // D at top (FIXED ANCHOR POINT)
       { x: 0, y: 80 },  // S in middle  
       { x: 0, y: 160 }  // L at bottom
     ];
 
-    // Horizontal positions for final animated state
+    // Horizontal positions - D stays fixed, S and L move to align with D horizontally
     const horizontalPositions = [
-      { x: 0, y: 80 },   // D stays in middle row
-      { x: 80, y: 80 },  // S moves right 
-      { x: 160, y: 80 }  // L moves further right
+      { x: 0, y: 0 },    // D NEVER MOVES - stays at anchor point
+      { x: 80, y: 0 },   // S moves right and up to align with D 
+      { x: 160, y: 0 }   // L moves right and up to align with D
     ];
 
     // Animation stages
@@ -794,10 +785,15 @@ const DSLAnimation = () => {
       return stackedPositions[letterIndex];
     }
 
+    // D never moves - always stays at its fixed position
+    if (letterIndex === 0) {
+      return stackedPositions[0]; // D always stays at (0,0)
+    }
+
     const stacked = stackedPositions[letterIndex];
     const horizontal = horizontalPositions[letterIndex];
 
-    // Animation sequence positions for each letter
+    // Animation sequence positions for S and L only
     if (stage === 1) {
       // Start movement - slight shift
       return {
@@ -817,8 +813,8 @@ const DSLAnimation = () => {
     }
 
     if (stage === 3) {
-      // Near final - slight overshoot for bounce effect
-      const overshoot = letterIndex === 0 ? 1.0 : 1.05; // D doesn't overshoot, S and L do slightly
+      // Near final - slight overshoot for bounce effect (only S and L)
+      const overshoot = 1.05;
       return {
         x: stacked.x + (horizontal.x - stacked.x) * overshoot,
         y: stacked.y + (horizontal.y - stacked.y) * overshoot,
@@ -928,28 +924,51 @@ export default function Home() {
       // First scroll to the detail sections area (to the left)
       container.scrollTo({ left: 0, behavior: 'smooth' });
       
-      // Then scroll to the specific section within the detail area
+      // Then scroll to the specific section within the detail area (now vertical)
       setTimeout(() => {
         const detailContainer = document.getElementById('work-detail-scroll-container');
         if (detailContainer) {
-          // Map section IDs to horizontal scroll positions (reversed order)
+          // Map section IDs to vertical scroll positions
           const sectionMap: { [key: string]: number } = {
-            'portfolio': 3,
-            'emerging-tech': 2,
-            'creator-tools': 1,
-            'innovation-labs': 0
+            'portfolio': 0,
+            'emerging-tech': 1,
+            'creator-tools': 2,
+            'innovation-labs': 3
           };
           const sectionIndex = sectionMap[sectionId] || 0;
           detailContainer.scrollTo({
-            left: sectionIndex * window.innerWidth,
+            top: sectionIndex * window.innerHeight,
             behavior: 'smooth'
           });
+          
+          // Trigger navigation arrow setup after scroll
+          setTimeout(() => {
+            const handleWorkScroll = () => {
+              const scrollTop = detailContainer.scrollTop;
+              const sectionHeight = window.innerHeight;
+              const currentSection = Math.round(scrollTop / sectionHeight);
+              const upArrow = document.getElementById('work-nav-up');
+              const downArrow = document.getElementById('work-nav-down');
+              const backArrow = document.getElementById('work-nav-back');
+              
+                             if (upArrow && upArrow.parentElement) upArrow.parentElement.style.display = 'none';
+               
+               if (currentSection === 0 || currentSection === 1 || currentSection === 2) {
+                 if (downArrow && downArrow.parentElement) downArrow.parentElement.style.display = 'flex';
+                 if (backArrow && backArrow.parentElement) backArrow.parentElement.style.display = 'none';
+               } else {
+                 if (downArrow && downArrow.parentElement) downArrow.parentElement.style.display = 'none';
+                 if (backArrow && backArrow.parentElement) backArrow.parentElement.style.display = 'flex';
+               }
+            };
+            handleWorkScroll();
+          }, 200);
         }
       }, 500);
     }
   };
 
-  // About Us vertical scroll tracking
+  // About Us vertical scroll tracking with dynamic navigation
   useEffect(() => {
     const handleAboutScroll = () => {
       const container = document.querySelector('.about-detail-container');
@@ -958,16 +977,37 @@ export default function Home() {
       const scrollTop = container.scrollTop;
       const sectionHeight = window.innerHeight;
       const currentSection = Math.round(scrollTop / sectionHeight);
-
-      // Could add navigation arrows or indicators here if needed
-      // For now, just tracking the position for future enhancements
+      const totalSections = 4; // Mission, Approach, Team, Values
+      
+      // Update navigation arrows visibility based on flow
+      const upArrow = document.getElementById('about-nav-up');
+      const downArrow = document.getElementById('about-nav-down');
+      const backArrow = document.getElementById('about-nav-back');
+      
+      console.log('About scroll - currentSection:', currentSection, 'scrollTop:', scrollTop);
+      
+      // Always hide up arrow (not needed in this flow)
+      if (upArrow) upArrow.style.display = 'none';
+      
+      if (currentSection >= totalSections - 1) {
+        // Last slide (Our Values): Only left arrow to go back to main section
+        if (downArrow) downArrow.style.display = 'none';
+        if (backArrow) backArrow.style.display = 'flex';
+      } else {
+        // All other slides (Mission, Our Approach, Our Team): Down arrow to continue
+        if (downArrow) downArrow.style.display = 'flex';
+        if (backArrow) backArrow.style.display = 'none';
+      }
     };
 
     const container = document.querySelector('.about-detail-container');
     if (container) {
       container.addEventListener('scroll', handleAboutScroll);
-      // Initial call to set correct state
-      handleAboutScroll();
+      
+      // Force initial setup after a brief delay to ensure DOM is ready
+      setTimeout(() => {
+        handleAboutScroll();
+      }, 100);
       
       return () => {
         container.removeEventListener('scroll', handleAboutScroll);
@@ -975,44 +1015,69 @@ export default function Home() {
     }
   }, []);
 
-  // Our Work horizontal scroll tracking
+  // Our Work vertical scroll tracking
   useEffect(() => {
     const handleWorkScroll = () => {
       const container = document.getElementById('work-detail-scroll-container');
       if (!container) return;
 
-      const scrollLeft = container.scrollLeft;
-      const sectionWidth = window.innerWidth;
-      const currentSection = Math.round(scrollLeft / sectionWidth);
+      const scrollTop = container.scrollTop;
+      const sectionHeight = window.innerHeight;
+      const currentSection = Math.round(scrollTop / sectionHeight);
+      const totalSections = 4; // Portfolio, Emerging, Creator, Innovation
 
-      // Update navigation arrows visibility
-      const leftArrow = document.getElementById('work-nav-left');
-      const rightArrow = document.getElementById('work-nav-right');
+      // Update navigation arrows visibility based on flow
+      const upArrow = document.getElementById('work-nav-up');
+      const downArrow = document.getElementById('work-nav-down');
+      const backArrow = document.getElementById('work-nav-back');
       
-      if (leftArrow) {
-        leftArrow.style.display = currentSection > 0 ? 'flex' : 'none';
+      console.log('Work scroll - currentSection:', currentSection, 'scrollTop:', scrollTop, 'sectionHeight:', sectionHeight);
+      
+      // Always hide up arrow (not needed in this flow)
+      if (upArrow && upArrow.parentElement) {
+        upArrow.parentElement.style.display = 'none';
       }
       
-      if (rightArrow) {
-        rightArrow.style.display = currentSection < 3 ? 'flex' : 'none';
-      }
-
-      // Update section indicators
-      for (let i = 0; i < 4; i++) {
-        const indicator = document.getElementById(`work-indicator-${i}`);
-        if (indicator) {
-          indicator.className = i === currentSection 
-            ? 'w-3 h-3 rounded-full bg-white hover:bg-white transition-colors duration-300'
-            : 'w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300';
+      // Force down arrow to be visible on first 3 slides
+      if (currentSection === 0 || currentSection === 1 || currentSection === 2) {
+        // Portfolio, Emerging Tech, Creator Tools: Show down arrow
+        if (downArrow && downArrow.parentElement) {
+          downArrow.parentElement.style.display = 'flex';
+          console.log('Showing down arrow for section:', currentSection);
+        }
+        if (backArrow && backArrow.parentElement) {
+          backArrow.parentElement.style.display = 'none';
+        }
+      } else {
+        // Last slide (Innovation Labs): Only left arrow to go back to main section
+        if (downArrow && downArrow.parentElement) {
+          downArrow.parentElement.style.display = 'none';
+          console.log('Hiding down arrow for last section:', currentSection);
+        }
+        if (backArrow && backArrow.parentElement) {
+          backArrow.parentElement.style.display = 'flex';
         }
       }
+
+
     };
 
     const container = document.getElementById('work-detail-scroll-container');
     if (container) {
       container.addEventListener('scroll', handleWorkScroll);
-      // Initial call to set correct state
-      handleWorkScroll();
+      
+      // Force initial setup with multiple attempts to ensure DOM is ready
+      setTimeout(() => {
+        handleWorkScroll();
+      }, 100);
+      
+      setTimeout(() => {
+        handleWorkScroll();
+      }, 300);
+      
+      setTimeout(() => {
+        handleWorkScroll();
+      }, 500);
       
       return () => {
         container.removeEventListener('scroll', handleWorkScroll);
@@ -1026,6 +1091,93 @@ export default function Home() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Ensure main sections are always the default view on page load
+  useEffect(() => {
+    const resetToMainSections = () => {
+      // Reset About Us to main section (left = 0)
+      const aboutContainer = document.getElementById('about-horizontal-container');
+      if (aboutContainer) {
+        aboutContainer.scrollLeft = 0;
+      }
+      
+      // Reset Our Work to main section (right side)
+      const workContainer = document.getElementById('companies-horizontal-container');
+      if (workContainer) {
+        workContainer.scrollLeft = window.innerWidth;
+      }
+
+      // Reset any detail scroll positions
+      const aboutDetailContainer = document.querySelector('.about-detail-container');
+      if (aboutDetailContainer) {
+        aboutDetailContainer.scrollTop = 0;
+      }
+
+      const workDetailContainer = document.getElementById('work-detail-scroll-container');
+      if (workDetailContainer) {
+        workDetailContainer.scrollTop = 0;
+      }
+    };
+
+    // Reset immediately
+    resetToMainSections();
+
+    // Also reset on window load (in case of browser restoration)
+    window.addEventListener('load', resetToMainSections);
+    
+    // Reset on window resize to handle viewport changes
+    window.addEventListener('resize', resetToMainSections);
+
+    return () => {
+      window.removeEventListener('load', resetToMainSections);
+      window.removeEventListener('resize', resetToMainSections);
+    };
+  }, []);
+
+  // Initialize About Us navigation arrows when entering detail sections
+  useEffect(() => {
+    const initializeAboutNavigation = () => {
+      const upArrow = document.getElementById('about-nav-up');
+      const downArrow = document.getElementById('about-nav-down');
+      const backArrow = document.getElementById('about-nav-back');
+      
+      // Initial state: Mission section (first slide) - only down arrow
+      if (upArrow) upArrow.style.display = 'none';
+      if (downArrow) downArrow.style.display = 'flex';
+      if (backArrow) backArrow.style.display = 'none';
+    };
+
+    // Initialize after component mount
+    setTimeout(initializeAboutNavigation, 200);
+  }, []);
+
+  // Initialize Our Work navigation arrows when entering detail sections
+  useEffect(() => {
+    const initializeWorkNavigation = () => {
+      const upArrow = document.getElementById('work-nav-up');
+      const downArrow = document.getElementById('work-nav-down');
+      const backArrow = document.getElementById('work-nav-back');
+      
+      console.log('Initializing work navigation arrows:', { upArrow, downArrow, backArrow });
+      
+      // Initial state: Portfolio section (first slide) - only down arrow
+      if (upArrow && upArrow.parentElement) {
+        upArrow.parentElement.style.display = 'none';
+      }
+      if (downArrow && downArrow.parentElement) {
+        downArrow.parentElement.style.display = 'flex';
+        console.log('Set down arrow to visible');
+      }
+      if (backArrow && backArrow.parentElement) {
+        backArrow.parentElement.style.display = 'none';
+      }
+    };
+
+    // Initialize after component mount with multiple attempts
+    setTimeout(initializeWorkNavigation, 200);
+    setTimeout(initializeWorkNavigation, 500);
+    setTimeout(initializeWorkNavigation, 1000);
+  }, []);
 
   return (
     <div className="scroll-container">
@@ -1190,6 +1342,65 @@ export default function Home() {
           <div className="horizontal-section bg-[#1a1a1a]">
             <div className="about-detail-container">
               
+              {/* Up Navigation - Top Center */}
+              <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-30">
+                <button
+                  onClick={() => {
+                    const container = document.querySelector('.about-detail-container');
+                    if (container) {
+                      const currentScroll = container.scrollTop;
+                      const targetScroll = Math.max(0, currentScroll - window.innerHeight);
+                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                    }
+                  }}
+                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                  id="about-nav-up"
+                >
+                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M3 10L8 5L13 10" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Down Navigation - Bottom Center */}
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+                <button
+                  onClick={() => {
+                    const container = document.querySelector('.about-detail-container');
+                    if (container) {
+                      const currentScroll = container.scrollTop;
+                      const maxScroll = container.scrollHeight - container.clientHeight;
+                      const targetScroll = Math.min(maxScroll, currentScroll + window.innerHeight);
+                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                    }
+                  }}
+                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                  id="about-nav-down"
+                >
+                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Back Navigation - Right Center */}
+              <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-30">
+                <button
+                  onClick={() => {
+                    const mainSection = document.getElementById('about-horizontal-container');
+                    if (mainSection) {
+                      mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                    }
+                  }}
+                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                  id="about-nav-back"
+                >
+                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              
               {/* Section 1: Our Mission Detail */}
               <div 
                 id="about-mission" 
@@ -1204,26 +1415,30 @@ export default function Home() {
                     <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
                   </div>
 
+                  {/* Down Navigation - Bottom Center */}
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const container = document.querySelector('.about-detail-container');
+                        if (container) {
+                          container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
                     <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Mission</h2>
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
                       To empower creators and innovators by building companies that challenge conventional thinking and celebrate human creativity.
                     </p>
-                    <div className="text-white/50 text-sm flex space-x-8">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('about-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-white transition-colors duration-300"
-                      >
-                        ← Back to About Us
-                      </button>
-                      <span>Scroll down to continue through sections</span>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -1242,25 +1457,29 @@ export default function Home() {
                     <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
                   </div>
 
+                  {/* Down Navigation - Bottom Center */}
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const container = document.querySelector('.about-detail-container');
+                        if (container) {
+                          container.scrollTo({ top: 2 * window.innerHeight, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
                     <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#F8F9FA] mb-8">Our Approach</h2>
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
                       We combine deep technical expertise with creative vision, fostering environments where breakthrough ideas can flourish.
                     </p>
-                    <div className="text-white/50 text-sm">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('about-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-white transition-colors duration-300"
-                      >
-                        ← Back to About Us
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1272,25 +1491,29 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
+                  {/* Down Navigation - Bottom Center */}
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const container = document.querySelector('.about-detail-container');
+                        if (container) {
+                          container.scrollTo({ top: 3 * window.innerHeight, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-[#4A90E2] hover:text-blue-600 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
                     <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Team</h2>
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
                       Authenticity, creativity, and community drive everything we do. We believe the best solutions emerge from diverse perspectives.
                     </p>
-                    <div className="text-black/50 text-sm">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('about-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-black transition-colors duration-300"
-                      >
-                        ← Back to About Us
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1309,25 +1532,29 @@ export default function Home() {
                     <span className="text-[clamp(48px,5vw,72px)] font-light text-[#4A90E2] leading-none">L</span>
                   </div>
 
+                  {/* Back Navigation - Left Center */}
+                  <div className="absolute left-8 top-1/2 transform -translate-y-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const mainSection = document.getElementById('about-horizontal-container');
+                        if (mainSection) {
+                          mainSection.scrollTo({ left: 0, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
                     <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Values</h2>
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
                       Building sustainable companies that create meaningful change in the creator economy and beyond.
                     </p>
-                    <div className="text-white/50 text-sm">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('about-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-white transition-colors duration-300"
-                      >
-                        ← Back to About Us
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1346,92 +1573,66 @@ export default function Home() {
           <div className="horizontal-section bg-[#4A90E2]">
             <div className="work-detail-container" id="work-detail-scroll-container">
               
-              {/* Horizontal Navigation Controls */}
-              <div className="absolute top-1/2 left-4 z-30 transform -translate-y-1/2">
+              {/* Up Navigation - Top Center */}
+              <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-40" style={{ display: 'none' }}>
                 <button
                   onClick={() => {
                     const container = document.getElementById('work-detail-scroll-container');
                     if (container) {
-                      const currentScroll = container.scrollLeft;
-                      const targetScroll = Math.max(0, currentScroll - window.innerWidth);
-                      container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+                      const currentScroll = container.scrollTop;
+                      const targetScroll = Math.max(0, currentScroll - window.innerHeight);
+                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
                     }
                   }}
-                  className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
-                  style={{ display: 'none' }}
-                  id="work-nav-left"
+                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 pointer-events-auto"
+                  id="work-nav-up"
                 >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M3 10L8 5L13 10" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Down Navigation - Bottom Center */}
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40" style={{ display: 'flex' }}>
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('work-detail-scroll-container');
+                    if (container) {
+                      const currentScroll = container.scrollTop;
+                      const maxScroll = container.scrollHeight - container.clientHeight;
+                      const targetScroll = Math.min(maxScroll, currentScroll + window.innerHeight);
+                      container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                    }
+                  }}
+                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 pointer-events-auto"
+                  id="work-nav-down"
+                >
+                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Back Navigation - Left Center */}
+              <div className="absolute left-8 top-1/2 transform -translate-y-1/2 z-40" style={{ display: 'none' }}>
+                <button
+                  onClick={() => {
+                    const mainSection = document.getElementById('companies-horizontal-container');
+                    if (mainSection) {
+                      mainSection.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
+                    }
+                  }}
+                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 pointer-events-auto"
+                  id="work-nav-back"
+                >
+                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </button>
               </div>
               
-              <div className="absolute top-1/2 right-4 z-30 transform -translate-y-1/2">
-                <button
-                  onClick={() => {
-                    const container = document.getElementById('work-detail-scroll-container');
-                    if (container) {
-                      const currentScroll = container.scrollLeft;
-                      const maxScroll = container.scrollWidth - container.clientWidth;
-                      const targetScroll = Math.min(maxScroll, currentScroll + window.innerWidth);
-                      container.scrollTo({ left: targetScroll, behavior: 'smooth' });
-                    }
-                  }}
-                  className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300"
-                  id="work-nav-right"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              
-              {/* Horizontal Section Indicators */}
-              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => {
-                      const container = document.getElementById('work-detail-scroll-container');
-                      if (container) {
-                        container.scrollTo({ left: 0, behavior: 'smooth' });
-                      }
-                    }}
-                    className="w-3 h-3 rounded-full bg-white/60 hover:bg-white transition-colors duration-300"
-                    id="work-indicator-0"
-                  ></button>
-                  <button
-                    onClick={() => {
-                      const container = document.getElementById('work-detail-scroll-container');
-                      if (container) {
-                        container.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
-                      }
-                    }}
-                    className="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300"
-                    id="work-indicator-1"
-                  ></button>
-                  <button
-                    onClick={() => {
-                      const container = document.getElementById('work-detail-scroll-container');
-                      if (container) {
-                        container.scrollTo({ left: 2 * window.innerWidth, behavior: 'smooth' });
-                      }
-                    }}
-                    className="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300"
-                    id="work-indicator-2"
-                  ></button>
-                  <button
-                    onClick={() => {
-                      const container = document.getElementById('work-detail-scroll-container');
-                      if (container) {
-                        container.scrollTo({ left: 3 * window.innerWidth, behavior: 'smooth' });
-                      }
-                    }}
-                    className="w-3 h-3 rounded-full bg-white/30 hover:bg-white transition-colors duration-300"
-                    id="work-indicator-3"
-                  ></button>
-                </div>
-              </div>
+
               
               {/* Section 1: Portfolio Companies Detail */}
               <div 
@@ -1439,6 +1640,23 @@ export default function Home() {
                 className="work-detail-section bg-[#1a1a1a]"
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+                  
+                  {/* Down Navigation - Bottom Center */}
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const container = document.getElementById('work-detail-scroll-container');
+                        if (container) {
+                          container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
                   
                   {/* D/S/L Stacked Letters - Bottom Left */}
                   <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
@@ -1453,20 +1671,7 @@ export default function Home() {
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
                       Building and investing in innovative startups that are reshaping industries and creating the future of technology.
                     </p>
-                    <div className="text-white/50 text-sm flex space-x-8">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('companies-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-white transition-colors duration-300"
-                      >
-                        ← Back to Our Work
-                      </button>
-                      <span>Scroll right or use navigation to explore all sections →</span>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -1478,25 +1683,30 @@ export default function Home() {
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
                   
+                  {/* Down Navigation - Bottom Center */}
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const container = document.getElementById('work-detail-scroll-container');
+                        if (container) {
+                          container.scrollTo({ top: 2 * window.innerHeight, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-[#4A90E2] hover:text-blue-600 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  
                   {/* Content Center */}
                   <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
                     <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Emerging Tech</h2>
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
                       Exploring cutting-edge technologies like AI, blockchain, and quantum computing to unlock new possibilities.
                     </p>
-                    <div className="text-black/50 text-sm">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('companies-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-black transition-colors duration-300"
-                      >
-                        ← Back to Our Work
-                      </button>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -1507,6 +1717,23 @@ export default function Home() {
                 className="work-detail-section bg-[#4A90E2]"
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+                  
+                  {/* Down Navigation - Bottom Center */}
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const container = document.getElementById('work-detail-scroll-container');
+                        if (container) {
+                          container.scrollTo({ top: 3 * window.innerHeight, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-white hover:text-blue-200 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
                   
                   {/* D/S/L Stacked Letters - Bottom Right */}
                   <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
@@ -1521,19 +1748,7 @@ export default function Home() {
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
                       Developing platforms and tools that empower creators to build, monetize, and scale their creative endeavors.
                     </p>
-                    <div className="text-white/50 text-sm">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('companies-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-white transition-colors duration-300"
-                      >
-                        ← Back to Our Work
-                      </button>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -1544,6 +1759,23 @@ export default function Home() {
                 className="work-detail-section bg-[#1a1a1a]"
               >
                 <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
+                  
+                  {/* Back Navigation - Right Center */}
+                  <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-50">
+                    <button
+                      onClick={() => {
+                        const mainSection = document.getElementById('companies-horizontal-container');
+                        if (mainSection) {
+                          mainSection.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
+                    >
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
                   
                   {/* D/S/L Stacked Letters - Top Left */}
                   <div className="absolute left-[3rem] top-[3rem] flex flex-col items-center space-y-2">
@@ -1558,20 +1790,7 @@ export default function Home() {
                     <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
                       Experimental projects and research initiatives that push the boundaries of what&apos;s possible in technology.
                     </p>
-                    <div className="text-white/50 text-sm flex space-x-8">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('companies-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                        className="hover:text-white transition-colors duration-300"
-                      >
-                        ← Back to Our Work
-                      </button>
-                      <span>Final section - navigate back or return to main Our Work area</span>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -1783,7 +2002,7 @@ export default function Home() {
       </section>
 
             {/* Section 5: Footer/Directory */}
-      <section className="section-container bg-black">
+      <section id="footer" className="section-container bg-black">
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Animated Letters - Top Left */}

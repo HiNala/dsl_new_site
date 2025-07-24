@@ -31,9 +31,18 @@ body {
 /* Enhanced smooth scrolling and snap behavior */
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
   overflow-x: hidden;
   height: 100%;
+  scroll-restoration: manual; /* Prevent browser scroll restoration */
+  scroll-snap-type: none; /* Only container should control snap */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+  scroll-snap-type: none; /* Only container should control snap */
 }
 
 /* Perfect scroll snap container */
@@ -43,23 +52,56 @@ html {
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100vh;
-  scroll-snap-stop: always;
+  scroll-padding: 0;
+  scroll-padding-top: 0;
+  scroll-margin: 0;
+  -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+  overscroll-behavior-y: contain; /* Prevent overscroll bounce interference */
+  scroll-snap-align: none; /* Container shouldn't snap */
+  will-change: scroll-position; /* Optimize for scrolling performance */
+  
+  /* Enhanced scroll snap for better browser compatibility */
+  -webkit-scroll-snap-type: y mandatory; /* Webkit browsers */
+  -ms-scroll-snap-type: y mandatory; /* IE/Edge */
+  scroll-snap-type: y mandatory; /* Modern browsers */
+  
+  /* Ensure consistent snap behavior */
+  scroll-snap-coordinate: 0 0; /* Legacy webkit */
+  scroll-snap-destination: 0 0; /* Legacy webkit */
 }
 
 /* Enhanced section snap behavior */
 section {
   scroll-snap-align: start;
-  scroll-snap-stop: always;
+  scroll-snap-stop: always; /* Force snap to each section */
   min-height: 100vh;
   height: 100vh;
   max-height: 100vh;
   position: relative;
   overflow: hidden;
+  scroll-margin-top: 0;
+  scroll-margin-bottom: 0;
 }
 
-/* Contact section maintains normal flow */
-section#contact {
+/* Specific section optimizations for perfect snapping */
+section#home,
+section#about,
+section#companies,
+section#contact,
+section#footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   overflow: hidden;
+  position: relative;
+  scroll-margin: 0;
+  transform: translateZ(0); /* Force hardware acceleration */
+}
+
+/* Ensure sections maintain exact viewport height */
+section.section-container {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
 }
 
 /* Horizontal scroll containers for About and Our Work sections */
@@ -73,6 +115,22 @@ section#contact {
   height: 100%;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+  overscroll-behavior-x: contain; /* Only contain horizontal scroll */
+  overscroll-behavior-y: auto; /* Allow main scroll to pass through */
+  touch-action: pan-x; /* Allow horizontal pan only */
+  pointer-events: auto; /* Ensure interactions work */
+  contain: layout style; /* Performance optimization */
+  isolation: isolate; /* Create stacking context */
+}
+
+/* Default positioning for About Us container (main section first) */
+#about-horizontal-container {
+  scroll-left: 0; /* Default to main section */
+}
+
+/* Default positioning for Our Work container (main section on right) */
+#companies-horizontal-container {
+  scroll-left: 100vw; /* Default to main section */
 }
 
 .horizontal-scroll-container::-webkit-scrollbar {
@@ -82,14 +140,15 @@ section#contact {
 /* Individual horizontal sections */
 .horizontal-section {
   scroll-snap-align: start;
-  scroll-snap-stop: always;
+  scroll-snap-stop: normal;
   min-width: 100vw;
   width: 100vw;
   height: 100vh;
   flex-shrink: 0;
   position: relative;
-  overflow-y: auto;
+  overflow-y: hidden; /* Prevent vertical scroll interference */
   overflow-x: hidden;
+  overscroll-behavior: contain;
 }
 
 /* Vertical scroll within horizontal sections */
@@ -121,24 +180,58 @@ section#contact {
 .about-detail-section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
   height: 100vh;
   min-height: 100vh;
+  max-height: 100vh;
   flex-shrink: 0;
+  flex-grow: 0;
   overscroll-behavior: contain;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Enhanced horizontal scroll containment for Our Work subsections */
+/* Ensure About Us section content containers fit perfectly */
+.about-detail-section > div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Perfect centering for About Us content */
+.about-detail-section .flex.flex-col.items-center.justify-center {
+  width: 100%;
+  max-width: 90vw;
+  height: auto;
+  text-align: center;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+/* Enhanced vertical scroll containment for Our Work subsections */
 .work-detail-container {
   overscroll-behavior: contain;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   width: 100vw;
+  min-width: 100vw;
   max-width: 100vw;
-  overflow-x: auto;
-  overflow-y: hidden;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
   position: relative;
   display: flex;
-  height: 100vh;
+  flex-direction: column;
 }
 
 .work-detail-section {
@@ -146,9 +239,72 @@ section#contact {
   scroll-snap-stop: always;
   width: 100vw;
   min-width: 100vw;
-  flex-shrink: 0;
-  overscroll-behavior: contain;
+  max-width: 100vw;
   height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  flex-shrink: 0;
+  flex-grow: 0;
+  overscroll-behavior: contain;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure Our Work section content containers fit perfectly */
+.work-detail-section > div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Perfect centering for Our Work content */
+.work-detail-section .flex.flex-col.items-center.justify-center {
+  width: 100%;
+  max-width: 90vw;
+  height: auto;
+  text-align: center;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+/* Responsive viewport optimizations */
+@media screen and (max-width: 768px) {
+  .work-detail-section .flex.flex-col.items-center.justify-center,
+  .about-detail-section .flex.flex-col.items-center.justify-center {
+    max-width: 95vw;
+    padding: 0 1rem;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  .work-detail-section,
+  .about-detail-section {
+    min-height: 100vh;
+    height: 100vh;
+  }
+}
+
+/* Ensure perfect viewport sizing across all devices */
+@supports (height: 100dvh) {
+  .work-detail-section,
+  .about-detail-section,
+  .work-detail-container,
+  .about-detail-container {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+/* Ensure Our Work vertical scrolling works like About Us */
+.work-detail-container {
+  scroll-snap-stop: always;
 }
 
 /* Prevent scroll momentum issues on mobile */
