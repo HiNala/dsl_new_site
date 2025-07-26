@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import AppleTeamSection from '../components/AppleTeamSection';
+import MissionSection from '../components/MissionSection';
+import ApproachSection from '../components/ApproachSection';
 import Image from 'next/image';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
@@ -1509,39 +1511,7 @@ export default function Home() {
                 id="about-mission" 
                 className="about-detail-section bg-[#1a1a1a]"
               >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-                  
-
-
-                  {/* Down Navigation - Bottom Center */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                    <button
-                      onClick={() => {
-                        const container = document.querySelector('.about-detail-container');
-                        if (container) {
-                          container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-                        }
-                      }}
-                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300 
-                                 min-w-[44px] min-h-[44px] p-3 rounded-full 
-                                 active:scale-95 active:bg-white/10 
-                                 md:min-w-auto md:min-h-auto md:p-0 md:rounded-none md:bg-transparent"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Content Center */}
-                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Our Mission</h2>
-                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                      To empower creators and innovators by building companies that challenge conventional thinking and celebrate human creativity.
-                    </p>
-
-                  </div>
-                </div>
+                <MissionSection />
               </div>
 
               {/* Section 2: Our Approach Detail */}
@@ -1549,40 +1519,7 @@ export default function Home() {
                 id="about-approach" 
                 className="about-detail-section bg-[#4A90E2]"
               >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-                  
-                  {/* D/S/L Stacked Letters - Bottom Left */}
-                  <div className="absolute left-[3rem] bottom-[3rem] flex flex-col items-center space-y-2">
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">D</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">S</span>
-                    <span className="text-[clamp(48px,5vw,72px)] font-light text-[#F8F9FA] leading-none">L</span>
-                  </div>
-
-                  {/* Down Navigation - Bottom Center */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                      <button
-                        onClick={() => {
-                        const container = document.querySelector('.about-detail-container');
-                        if (container) {
-                          container.scrollTo({ top: 2 * window.innerHeight, behavior: 'smooth' });
-                        }
-                      }}
-                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      </button>
-                    </div>
-
-                  {/* Content Center */}
-                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#F8F9FA] mb-8">Our Approach</h2>
-                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                      We combine deep technical expertise with creative vision, fostering environments where breakthrough ideas can flourish.
-                    </p>
-                  </div>
-                </div>
+                <ApproachSection />
               </div>
 
               {/* Section 3: Our Team Detail */}
