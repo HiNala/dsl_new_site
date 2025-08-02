@@ -204,23 +204,23 @@ const AppleTeamSection: React.FC = () => {
 
         {/* Right Side - Staggered Team Cards */}
         <div className="flex-1 flex items-center justify-center pr-[4vw] relative">
-          <div className="relative w-full max-w-[800px]">
+          <div className="relative w-full max-w-[900px]">
             
             {/* Top Row - Left Aligned */}
-            <div className="flex space-x-8 mb-12">
+            <div className="flex space-x-6 mb-8">
               {teamMembers.slice(0, 2).map((member, index) => (
                 <motion.div
                   key={member.id}
                   initial={{ opacity: 0, y: 30, x: -20 }}
                   animate={{ opacity: 1, y: 0, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 + index * 0.15 }}
-                  className="group cursor-pointer flex-1"
+                  className="group cursor-pointer w-[420px]"
                   onClick={() => openModal(member)}
                 >
-                  <div className="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-500 hover:border-[#4A90E2]/50 overflow-hidden h-[280px] hover:-translate-y-2">
+                  <div className="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-500 hover:border-[#4A90E2]/50 overflow-hidden h-[240px] hover:-translate-y-2 rounded-lg">
                     <div className="flex h-full">
                       {/* Image - Left Side */}
-                      <div className="relative w-48 overflow-hidden flex-shrink-0">
+                      <div className="relative w-40 overflow-hidden flex-shrink-0">
                         <motion.img
                           src={member.image}
                           alt={member.name}
@@ -230,20 +230,20 @@ const AppleTeamSection: React.FC = () => {
                       </div>
                       
                       {/* Content - Right Side */}
-                      <div className="flex-1 p-6 flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-[20px] font-bold text-gray-900 group-hover:text-[#4A90E2] transition-colors duration-300 mb-3 leading-tight">
+                      <div className="flex-1 p-5 flex flex-col justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-[18px] font-bold text-gray-900 group-hover:text-[#4A90E2] transition-colors duration-300 mb-2 leading-tight">
                             {member.name}
                           </h3>
-                          <p className="text-[16px] font-semibold text-[#4A90E2] mb-4 line-clamp-2">
+                          <p className="text-[14px] font-semibold text-[#4A90E2] mb-3 line-clamp-2">
                             {member.role}
                           </p>
-                          <p className="text-[14px] text-gray-600 line-clamp-4 leading-relaxed">
+                          <p className="text-[13px] text-gray-600 line-clamp-3 leading-relaxed flex-1">
                             {member.edge}
                           </p>
                         </div>
                         
-                        <div className="text-[14px] text-[#4A90E2] font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300 mt-4">
+                        <div className="text-[13px] text-[#4A90E2] font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300 mt-3">
                           Learn more →
                         </div>
                       </div>
@@ -257,20 +257,20 @@ const AppleTeamSection: React.FC = () => {
             </div>
             
             {/* Bottom Row - Right Offset */}
-            <div className="flex space-x-8 ml-20">
+            <div className="flex space-x-6 ml-16">
               {teamMembers.slice(2, 4).map((member, index) => (
                 <motion.div
                   key={member.id}
                   initial={{ opacity: 0, y: 30, x: 20 }}
                   animate={{ opacity: 1, y: 0, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.7 + index * 0.15 }}
-                  className="group cursor-pointer flex-1"
+                  className="group cursor-pointer w-[420px]"
                   onClick={() => openModal(member)}
                 >
-                  <div className="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-500 hover:border-[#4A90E2]/50 overflow-hidden h-[280px] hover:-translate-y-2">
+                  <div className="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-500 hover:border-[#4A90E2]/50 overflow-hidden h-[240px] hover:-translate-y-2 rounded-lg">
                     <div className="flex h-full">
                       {/* Image - Left Side */}
-                      <div className="relative w-48 overflow-hidden flex-shrink-0">
+                      <div className="relative w-40 overflow-hidden flex-shrink-0">
                         <motion.img
                           src={member.image}
                           alt={member.name}
@@ -280,20 +280,20 @@ const AppleTeamSection: React.FC = () => {
                       </div>
                       
                       {/* Content - Right Side */}
-                      <div className="flex-1 p-6 flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-[20px] font-bold text-gray-900 group-hover:text-[#4A90E2] transition-colors duration-300 mb-3 leading-tight">
+                      <div className="flex-1 p-5 flex flex-col justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-[18px] font-bold text-gray-900 group-hover:text-[#4A90E2] transition-colors duration-300 mb-2 leading-tight">
                             {member.name}
                           </h3>
-                          <p className="text-[16px] font-semibold text-[#4A90E2] mb-4 line-clamp-2">
+                          <p className="text-[14px] font-semibold text-[#4A90E2] mb-3 line-clamp-2">
                             {member.role}
                           </p>
-                          <p className="text-[14px] text-gray-600 line-clamp-4 leading-relaxed">
+                          <p className="text-[13px] text-gray-600 line-clamp-3 leading-relaxed flex-1">
                             {member.edge}
                           </p>
                         </div>
                         
-                        <div className="text-[14px] text-[#4A90E2] font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300 mt-4">
+                        <div className="text-[13px] text-[#4A90E2] font-medium flex items-center group-hover:translate-x-1 transition-transform duration-300 mt-3">
                           Learn more →
                         </div>
                       </div>
