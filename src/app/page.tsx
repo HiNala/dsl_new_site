@@ -1609,9 +1609,9 @@ export default function Home() {
 
                     {/* Four Core Values in Corners - No Overlapping */}
                     
-                    {/* Top-Left: Creativity */}
-                    <motion.div
-                      className="absolute top-[4vh] left-[2vw] text-left group max-w-[250px]"
+                        {/* Top-Left: Creativity */}
+    <motion.div
+      className="absolute top-[1vh] left-[0.5vw] text-left group max-w-[280px]"
                       initial={{ opacity: 0, x: -50, y: -30 }}
                       whileInView={{ opacity: 1, x: 0, y: 0 }}
                       transition={{ duration: 0.8, delay: 0.4 }}
@@ -1625,9 +1625,9 @@ export default function Home() {
                       <p className="text-[13px] text-white/75 leading-[1.6] tracking-wide">Bold experimentation and authentic expression</p>
                     </motion.div>
 
-                    {/* Top-Right: Authenticity */}
-                    <motion.div
-                      className="absolute top-[4vh] right-[2vw] text-right group max-w-[250px]"
+                        {/* Top-Right: Authenticity */}
+    <motion.div
+      className="absolute top-[1vh] right-[0.5vw] text-right group max-w-[280px]"
                       initial={{ opacity: 0, x: 50, y: -30 }}
                       whileInView={{ opacity: 1, x: 0, y: 0 }}
                       transition={{ duration: 0.8, delay: 0.6 }}
@@ -1641,9 +1641,9 @@ export default function Home() {
                       <p className="text-[13px] text-white/75 leading-[1.6] tracking-wide">Genuine relationships and transparent communication</p>
                     </motion.div>
 
-                    {/* Bottom-Left: Community */}
-                    <motion.div
-                      className="absolute bottom-[25vh] left-[2vw] text-left group max-w-[250px]"
+                        {/* Bottom-Left: Community */}
+    <motion.div
+      className="absolute bottom-[1vh] left-[0.5vw] text-left group max-w-[280px]"
                       initial={{ opacity: 0, x: -50, y: 30 }}
                       whileInView={{ opacity: 1, x: 0, y: 0 }}
                       transition={{ duration: 0.8, delay: 0.8 }}
@@ -1658,9 +1658,9 @@ export default function Home() {
                       <p className="text-[13px] text-white/75 leading-[1.6] tracking-wide">Inclusive networks empowering diverse perspectives</p>
                     </motion.div>
 
-                    {/* Bottom-Right: Innovation */}
-                    <motion.div
-                      className="absolute bottom-[25vh] right-[2vw] text-right group max-w-[250px]"
+                        {/* Bottom-Right: Innovation */}
+    <motion.div
+      className="absolute bottom-[1vh] right-[0.5vw] text-right group max-w-[280px]"
                       initial={{ opacity: 0, x: 50, y: 30 }}
                       whileInView={{ opacity: 1, x: 0, y: 0 }}
                       transition={{ duration: 0.8, delay: 1.0 }}
@@ -1874,7 +1874,7 @@ export default function Home() {
 
 
               {/* Our Work Headline - Right Side (mirroring About Us) */}
-              <div className="absolute right-[4vw] top-[12rem]">
+              <div className="absolute right-[4vw] top-[9rem]">
                 <div className="text-right mb-[3rem]">
                   <TextSplit
                     className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
@@ -1889,7 +1889,7 @@ export default function Home() {
               </div>
 
               {/* Work Content Grid - Asymmetrical Layout */}
-              <div className="absolute right-[4vw] top-[21rem] flex justify-end">
+              <div className="absolute right-[4vw] top-[17rem] flex justify-end">
                 <div className="max-w-[75vw] w-full">
                   <div className="grid grid-cols-2 gap-[3rem] h-[400px]">
                     
@@ -1939,11 +1939,11 @@ export default function Home() {
                         
                         {/* Enhanced Accent Line - Research */}
                         <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div className="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 w-16 h-[3px] bg-white group-hover:w-24 group-hover:bg-white transition-all duration-500"></div>
+                        <div className="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 w-20 h-[3px] bg-white group-hover:w-32 group-hover:bg-white transition-all duration-500"></div>
                       </div>
 
                       {/* Art */}
-                      <div className="border-b border-white/20 pb-[2rem] relative flex-1 flex flex-col justify-center mt-[2rem] group">
+                      <div className="border-b border-white/20 pb-[2rem] relative flex-1 flex flex-col justify-center group">
                         <button 
                           className="peer absolute bottom-[2rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
                           onClick={() => scrollToCompaniesSection('creator-tools')}
@@ -1961,7 +1961,7 @@ export default function Home() {
                         
                         {/* Enhanced Accent Line - Art */}
                         <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div className="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 w-16 h-[3px] bg-white group-hover:w-24 group-hover:bg-white transition-all duration-500"></div>
+                        <div className="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 w-20 h-[3px] bg-white group-hover:w-32 group-hover:bg-white transition-all duration-500"></div>
                       </div>
 
                     </div>

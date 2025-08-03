@@ -88,6 +88,27 @@ body {
   transform: translateZ(0);
   backface-visibility: hidden; /* Prevent flickering */
   perspective: 1000px; /* Enable 3D context */
+  
+  /* Perfect snap timing and easing */
+  scroll-snap-type: y mandatory;
+  scroll-timeline: --scroll-timeline;
+  animation-timeline: --scroll-timeline;
+  
+  /* Enhanced scrollbar styling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for webkit browsers */
+}
+
+/* Enhanced section behavior for perfect snapping */
+.scroll-container > section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  isolation: isolate; /* Create stacking context */
 }
 
 /* Enhanced section snap behavior */
@@ -109,6 +130,16 @@ section {
   transform: translateZ(0);
   backface-visibility: hidden;
   contain: layout style paint; /* Improve performance */
+  
+  /* Enhanced snap positioning */
+  scroll-margin: 0;
+  scroll-padding: 0;
+  
+  /* Ensure perfect alignment */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
 }
 
 /* Specific section optimizations for perfect snapping */

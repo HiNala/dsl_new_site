@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
+import ScrollSnapManager from "@/components/ScrollSnapManager";
 
 export const metadata: Metadata = {
   title: "Digital Studio Labs",
@@ -18,6 +19,7 @@ export default function RootLayout({
         fontFamily: '"Helvetica Neue", Arial, sans-serif'
       }}>
               <CustomCursor />
+        <ScrollSnapManager />
         {children}
       </body>
     </html>

@@ -36,18 +36,18 @@ const MissionSection: React.FC = () => {
 
       <div className="relative flex-1">
         
-        {/* Large Artistic Image - Left Side with Off-Top Effect and Space Below */}
-        <div className="absolute left-[1vw] top-[0px] bottom-[120px]">
+        {/* Large Artistic Image - Left Side extending to top with rounded bottom corners */}
+        <div className="absolute left-[1vw] top-0 bottom-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.1 }}
             viewport={{ once: true }}
-            className="relative h-full w-[520px]"
+            className="relative h-full w-[520px] rounded-b-[2.5rem] overflow-hidden shadow-2xl"
           >
             <div className="relative w-full h-full overflow-hidden">
-              {/* Image extending off top, rounded bottom corners only with artistic spacing */}
-              <div className="w-full h-full rounded-b-[2.5rem] overflow-hidden shadow-2xl">
+              {/* Image extending off top, rounded bottom corners only */}
+              <div className="w-full h-full rounded-t-none rounded-b-[2.5rem] overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1200&h=800&fit=crop&crop=center"
                   alt="Innovation and creativity"
