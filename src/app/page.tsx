@@ -1145,7 +1145,7 @@ export default function Home() {
           {/* Our Team content centered with title above */}
           <div className="absolute inset-0 flex flex-col items-center justify-center px-[4vw]">
             <div className="w-full max-w-[1100px] flex flex-col items-start">
-              <div className="w-[520px] text-center">
+              <div className="w-[520px] text-left -ml-2 mt-2">
                 <TextSplit
                   className="text-[clamp(36px,4.5vw,64px)] font-light leading-[1] tracking-tight"
                   topClassName="text-white"
@@ -1156,7 +1156,7 @@ export default function Home() {
                   THE TEAM
                 </TextSplit>
               </div>
-              <div className="mt-1">
+              <div className="mt-0">
                 <HoverSliderDemo />
               </div>
             </div>
@@ -1191,8 +1191,8 @@ export default function Home() {
       <section id="contact" className="section-container bg-white">
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
-          {/* D/S/L Stacked Letters - Bottom Right with larger spacing */}
-          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center gap-[1.25rem] z-20 md:right-[3rem] md:bottom-[3rem] sm:right-[2rem] sm:bottom-[2rem] xs:right-[1rem] xs:bottom-[1rem]">
+          {/* D/S/L Stacked Letters - Bottom Right with tighter spacing */}
+          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center gap-[0.75rem] z-20 md:right-[3rem] md:bottom-[3rem] sm:right-[2rem] sm:bottom-[2rem] xs:right-[1rem] xs:bottom-[1rem]">
             <DSLLetter letter="D" />
             <DSLLetter letter="S" />
             <DSLLetter letter="L" />

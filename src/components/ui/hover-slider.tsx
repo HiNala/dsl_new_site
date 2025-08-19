@@ -215,8 +215,8 @@ const TEAM_MEMBERS = [
 export function HoverSliderDemo() {
 	return (
 		<HoverSlider className="min-h-[70vh] place-content-center p-6 md:px-12 bg-transparent text-white">
-			<div className="grid grid-cols-[520px_1fr] items-center gap-16">
-				<div className="flex flex-col space-y-6 md:space-y-8">
+			<div className="grid grid-cols-1 md:grid-cols-[520px_1fr] items-center gap-8 md:gap-16">
+				<div className="flex flex-col space-y-4 md:space-y-6 order-2 md:order-1 items-start md:items-start">
 					{TEAM_MEMBERS.map((member, index) => (
 						<motion.div
 							key={member.name}
@@ -226,13 +226,13 @@ export function HoverSliderDemo() {
 						>
 							<TextStaggerHover
 								index={index}
-								className="text-[clamp(22px,2.6vw,36px)] font-bold uppercase tracking-tight block text-white"
+								className="text-[clamp(18px,5vw,28px)] md:text-[clamp(22px,2.6vw,36px)] font-bold uppercase tracking-tight block text-white"
 								text={member.name}
 							/>
 						</motion.div>
 					))}
 				</div>
-				<div className="flex flex-col">
+				<div className="flex flex-col order-1 md:order-2">
 					<HoverSliderImageWrap>
 						{TEAM_MEMBERS.map((member, index) => (
 							<div key={member.id} className="">
@@ -241,19 +241,19 @@ export function HoverSliderDemo() {
 									imageUrl={member.imageUrl}
 									src={member.imageUrl}
 									alt={`${member.name} - ${member.role}`}
-									className="size-full max-h-[460px] object-cover rounded-xl shadow-2xl"
+									className="w-full h-auto max-h-[360px] md:max-h-[460px] object-cover rounded-xl shadow-2xl"
 									loading="eager"
 									decoding="async"
 								/>
 							</div>
 						))}
 					</HoverSliderImageWrap>
-					<div className="mt-4 relative min-h-[4.2rem] overflow-hidden text-center px-2">
+					<div className="mt-3 relative min-h-[3.2rem] md:min-h-[4.2rem] overflow-hidden text-center px-2">
 						{TEAM_MEMBERS.map((member, index) => (
 							<HoverSliderContext.Consumer key={member.id}>
 								{(context) => (
 									<motion.div
-										className="absolute inset-0 text-sm text-white whitespace-normal break-words"
+										className="absolute inset-0 text-xs md:text-sm text-white whitespace-normal break-words"
 										initial={{ y: 10, opacity: 0 }}
 										animate={context?.activeSlide === index ? { y: 0, opacity: 1 } : { y: -10, opacity: 0 }}
 										transition={{
