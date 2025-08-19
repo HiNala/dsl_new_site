@@ -1174,15 +1174,10 @@ export default function Home() {
 
 
 
-      {/* Section 4: About Us Grid (moved here between Our Team and Let's Create) */}
+      {/* Section 4: Dynamic Content (cleared for redesign) */}
       <section id="about" className="section-container">
         <div className="relative w-full h-full bg-black">
-          <DynamicFrameLayout 
-            frames={demoFrames} 
-            className="w-full h-full" 
-            hoverSize={6}
-            gapSize={4}
-          />
+          {/* Content cleared - ready for redesign */}
         </div>
       </section>
 
