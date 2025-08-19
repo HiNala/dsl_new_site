@@ -26,7 +26,14 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  cursor: none;
+  cursor: auto;
+}
+
+/* Ensure native cursor never shows, even over interactive elements */
+/* Re-enable native cursor everywhere */
+html, body, *:hover, *:active, *:focus,
+a, button, [role="button"], input[type="button"], input[type="submit"], label, video, iframe {
+  cursor: auto !important;
 }
 
 /* Enhanced smooth scrolling and snap behavior */

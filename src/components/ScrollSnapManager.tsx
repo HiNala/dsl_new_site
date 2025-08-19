@@ -7,6 +7,8 @@ export default function ScrollSnapManager() {
     let isScrolling = false
     let scrollTimeout: NodeJS.Timeout
     let isAnimating = false
+    let wheelCooldownUntil = 0
+    const COOLDOWN_MS = 700
 
     const handleScroll = () => {
       const scrollContainer = document.querySelector('.scroll-container') as HTMLElement
@@ -57,17 +59,22 @@ export default function ScrollSnapManager() {
     }
 
     const handleWheel = (e: WheelEvent) => {
-      // Don't interfere if user is in horizontal scroll containers
-      const target = e.target as HTMLElement
-      if (target.closest('.horizontal-scroll-container')) return
-
       const scrollContainer = document.querySelector('.scroll-container') as HTMLElement
       if (!scrollContainer) return
 
       // Prevent default to control scroll behavior
       e.preventDefault()
 
-      const delta = e.deltaY
+      // Ignore wheel while animating or within cooldown to avoid skipping multiple sections
+      const now = Date.now()
+      if (isAnimating || now < wheelCooldownUntil) {
+        return
+      }
+
+      // Apply a larger deadzone and use sign only to reduce overshooting
+      const DEADZONE = 80
+      const delta = Math.abs(e.deltaY) < DEADZONE ? 0 : Math.sign(e.deltaY)
+      if (delta === 0) return
       const sections = Array.from(scrollContainer.querySelectorAll('section')) as HTMLElement[]
       const scrollTop = scrollContainer.scrollTop
       const containerHeight = scrollContainer.clientHeight
@@ -88,12 +95,19 @@ export default function ScrollSnapManager() {
         targetIndex = currentSectionIndex - 1
       }
 
-      // Scroll to target section
+      // Scroll to target section with improved smoothness
       if (targetIndex !== currentSectionIndex) {
+        isAnimating = true
+        wheelCooldownUntil = now + COOLDOWN_MS
         scrollContainer.scrollTo({
           top: sections[targetIndex].offsetTop,
           behavior: 'smooth'
         })
+        
+        // Reset animation flag after scroll completes
+        setTimeout(() => {
+          isAnimating = false
+        }, COOLDOWN_MS)
       }
     }
 

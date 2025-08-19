@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import CustomCursor from "@/components/CustomCursor";
 import ScrollSnapManager from "@/components/ScrollSnapManager";
 
 export const metadata: Metadata = {
@@ -15,10 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#F8F9FA] text-[#4A90E2]" style={{
+      <body className="bg-[#F8F9FA] text-[#4A90E2] cursor-auto" style={{
         fontFamily: '"Helvetica Neue", Arial, sans-serif'
       }}>
-              <CustomCursor />
         <ScrollSnapManager />
         {children}
       </body>

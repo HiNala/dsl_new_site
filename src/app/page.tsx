@@ -3,9 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { EvervaultBackground } from '@/components/ui/evervault-background';
-import AppleTeamSection from '../components/AppleTeamSection';
-import MissionSection from '../components/MissionSection';
-import ApproachSection from '../components/ApproachSection';
+import { DynamicFrameLayout } from '@/components/ui/dynamic-frame-layout';
+import { HoverSliderDemo } from '@/components/ui/hover-slider';
 import Image from 'next/image';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
@@ -100,7 +99,7 @@ function ScoreboardHeader({ letters, className = "" }: { letters: string[], clas
           <span 
             key={index}
             className={`
-              text-[clamp(14px,1.0vw,22px)] text-[#4A90E2] transition-all duration-300
+              text-[clamp(14px,1.0vw,22px)] text-black transition-all duration-300
               text-center hover:scale-110 hover:font-medium
               ${isFirstLetter ? 'font-medium' : 'font-light'}
             `}
@@ -142,7 +141,7 @@ const TextSplit: React.FC<TextSplitProps> = ({
   };
 
   return (
-    <div className={cn("relative flex items-center justify-center", className)}>
+    <div className={cn("relative flex items-center justify-center gap-[0.06em] pt-[0.06em]", className)}>
       {children.split("").map((char, index) => {
         const offset = getOffset(index);
         const displayChar = char === " " ? "\u00A0" : char;
@@ -485,56 +484,56 @@ const DSLLetter: React.FC<DSLLetterProps> = ({ letter }) => {
 const DESIGN_IMAGES = [
   // Left column images (8 total, 3 portrait)
   {
-    src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=600&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&h=600",
     alt: "Modern architecture",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=800&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&h=800",
     alt: "Interior design",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&h=450",
     alt: "Minimalist design",
     aspectRatio: "aspect-[16/9]", // landscape
     width: 800,
     height: 450,
   },
   {
-    src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?w=600&h=800&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1586473219010-2ffc57b0d282?auto=format&fit=crop&w=600&h=800",
     alt: "Product design",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=800&h=600",
     alt: "Graphic design",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&h=800&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=600&h=800",
     alt: "UI design",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=480&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&h=480",
     alt: "Brand design",
     aspectRatio: "aspect-[5/3]", // landscape
     width: 800,
     height: 480,
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&h=600",
     alt: "Web design",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
@@ -545,56 +544,56 @@ const DESIGN_IMAGES = [
 const RIGHT_COLUMN_IMAGES = [
   // Right column images (8 total, 2 portrait)
   {
-    src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?w=800&h=450&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4?auto=format&fit=crop&w=800&h=450",
     alt: "Creative workspace",
     aspectRatio: "aspect-[16/9]", // landscape
     width: 800,
     height: 450,
   },
   {
-    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?w=600&h=800&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1542744173-b6894b6b5d8d?auto=format&fit=crop&w=600&h=800",
     alt: "Design tools",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&h=600&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1542744094-3a31f272c490?auto=format&fit=crop&w=800&h=600",
     alt: "Typography",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&h=800&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=600&h=800",
     alt: "Color palette",
     aspectRatio: "aspect-[3/4]", // portrait
     width: 600,
     height: 800,
   },
   {
-    src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&h=480&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=800&h=480",
     alt: "Digital art",
     aspectRatio: "aspect-[5/3]", // landscape
     width: 800,
     height: 480,
   },
   {
-    src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=800&h=600&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&w=800&h=600",
     alt: "Design process",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
     height: 600,
   },
   {
-    src: "https://images.unsplash.com/photo-1600607687920-4f2c19665e92?w=800&h=450&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1600607687920-4f2c19665e92?auto=format&fit=crop&w=800&h=450",
     alt: "Creative concept",
     aspectRatio: "aspect-[16/9]", // landscape
     width: 800,
     height: 450,
   },
   {
-    src: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=800&h=600&fit=crop&auto=format",
+    src: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&w=800&h=600",
     alt: "Design inspiration",
     aspectRatio: "aspect-[4/3]", // landscape
     width: 800,
@@ -607,31 +606,44 @@ const ImageMosaic: React.FC<ImageMosaicProps> = ({ className }) => {
   const rightColumnRef = React.useRef<HTMLDivElement>(null);
   const leftScrollY = React.useRef(0);
   const rightScrollY = React.useRef(0);
+  const rafIdRef = React.useRef<number | null>(null);
+  const lastTsRef = React.useRef<number | null>(null);
 
   React.useEffect(() => {
-    const animate = () => {
-      // Smooth infinite scrolling - left travels down slowly, right travels up 10% faster
-      leftScrollY.current += 0.3; // scroll down slowly  
-      rightScrollY.current -= 0.33; // scroll up 10% faster than left
+    const SPEED_LEFT = 18; // px/sec down
+    const SPEED_RIGHT = 20; // px/sec up
+
+    const step = (ts: number) => {
+      const last = lastTsRef.current ?? ts;
+      const dt = (ts - last) / 1000; // seconds
+      lastTsRef.current = ts;
+
+      leftScrollY.current += SPEED_LEFT * dt;
+      rightScrollY.current -= SPEED_RIGHT * dt;
 
       if (leftColumnRef.current) {
-        const leftHeight = leftColumnRef.current.scrollHeight / 3; // Divide by 3 since we have triple images
-        // Continuous loop using modulo for seamless transition
+        const leftHeight = Math.max(1, leftColumnRef.current.scrollHeight / 3);
         leftScrollY.current = leftScrollY.current % leftHeight;
-        leftColumnRef.current.style.transform = `translateY(-${leftScrollY.current}px)`;
+        leftColumnRef.current.style.willChange = 'transform';
+        leftColumnRef.current.style.transform = `translate3d(0, -${leftScrollY.current}px, 0)`;
       }
 
       if (rightColumnRef.current) {
-        const rightHeight = rightColumnRef.current.scrollHeight / 3; // Divide by 3 since we have triple images
-        // Continuous loop using modulo for seamless transition
+        const rightHeight = Math.max(1, rightColumnRef.current.scrollHeight / 3);
         rightScrollY.current = ((rightScrollY.current % rightHeight) + rightHeight) % rightHeight;
-        rightColumnRef.current.style.transform = `translateY(-${rightScrollY.current}px)`;
+        rightColumnRef.current.style.willChange = 'transform';
+        rightColumnRef.current.style.transform = `translate3d(0, -${rightScrollY.current}px, 0)`;
       }
 
-      requestAnimationFrame(animate);
+      rafIdRef.current = requestAnimationFrame(step);
     };
 
-    animate();
+    rafIdRef.current = requestAnimationFrame(step);
+    return () => {
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+      lastTsRef.current = null;
+    };
   }, []);
 
   return (
@@ -846,10 +858,7 @@ const DSLAnimation = () => {
   const letters = ["D", "S", "L"];
 
   return (
-    <div className="absolute left-[3rem] top-[3rem] z-30 
-                    md:left-[3rem] md:top-[3rem]
-                    sm:left-[2rem] sm:top-[2rem]
-                    xs:left-[1.5rem] xs:top-[1.5rem]">
+    <div className="absolute left-[3rem] top-[3rem] z-30 md:left-[3rem] md:top-[3rem] sm:left-[2rem] sm:top-[2rem] xs:left-[1.5rem] xs:top-[1.5rem]">
       <div className="relative w-[180px] h-[180px]">
         {letters.map((letter, index) => (
           <motion.div
@@ -878,226 +887,125 @@ const DSLAnimation = () => {
   );
 };
 
+const demoFrames = [
+  {
+    id: 1,
+    video: "https://static.cdn-luma.com/files/981e483f71aa764b/Company%20Thing%20Exported.mp4",
+    defaultPos: { x: 0, y: 0, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 2,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/WebGL%20Exported%20(1).mp4",
+    defaultPos: { x: 4, y: 0, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 3,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/Jitter%20Exported%20Poster.mp4",
+    defaultPos: { x: 8, y: 0, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 4,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/Exported%20Web%20Video.mp4",
+    defaultPos: { x: 0, y: 4, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 5,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/Logo%20Exported.mp4",
+    defaultPos: { x: 4, y: 4, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 6,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/Animation%20Exported%20(4).mp4",
+    defaultPos: { x: 8, y: 4, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 7,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/Illustration%20Exported%20(1).mp4",
+    defaultPos: { x: 0, y: 8, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 8,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/Art%20Direction%20Exported.mp4",
+    defaultPos: { x: 4, y: 8, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+  {
+    id: 9,
+    video: "https://static.cdn-luma.com/files/58ab7363888153e3/Product%20Video.mp4",
+    defaultPos: { x: 8, y: 8, w: 4, h: 4 },
+    corner: "",
+    edgeHorizontal: "",
+    edgeVertical: "",
+    mediaSize: 1,
+    borderThickness: 0,
+    borderSize: 100,
+    isHovered: false,
+  },
+];
+
 export default function Home() {
   const brandLetters = ['D', 'I', 'G', 'I', 'T', 'A', 'L', 'S', 'T', 'U', 'D', 'I', 'O', 'L', 'A', 'B', 'S'];
 
-  const scrollToAboutMain = () => {
-    const container = document.getElementById('about-horizontal-container');
-    if (container) {
-      // Scroll to the main About Us section (position 0 = main overview)
-      container.scrollTo({ left: 0, behavior: 'smooth' });
-    }
-  };
-
-  const scrollToAboutSection = (sectionId: string) => {
-    const container = document.getElementById('about-horizontal-container');
-    const detailContainer = document.querySelector('.about-detail-container');
-    
-    if (container && detailContainer) {
-      // Map section IDs to vertical scroll positions
-      const sectionMap: { [key: string]: number } = {
-        'mission': 0,
-        'approach': 1,
-        'team': 2,
-        'values': 3
-      };
-      const sectionIndex = sectionMap[sectionId] || 0;
-      
-      // Pre-position the vertical scroll to the target section
-      detailContainer.scrollTo({
-        top: sectionIndex * window.innerHeight,
-        behavior: 'auto'
-      });
-      
-      // Then smoothly scroll horizontally to reveal the positioned section
-      container.scrollTo({ 
-        left: window.innerWidth, 
-        behavior: 'smooth' 
-      });
-    }
-  };
-
-  const scrollToCompaniesMain = () => {
-    const container = document.getElementById('companies-horizontal-container');
-    if (container) {
-      // Scroll to the main Our Work section (position 1 = main overview on the right)
-      container.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
-    }
-  };
-
-  const scrollToCompaniesSection = (sectionId: string) => {
-    const container = document.getElementById('companies-horizontal-container');
-    if (container) {
-      // First scroll to the detail sections area (to the left)
-      container.scrollTo({ left: 0, behavior: 'smooth' });
-      
-      // Then scroll to the specific section within the detail area (now vertical)
-      setTimeout(() => {
-        const detailContainer = document.getElementById('work-detail-scroll-container');
-        if (detailContainer) {
-          // Map section IDs to vertical scroll positions
-          const sectionMap: { [key: string]: number } = {
-            'portfolio': 0,
-            'emerging-tech': 1,
-            'creator-tools': 2,
-            'innovation-labs': 3
-          };
-          const sectionIndex = sectionMap[sectionId] || 0;
-          detailContainer.scrollTo({
-            top: sectionIndex * window.innerHeight,
-            behavior: 'smooth'
-          });
-          
-          // Trigger navigation arrow setup after scroll
-          setTimeout(() => {
-            const handleWorkScroll = () => {
-              const scrollTop = detailContainer.scrollTop;
-              const sectionHeight = window.innerHeight;
-              const currentSection = Math.round(scrollTop / sectionHeight);
-              const upArrow = document.getElementById('work-nav-up');
-              const downArrow = document.getElementById('work-nav-down');
-              const backArrow = document.getElementById('work-nav-back');
-              
-                             if (upArrow && upArrow.parentElement) upArrow.parentElement.style.display = 'none';
-               
-               if (currentSection === 0 || currentSection === 1 || currentSection === 2) {
-                 if (downArrow && downArrow.parentElement) downArrow.parentElement.style.display = 'flex';
-                 if (backArrow && backArrow.parentElement) backArrow.parentElement.style.display = 'none';
-               } else {
-                 if (downArrow && downArrow.parentElement) downArrow.parentElement.style.display = 'none';
-                 if (backArrow && backArrow.parentElement) backArrow.parentElement.style.display = 'flex';
-               }
-            };
-            handleWorkScroll();
-          }, 200);
-        }
-      }, 500);
-    }
-  };
-
-  // About Us vertical scroll tracking with dynamic navigation
-  useEffect(() => {
-    const handleAboutScroll = () => {
-      const container = document.querySelector('.about-detail-container');
-      if (!container) return;
-
-      const scrollTop = container.scrollTop;
-      const sectionHeight = window.innerHeight;
-      const currentSection = Math.round(scrollTop / sectionHeight);
-      const totalSections = 4; // Mission, Approach, Team, Values
-      
-      // Update navigation arrows visibility based on flow
-      const upArrow = document.getElementById('about-nav-up');
-      const downArrow = document.getElementById('about-nav-down');
-      const backArrow = document.getElementById('about-nav-back');
-      
-      console.log('About scroll - currentSection:', currentSection, 'scrollTop:', scrollTop);
-      
-      // Always hide up arrow (not needed in this flow)
-      if (upArrow) upArrow.style.display = 'none';
-      
-      if (currentSection >= totalSections - 1) {
-        // Last slide (Our Values): Only left arrow to go back to main section
-        if (downArrow) downArrow.style.display = 'none';
-        if (backArrow) backArrow.style.display = 'flex';
-      } else {
-        // All other slides (Mission, Our Approach, Our Team): Down arrow to continue
-        if (downArrow) downArrow.style.display = 'flex';
-        if (backArrow) backArrow.style.display = 'none';
-      }
-    };
-
-    const container = document.querySelector('.about-detail-container');
-    if (container) {
-      container.addEventListener('scroll', handleAboutScroll);
-      
-      // Force initial setup after a brief delay to ensure DOM is ready
-      setTimeout(() => {
-      handleAboutScroll();
-      }, 100);
-      
-      return () => {
-        container.removeEventListener('scroll', handleAboutScroll);
-      };
-    }
-  }, []);
-
-  // Our Work vertical scroll tracking
-  useEffect(() => {
-    const handleWorkScroll = () => {
-      const container = document.getElementById('work-detail-scroll-container');
-      if (!container) return;
-
-      const scrollTop = container.scrollTop;
-      const sectionHeight = window.innerHeight;
-      const currentSection = Math.round(scrollTop / sectionHeight);
-      const totalSections = 4; // Portfolio, Emerging, Creator, Innovation
-
-      // Update navigation arrows visibility based on flow
-      const upArrow = document.getElementById('work-nav-up');
-      const downArrow = document.getElementById('work-nav-down');
-      const backArrow = document.getElementById('work-nav-back');
-      
-      console.log('Work scroll - currentSection:', currentSection, 'scrollTop:', scrollTop, 'sectionHeight:', sectionHeight);
-      
-      // Always hide up arrow (not needed in this flow)
-      if (upArrow && upArrow.parentElement) {
-        upArrow.parentElement.style.display = 'none';
-      }
-      
-      // Force down arrow to be visible on first 3 slides
-      if (currentSection === 0 || currentSection === 1 || currentSection === 2) {
-        // Portfolio, Emerging Tech, Creator Tools: Show down arrow
-        if (downArrow && downArrow.parentElement) {
-          downArrow.parentElement.style.display = 'flex';
-          console.log('Showing down arrow for section:', currentSection);
-        }
-        if (backArrow && backArrow.parentElement) {
-          backArrow.parentElement.style.display = 'none';
-        }
-      } else {
-        // Last slide (Innovation Labs): Only left arrow to go back to main section
-        if (downArrow && downArrow.parentElement) {
-          downArrow.parentElement.style.display = 'none';
-          console.log('Hiding down arrow for last section:', currentSection);
-        }
-        if (backArrow && backArrow.parentElement) {
-          backArrow.parentElement.style.display = 'flex';
-        }
-      }
 
 
-    };
 
-    const container = document.getElementById('work-detail-scroll-container');
-    if (container) {
-      container.addEventListener('scroll', handleWorkScroll);
-      
-      // Force initial setup with multiple attempts to ensure DOM is ready
-      setTimeout(() => {
-      handleWorkScroll();
-      }, 100);
-      
-      setTimeout(() => {
-        handleWorkScroll();
-      }, 300);
-      
-      setTimeout(() => {
-        handleWorkScroll();
-      }, 500);
-      
-      return () => {
-        container.removeEventListener('scroll', handleWorkScroll);
-      };
-    }
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+
 
   // Typing animation state
   const words = ['Together', 'Dreams', 'Reality'];
@@ -1166,166 +1074,21 @@ export default function Home() {
 
 
 
-  // Ensure main sections are always the default view on page load
+  // Set viewport height for mobile
   useEffect(() => {
-    const resetToMainSections = () => {
-      // Reset About Us to main section (left = 0)
-      const aboutContainer = document.getElementById('about-horizontal-container');
-      if (aboutContainer) {
-        aboutContainer.scrollLeft = 0;
-      }
-      
-      // Reset Our Work to main section (right side)
-      const workContainer = document.getElementById('companies-horizontal-container');
-      if (workContainer) {
-        workContainer.scrollLeft = window.innerWidth;
-      }
-
-      // Reset any detail scroll positions
-      const aboutDetailContainer = document.querySelector('.about-detail-container');
-      if (aboutDetailContainer) {
-        aboutDetailContainer.scrollTop = 0;
-      }
-
-      const workDetailContainer = document.getElementById('work-detail-scroll-container');
-      if (workDetailContainer) {
-        workDetailContainer.scrollTop = 0;
-      }
-    };
-
-    const handleResize = () => {
-      resetToMainSections();
-      
-      // Force scroll snap recalculation on mobile for better performance
-      if (window.innerWidth <= 768) {
-        const scrollContainer = document.querySelector('.scroll-container') as HTMLElement;
-        if (scrollContainer) {
-          scrollContainer.style.scrollSnapType = 'none';
-          setTimeout(() => {
-            scrollContainer.style.scrollSnapType = 'y mandatory';
-          }, 50);
-        }
-      }
-    };
-
-    const handleOrientationChange = () => {
-      // Handle mobile orientation changes with delay
-      setTimeout(() => {
-        resetToMainSections();
-        
-        // Refresh viewport dimensions for mobile
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-      }, 100);
-    };
-
-    // Set initial viewport height for mobile
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 
-    // Reset immediately
-    resetToMainSections();
+    const handleResize = () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
 
-    // Add event listeners
-    window.addEventListener('load', resetToMainSections);
     window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleOrientationChange);
-
-    return () => {
-      window.removeEventListener('load', resetToMainSections);
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleOrientationChange);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Enhanced mobile touch support
-  useEffect(() => {
-    const handleTouchStart = (e: TouchEvent) => {
-      // Prevent zoom on double tap for interactive elements
-      if (e.touches.length > 1) {
-        e.preventDefault();
-      }
-    };
 
-    const handleTouchEnd = (e: TouchEvent) => {
-      // Prevent zoom on double tap
-      const now = Date.now();
-      if (now - (window as any).lastTouchEnd <= 300) {
-        e.preventDefault();
-      }
-      (window as any).lastTouchEnd = now;
-    };
-
-    // Enhanced mobile scroll behavior
-    const handleTouchMove = (e: TouchEvent) => {
-      // Allow natural scrolling but prevent unwanted gestures
-      const target = e.target as Element;
-      if (target.closest('.scroll-container') || target.closest('.horizontal-scroll-container')) {
-        // Allow scrolling in scroll containers
-        return;
-      }
-    };
-
-    // Add touch event listeners for better mobile UX
-    if ('ontouchstart' in window) {
-      document.addEventListener('touchstart', handleTouchStart, { passive: false });
-      document.addEventListener('touchend', handleTouchEnd, { passive: false });
-      document.addEventListener('touchmove', handleTouchMove, { passive: true });
-    }
-
-    return () => {
-      if ('ontouchstart' in window) {
-        document.removeEventListener('touchstart', handleTouchStart);
-        document.removeEventListener('touchend', handleTouchEnd);
-        document.removeEventListener('touchmove', handleTouchMove);
-      }
-    };
-  }, []);
-
-  // Initialize About Us navigation arrows when entering detail sections
-  useEffect(() => {
-    const initializeAboutNavigation = () => {
-      const upArrow = document.getElementById('about-nav-up');
-      const downArrow = document.getElementById('about-nav-down');
-      const backArrow = document.getElementById('about-nav-back');
-      
-      // Initial state: Mission section (first slide) - only down arrow
-      if (upArrow) upArrow.style.display = 'none';
-      if (downArrow) downArrow.style.display = 'flex';
-      if (backArrow) backArrow.style.display = 'none';
-    };
-
-    // Initialize after component mount
-    setTimeout(initializeAboutNavigation, 200);
-  }, []);
-
-  // Initialize Our Work navigation arrows when entering detail sections
-  useEffect(() => {
-    const initializeWorkNavigation = () => {
-      const upArrow = document.getElementById('work-nav-up');
-      const downArrow = document.getElementById('work-nav-down');
-      const backArrow = document.getElementById('work-nav-back');
-      
-      console.log('Initializing work navigation arrows:', { upArrow, downArrow, backArrow });
-      
-      // Initial state: Portfolio section (first slide) - only down arrow
-      if (upArrow && upArrow.parentElement) {
-        upArrow.parentElement.style.display = 'none';
-      }
-      if (downArrow && downArrow.parentElement) {
-        downArrow.parentElement.style.display = 'flex';
-        console.log('Set down arrow to visible');
-      }
-      if (backArrow && backArrow.parentElement) {
-        backArrow.parentElement.style.display = 'none';
-      }
-    };
-
-    // Initialize after component mount with multiple attempts
-    setTimeout(initializeWorkNavigation, 200);
-    setTimeout(initializeWorkNavigation, 500);
-    setTimeout(initializeWorkNavigation, 1000);
-  }, []);
 
   return (
     <div className="scroll-container">
@@ -1343,7 +1106,7 @@ export default function Home() {
           
           {/* Main Headline - positioned exactly like reference */}
           <div className="absolute left-[4vw] top-[70px]">
-            <h1 className="text-[clamp(38px,5.0vw,105px)] font-light leading-[1.1] text-[#4A90E2] max-w-[65vw]">
+            <h1 className="text-[clamp(38px,5.0vw,105px)] font-light leading-[1.1] text-black max-w-[65vw]">
               We believe in the<br />
               value of what can&apos;t<br />
               be measured.
@@ -1352,7 +1115,7 @@ export default function Home() {
 
           {/* Body Text Paragraph - positioned exactly like reference */}
           <div className="absolute right-[4vw] top-[390px] w-[min(380px,35vw)]">
-            <p className="text-[15px] font-normal leading-[1.65] text-[#4A90E2] opacity-90">
+            <p className="text-[15px] font-normal leading-[1.65] text-black opacity-90">
               Digital Studio Labs is a San Francisco-based venture studio that 
               invests in founders and builds companies in the creator economy. 
               We believe in the value of what can&apos;t be measured: traits like 
@@ -1365,650 +1128,89 @@ export default function Home() {
           {/* Navigation - positioned exactly like reference */}
           <nav className="absolute left-[4vw] bottom-[80px]">
             <ul className="space-y-[8px]">
-              <li><a href="#home" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Home</a></li>
-              <li>
-                <button 
-                  onClick={scrollToCompaniesMain}
-                  className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity"
-                >
-                  Companies
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={scrollToAboutMain}
-                  className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity"
-                >
-                  About
-                </button>
-              </li>
-              <li><a href="#contact" className="text-[15px] font-normal text-[#4A90E2] hover:opacity-70 transition-opacity">Contact</a></li>
+              <li><a href="#home" className="text-[15px] font-normal text-black hover:opacity-70 transition-opacity">Home</a></li>
+              <li><a href="#companies" className="text-[15px] font-normal text-black hover:opacity-70 transition-opacity">Companies</a></li>
+              <li><a href="#about" className="text-[15px] font-normal text-black hover:opacity-70 transition-opacity">About</a></li>
+              <li><a href="#contact" className="text-[15px] font-normal text-black hover:opacity-70 transition-opacity">Contact</a></li>
             </ul>
           </nav>
 
         </div>
       </section>
 
-      {/* Section 2: About Us with Horizontal Scroll */}
-      <section id="about" className="section-container">
-        <div id="about-horizontal-container" className="horizontal-scroll-container">
-          
-          {/* Main About Us Section */}
-          <div className="horizontal-section bg-[#1a1a1a]">
-            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
-              
-              {/* D/S/L Stacked Letters - Top Right */}
-              <div className="absolute right-[3rem] top-[3rem] flex flex-col items-center space-y-2">
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">D</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">S</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">L</span>
-              </div>
-
-              {/* About Us Headline - moved down */}
-              <div className="mt-[8rem] mb-[3rem]">
-                <h2 className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] text-white max-w-[50vw]">
-                  ABOUT US
-                </h2>
-              </div>
-
-              {/* About Content Grid - Responsive and Compact */}
-              <div className="flex-1 max-w-[75vw]">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-[2rem] md:gap-[3rem]">
-                  
-                  {/* Our Mission */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToAboutSection('mission')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Mission</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                      To empower creators and innovators by building companies that 
-                      challenge conventional thinking and celebrate human creativity.
-                    </p>
-                  </div>
-
-                  {/* Our Team */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToAboutSection('team')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Team</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                      Authenticity, creativity, and community drive everything we do. 
-                      We believe the best solutions emerge from diverse perspectives.
-                    </p>
-                  </div>
-
-                  {/* Our Approach */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToAboutSection('approach')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Approach</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                      We combine deep technical expertise with creative vision, 
-                      fostering environments where breakthrough ideas can flourish.
-                    </p>
-                  </div>
-
-                  {/* Our Values */}
-                  <div className="border-b border-white/20 pb-[1.5rem] relative">
-                    <button 
-                      className="peer absolute bottom-[1.5rem] right-0 w-8 h-8 flex items-center justify-center text-[#4A90E2] hover:text-white transition-colors duration-300 cursor-pointer"
-                      onClick={() => scrollToAboutSection('values')}
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    <h3 className="text-[16px] font-medium text-[#4A90E2] peer-hover:text-white mb-[0.75rem] transition-colors duration-300">Our Values</h3>
-                    <p className="text-[14px] font-light text-white/90 leading-[1.5] pr-8">
-                      Building sustainable companies that create meaningful change 
-                      in the creator economy and beyond.
-                    </p>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
+      {/* Section 2: About Us Title Card */}
+      <section id="about-overview" className="section-container">
+        <div className="relative w-full h-full bg-black">
+          <div className="absolute right-[4vw] top-[4rem]">
+            <h2 className="text-[clamp(48px,6vw,80px)] font-light leading-[1.0] text-white">ABOUT US</h2>
           </div>
-
-          {/* About Detail Sections - Contained Vertical Scroll */}
-          <div className="horizontal-section bg-[#1a1a1a]">
-            <div className="about-detail-container">
-              
-
-              
-              {/* Back Navigation - Right Center */}
-              <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-30">
-                <button
-                  onClick={() => {
-                    const mainSection = document.getElementById('about-horizontal-container');
-                    if (mainSection) {
-                      mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
-                  id="about-nav-back"
-                >
-                  <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              
-              {/* Section 1: Our Mission Detail */}
-              <div 
-                id="about-mission" 
-                className="about-detail-section bg-[#1a1a1a]"
-              >
-                <MissionSection />
-              </div>
-
-              {/* Section 2: Our Team Detail */}
-              <div 
-                id="about-team" 
-                className="about-detail-section bg-white"
-              >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-                  
-                  {/* Down Navigation - Bottom Center */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                    <button
-                      onClick={() => {
-                        const container = document.querySelector('.about-detail-container');
-                        if (container) {
-                          container.scrollTo({ top: 2 * window.innerHeight, behavior: 'smooth' });
-                        }
-                      }}
-                      className="flex items-center justify-center text-[#4A90E2] hover:text-blue-600 transition-all duration-300"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-                  
-                  {/* Content Center - Cards Only */}
-                  <div className="flex items-center justify-center h-full w-full">
-                    {/* Apple-inspired Team Section - Perfectly Centered */}
-                    <AppleTeamSection />
-                  </div>
-                </div>
-              </div>
-
-              {/* Section 3: Our Approach Detail */}
-              <div 
-                id="about-approach" 
-                className="about-detail-section bg-[#4A90E2]"
-              >
-                <ApproachSection />
-              </div>
-
-              {/* Section 4: Our Values Detail - Final Section */}
-              <div 
-                id="about-values" 
-                className="about-detail-section bg-black"
-              >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-                  
-                  {/* Back Navigation - Left Center */}
-                  <div className="absolute left-8 top-1/2 transform -translate-y-1/2 z-50">
-                      <button
-                        onClick={() => {
-                          const mainSection = document.getElementById('about-horizontal-container');
-                          if (mainSection) {
-                            mainSection.scrollTo({ left: 0, behavior: 'smooth' });
-                          }
-                        }}
-                      className="flex items-center justify-center text-white hover:text-[#D4AF37] transition-all duration-300"
-                      >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      </button>
-                    </div>
-
-                  {/* Great Gatsby Art Deco Layout */}
-                  <div className="relative flex-1">
-                    
-                    {/* Central Title with Art Deco Typography - Properly spaced from corners */}
-                    <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <motion.div
-                        className="text-center"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        viewport={{ once: true }}
-                      >
-                        <h1 className="text-[clamp(48px,6vw,100px)] font-light text-white leading-[0.8] tracking-[0.2em] mb-6">
-                          OUR VALUES
-                        </h1>
-                        <div className="w-32 h-[3px] bg-[#D4AF37] mx-auto mb-8"></div>
-                        <p className="text-[18px] font-light text-white/85 tracking-wide max-w-[500px] leading-[1.4]">
-                          Building sustainable companies that honor human creativity
-                        </p>
-                      </motion.div>
-                    </div>
-
-                    {/* Four Core Values in Corners - No Overlapping */}
-                    
-                        {/* Top-Left: Creativity */}
-    <motion.div
-      className="absolute top-[1vh] left-[0.5vw] text-left group max-w-[280px]"
-                      initial={{ opacity: 0, x: -50, y: -30 }}
-                      whileInView={{ opacity: 1, x: 0, y: 0 }}
-                      transition={{ duration: 0.8, delay: 0.4 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="relative mb-4">
-                        <div className="w-16 h-16 border-[2px] border-white rotate-45 group-hover:border-[#D4AF37] transition-colors duration-500"></div>
-                        <div className="absolute top-4 left-4 w-8 h-8 bg-[#D4AF37] rotate-45 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
-                      <h3 className="text-[22px] font-medium text-white mb-3 tracking-[0.15em]">CREATIVITY</h3>
-                      <p className="text-[13px] text-white/75 leading-[1.6] tracking-wide">Bold experimentation and authentic expression</p>
-                    </motion.div>
-
-                        {/* Top-Right: Authenticity */}
-    <motion.div
-      className="absolute top-[1vh] right-[0.5vw] text-right group max-w-[280px]"
-                      initial={{ opacity: 0, x: 50, y: -30 }}
-                      whileInView={{ opacity: 1, x: 0, y: 0 }}
-                      transition={{ duration: 0.8, delay: 0.6 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="relative mb-4 ml-auto">
-                        <div className="w-16 h-16 border-[2px] border-white group-hover:border-[#D4AF37] transition-colors duration-500"></div>
-                        <div className="absolute top-4 left-4 w-8 h-8 bg-[#D4AF37] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
-                      <h3 className="text-[22px] font-medium text-white mb-3 tracking-[0.15em]">AUTHENTICITY</h3>
-                      <p className="text-[13px] text-white/75 leading-[1.6] tracking-wide">Genuine relationships and transparent communication</p>
-                    </motion.div>
-
-                        {/* Bottom-Left: Community */}
-    <motion.div
-      className="absolute bottom-[1vh] left-[0.5vw] text-left group max-w-[280px]"
-                      initial={{ opacity: 0, x: -50, y: 30 }}
-                      whileInView={{ opacity: 1, x: 0, y: 0 }}
-                      transition={{ duration: 0.8, delay: 0.8 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="relative mb-4">
-                        <div className="w-14 h-14 border-[2px] border-white group-hover:border-[#D4AF37] transition-colors duration-500"></div>
-                        <div className="w-16 h-16 border border-white/60 absolute -top-1 -left-1 group-hover:border-[#D4AF37]/60 transition-colors duration-500"></div>
-                        <div className="absolute top-3 left-3 w-5 h-5 bg-[#D4AF37] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
-                      <h3 className="text-[22px] font-medium text-white mb-3 tracking-[0.15em]">COMMUNITY</h3>
-                      <p className="text-[13px] text-white/75 leading-[1.6] tracking-wide">Inclusive networks empowering diverse perspectives</p>
-                    </motion.div>
-
-                        {/* Bottom-Right: Innovation */}
-    <motion.div
-      className="absolute bottom-[1vh] right-[0.5vw] text-right group max-w-[280px]"
-                      initial={{ opacity: 0, x: 50, y: 30 }}
-                      whileInView={{ opacity: 1, x: 0, y: 0 }}
-                      transition={{ duration: 0.8, delay: 1.0 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="relative mb-4 ml-auto">
-                        <div className="w-16 h-5 border-[2px] border-white group-hover:border-[#D4AF37] transition-colors duration-500"></div>
-                        <div className="w-12 h-8 border-[2px] border-white absolute top-1 right-1 group-hover:border-[#D4AF37] transition-colors duration-500"></div>
-                        <div className="w-8 h-12 border-[2px] border-white absolute top-0 right-3 group-hover:border-[#D4AF37] transition-colors duration-500"></div>
-                        <div className="absolute top-3 right-5 w-2 h-6 bg-[#D4AF37] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      </div>
-                      <h3 className="text-[22px] font-medium text-white mb-3 tracking-[0.15em]">INNOVATION</h3>
-                      <p className="text-[13px] text-white/75 leading-[1.6] tracking-wide">Emerging technologies that shape tomorrow</p>
-                    </motion.div>
-
-                    {/* Art Deco Quote at Bottom - Clear of corners */}
-                    <div className="absolute left-1/2 bottom-[4vh] transform -translate-x-1/2">
-                      <motion.div
-                        className="text-center"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 1.2 }}
-                        viewport={{ once: true }}
-                      >
-                        <div className="w-32 h-[1px] bg-[#D4AF37] mx-auto mb-4"></div>
-                        <p className="text-[16px] font-light text-white/80 italic tracking-wide max-w-[500px]">
-                          "Technology that serves humanity's highest aspirations"
-                        </p>
-                        <div className="w-32 h-[1px] bg-[#D4AF37] mx-auto mt-4"></div>
-                      </motion.div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
         </div>
       </section>
 
-      {/* Section 3: Our Work with Horizontal Scroll */}
+      {/* Section 3: Our Work */}
       <section id="companies" className="section-container">
-        <div id="companies-horizontal-container" className="horizontal-scroll-container">
-          
-          {/* Our Work Detail Sections - Now positioned left (first) */}
-          <div className="horizontal-section bg-[#4A90E2]">
-            <div className="work-detail-container" id="work-detail-scroll-container">
-              
-
-              
-
-              
-              {/* Section 1: Portfolio Companies Detail - Great Gatsby Art Deco */}
-              <div 
-                id="companies-portfolio" 
-                className="work-detail-section bg-black"
-              >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center overflow-hidden">
-                  
-                  {/* Down Navigation - Bottom Center */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                    <button
-                      onClick={() => {
-                        const container = document.getElementById('work-detail-scroll-container');
-                        if (container) {
-                          container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-                        }
-                      }}
-                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-                  
-
-
-                  {/* Content Center */}
-                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Portfolio Companies</h2>
-                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                      Building and investing in innovative startups that are reshaping industries and creating the future of technology.
-                    </p>
-
-                  </div>
-                </div>
-              </div>
-
-              {/* Section 2: Emerging Tech Detail */}
-              <div 
-                id="companies-emerging-tech" 
-                className="work-detail-section bg-white"
-              >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-                  
-                  {/* Down Navigation - Bottom Center */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                      <button
-                        onClick={() => {
-                        const container = document.getElementById('work-detail-scroll-container');
-                        if (container) {
-                          container.scrollTo({ top: 2 * window.innerHeight, behavior: 'smooth' });
-                        }
-                      }}
-                      className="flex items-center justify-center text-[#4A90E2] hover:text-blue-600 transition-all duration-300"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      </button>
-                    </div>
-                  
-                  {/* Content Center */}
-                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Emerging Tech</h2>
-                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-black/80 leading-[1.5] mb-12">
-                      Exploring cutting-edge technologies like AI, blockchain, and quantum computing to unlock new possibilities.
-                    </p>
-
-                  </div>
-                </div>
-              </div>
-
-              {/* Section 3: Creator Tools Detail */}
-              <div 
-                id="companies-creator-tools" 
-                className="work-detail-section bg-[#4A90E2]"
-              >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-                  
-                  {/* Down Navigation - Bottom Center */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                    <button
-                      onClick={() => {
-                        const container = document.getElementById('work-detail-scroll-container');
-                        if (container) {
-                          container.scrollTo({ top: 3 * window.innerHeight, behavior: 'smooth' });
-                        }
-                      }}
-                      className="flex items-center justify-center text-white hover:text-blue-200 transition-all duration-300 
-                                 min-w-[44px] min-h-[44px] p-3 rounded-full 
-                                 active:scale-95 active:bg-white/10 
-                                 md:min-w-auto md:min-h-auto md:p-0 md:rounded-none md:bg-transparent"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M3 6L8 11L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-                  
-
-
-                  {/* Content Center */}
-                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#F8F9FA] mb-8">Creator Tools</h2>
-                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                      Developing platforms and tools that empower creators to build, monetize, and scale their creative endeavors.
-                    </p>
-
-                  </div>
-            </div>
-          </div>
-
-              {/* Section 4: Innovation Labs Detail - Final Section */}
-              <div 
-                id="companies-innovation-labs" 
-                className="work-detail-section bg-[#1a1a1a]"
-              >
-                <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col justify-center">
-                  
-                  {/* Back Navigation - Right Center */}
-                  <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-50">
-                    <button
-                      onClick={() => {
-                        const mainSection = document.getElementById('companies-horizontal-container');
-                        if (mainSection) {
-                          mainSection.scrollTo({ left: window.innerWidth, behavior: 'smooth' });
-                        }
-                      }}
-                      className="flex items-center justify-center text-white hover:text-blue-300 transition-all duration-300"
-                    >
-                      <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-        </div>
-                  
-
-
-                  {/* Content Center */}
-                  <div className="flex flex-col items-center justify-center text-center max-w-[900px] mx-auto">
-                    <h2 className="text-[clamp(48px,8vw,120px)] font-light text-[#4A90E2] mb-8">Innovation Labs</h2>
-                    <p className="text-[clamp(18px,2.5vw,32px)] font-light text-white/90 leading-[1.5] mb-12">
-                      Experimental projects and research initiatives that push the boundaries of what&apos;s possible in technology.
-                    </p>
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Main Our Work Section - Now positioned right (second) */}
-          <div className="horizontal-section bg-[#4A90E2]">
+        <div className="relative w-full h-full bg-white">
             <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
-              
-
-
-              {/* Our Work Headline - Right Side (mirroring About Us) */}
-              <div className="absolute right-[4vw] top-[9rem]">
-                <div className="text-right mb-[3rem]">
+                  
+            {/* Our Team Headline with Animation - Right Side */}
+              <div className="absolute left-[4vw] top-[4rem] z-30">
+                <div className="text-left mb-[3rem]">
                   <TextSplit
-                    className="text-[clamp(36px,6vw,100px)] font-light leading-[1.0] tracking-tighter"
-                    topClassName="text-[#F8F9FA]"
-                    bottomClassName="text-white/60"
+                    className="text-[clamp(48px,6vw,80px)] font-light leading-[1.0] tracking-tighter"
+                    topClassName="text-black"
+                    bottomClassName="text-black"
                     maxMove={100}
                     falloff={0.2}
                   >
-                    OUR WORK
+                    OUR TEAM
                   </TextSplit>
                 </div>
               </div>
 
-              {/* Work Content Grid - Asymmetrical Layout */}
-              <div className="absolute right-[4vw] top-[17rem] flex justify-end">
-                <div className="max-w-[75vw] w-full">
-                  <div className="grid grid-cols-2 gap-[3rem] h-[400px]">
-                    
-                    {/* Projects - Large Left Card */}
-                    <div className="border-b border-white/20 pb-[2rem] relative flex flex-col justify-center h-full group">
-                      <button 
-                        className="peer absolute bottom-[2rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                        onClick={() => scrollToCompaniesSection('portfolio')}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                          <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </button>
-                      <h3 className="text-[28px] font-semibold text-[#F8F9FA] mb-[1.5rem] text-right transition-colors duration-300 peer-hover:text-black tracking-wide">
-                        Projects
-                      </h3>
-                      <p className="text-[16px] font-light text-white/90 leading-[1.8] pl-8 text-right">
-                        Building innovative startups and creator tools that empower the next generation of digital entrepreneurs. 
-                        We focus on sustainable businesses that reshape industries while celebrating human creativity and authentic expression.
-                        Our portfolio spans from early-stage ventures to established platforms that drive meaningful change in the creator economy.
-                      </p>
-                      
-                      {/* Enhanced Accent Line - Projects */}
-                      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      <div className="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 w-20 h-[3px] bg-white group-hover:w-32 group-hover:bg-white transition-all duration-500"></div>
-                    </div>
-
-                    {/* Right Side - Research & Art Stacked */}
-                    <div className="flex flex-col h-full">
-                      
-                      {/* Research */}
-                      <div className="border-b border-white/20 pb-[2rem] relative flex-1 flex flex-col justify-center group">
-                        <button 
-                          className="peer absolute bottom-[2rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                          onClick={() => scrollToCompaniesSection('emerging-tech')}
-                        >
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </button>
-                        <h3 className="text-[22px] font-semibold text-[#F8F9FA] mb-[1rem] text-right transition-colors duration-300 peer-hover:text-black tracking-wide">
-                          Research
-                        </h3>
-                        <p className="text-[15px] font-light text-white/90 leading-[1.7] pl-8 text-right">
-                          Exploring emerging technologies like AI, blockchain, and quantum computing to unlock new possibilities and create breakthroughs.
-                        </p>
-                        
-                        {/* Enhanced Accent Line - Research */}
-                        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div className="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 w-20 h-[3px] bg-white group-hover:w-32 group-hover:bg-white transition-all duration-500"></div>
-                      </div>
-
-                      {/* Art */}
-                      <div className="border-b border-white/20 pb-[2rem] relative flex-1 flex flex-col justify-center group">
-                        <button 
-                          className="peer absolute bottom-[2rem] left-0 w-8 h-8 flex items-center justify-center text-[#F8F9FA] hover:text-black transition-colors duration-300 cursor-pointer"
-                          onClick={() => scrollToCompaniesSection('creator-tools')}
-                        >
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </button>
-                        <h3 className="text-[22px] font-semibold text-[#F8F9FA] mb-[1rem] text-right transition-colors duration-300 peer-hover:text-black tracking-wide">
-                          Art
-                        </h3>
-                        <p className="text-[15px] font-light text-white/90 leading-[1.7] pl-8 text-right">
-                          Creative expressions that celebrate human creativity, inspire innovation, and push cultural boundaries through artistic endeavors.
-                        </p>
-                        
-                        {/* Enhanced Accent Line - Art */}
-                        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div className="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 w-20 h-[3px] bg-white group-hover:w-32 group-hover:bg-white transition-all duration-500"></div>
-                      </div>
-
-                    </div>
-
-                  </div>
+              {/* Our Team Hover Slider - Focal content centered */}
+              <div className="absolute inset-0 flex items-center justify-center pt-[8rem]">
+                <div className="w-full max-w-[1280px]">
+                  <HoverSliderDemo />
                 </div>
               </div>
-                  
-                  {/* D/S/L Stacked Letters - Bottom Left */}
-              <div className="absolute left-[4vw] bottom-[4rem] flex flex-col items-center space-y-2 z-20">
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">D</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">S</span>
-                <span className="text-[clamp(48px,5vw,72px)] font-light text-white leading-none">L</span>
-                  </div>
-
+              
             </div>
-          </div>
-
         </div>
       </section>
 
-      {/* Section 4: Contact/Partnership */}
+
+
+
+      {/* Section 4: About Us Grid (moved here between Our Team and Let's Create) */}
+      <section id="about" className="section-container">
+        <div className="relative w-full h-full bg-black">
+          <DynamicFrameLayout 
+            frames={demoFrames} 
+            className="w-full h-full" 
+            hoverSize={6}
+            gapSize={4}
+          />
+        </div>
+      </section>
+
+
+      {/* Section 5: Contact/Partnership */}
       <section id="contact" className="section-container bg-white">
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
           {/* D/S/L Stacked Letters - Bottom Right (matching other sections) */}
-          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2 z-20
-                          md:right-[3rem] md:bottom-[3rem]
-                          sm:right-[2rem] sm:bottom-[2rem]
-                          xs:right-[1rem] xs:bottom-[1rem]">
+          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2 z-20 md:right-[3rem] md:bottom-[3rem] sm:right-[2rem] sm:bottom-[2rem] xs:right-[1rem] xs:bottom-[1rem]">
             <DSLLetter letter="D" />
             <DSLLetter letter="S" />
             <DSLLetter letter="L" />
           </div>
 
           {/* Main Content - Mobile Responsive Layout */}
-          <div className="absolute left-[4vw] top-[12rem] 
-                          md:left-[4vw] md:top-[12rem] md:max-w-[35vw]
-                          sm:left-[4vw] sm:top-[8rem] sm:max-w-[85vw]
-                          xs:left-[4vw] xs:top-[6rem] xs:max-w-[90vw]">
+          <div className="absolute left-[4vw] top-[12rem] md:left-[4vw] md:top-[12rem] md:max-w-[35vw] sm:left-[4vw] sm:top-[8rem] sm:max-w-[85vw] xs:left-[4vw] xs:top-[6rem] xs:max-w-[90vw]">
             <div className="max-w-[35vw] md:max-w-[35vw] sm:max-w-[85vw] xs:max-w-[90vw]">
               
               {/* Animated Headline */}
-              <div className="mb-[3rem] h-[80px] relative 
-                              md:mb-[3rem] md:h-[80px]
-                              sm:mb-[2rem] sm:h-[60px]
-                              xs:mb-[1.5rem] xs:h-[50px]">
+              <div className="relative mb-[3rem] md:mb-[3rem] sm:mb-[2rem] xs:mb-[1.5rem]">
                 <ProximityGradientText
                   colors={["#3b82f6", "#ec4899", "#fbbf24", "#3b82f6"]}
                   proximityRadius={500}
@@ -2018,43 +1220,25 @@ export default function Home() {
               </div>
 
               {/* Supporting Text */}
-              <div className="space-y-[2rem] max-w-[320px] 
-                              md:space-y-[2rem] md:max-w-[320px]
-                              sm:space-y-[1.5rem] sm:max-w-[100%]
-                              xs:space-y-[1rem] xs:max-w-[100%]">
-                <p className="text-[16px] font-light text-black/80 leading-[1.6]
-                              md:text-[16px]
-                              sm:text-[15px]
-                              xs:text-[14px]">
+              <div className="space-y-[2rem] max-w-[320px] md:space-y-[2rem] md:max-w-[320px] sm:space-y-[1.5rem] sm:max-w-[100%] xs:space-y-[1rem] xs:max-w-[100%]">
+                <p className="text-[16px] font-light text-black/80 leading-[1.6] md:text-[16px] sm:text-[15px] xs:text-[14px]">
                   Ready to build something extraordinary? We partner with visionary founders 
                   and companies to create digital experiences that redefine what&apos;s possible.
                 </p>
                 
-                <p className="text-[16px] font-light text-black/80 leading-[1.6]
-                              md:text-[16px]
-                              sm:text-[15px]
-                              xs:text-[14px]">
+                <p className="text-[16px] font-light text-black/80 leading-[1.6] md:text-[16px] sm:text-[15px] xs:text-[14px]">
                   From startups to Fortune 500 enterprises, we bring together strategic 
                   thinking, cutting-edge technology, and exceptional design to transform 
                   ambitious ideas into reality.
                 </p>
                 
-                <div className="space-y-[1rem]
-                                md:space-y-[1rem]
-                                sm:space-y-[0.75rem]
-                                xs:space-y-[0.5rem]">
-                  <p className="text-[14px] font-medium text-black
-                                md:text-[14px]
-                                sm:text-[13px]
-                                xs:text-[12px]">
+                <div className="space-y-[1rem] md:space-y-[1rem] sm:space-y-[0.75rem] xs:space-y-[0.5rem]">
+                  <p className="text-[14px] font-medium text-black md:text-[14px] sm:text-[13px] xs:text-[12px]">
                     Start the conversation
                   </p>
                   <a 
                     href="mailto:hello@digitalstudiolabs.com"
-                    className="text-[14px] font-normal text-black/70 hover:text-black transition-colors duration-300 border-b border-black/20 hover:border-black/40
-                              md:text-[14px]
-                              sm:text-[13px]
-                              xs:text-[12px]"
+                    className="text-[14px] font-normal text-black/70 hover:text-black transition-colors duration-300 border-b border-black/20 hover:border-black/40 md:text-[14px] sm:text-[13px] xs:text-[12px]"
                   >
                     hello@digitalstudiolabs.com
                   </a>
@@ -2065,11 +1249,7 @@ export default function Home() {
           </div>
 
           {/* Dynamic Image Mosaic - Extending to section edges */}
-          <div className="absolute left-[45vw] top-0 bottom-0 w-[550px] z-10 overflow-hidden
-                          lg:left-[45vw] lg:w-[550px]
-                          md:left-[42vw] md:w-[480px] md:top-0 md:bottom-0
-                          sm:left-[38vw] sm:w-[400px] sm:top-0 sm:bottom-0
-                          xs:hidden"
+          <div className="absolute left-[45vw] top-0 bottom-0 w-[550px] z-10 overflow-hidden lg:left-[45vw] lg:w-[550px] md:left-[42vw] md:w-[480px] md:top-0 md:bottom-0 sm:left-[38vw] sm:w-[400px] sm:top-0 sm:bottom-0 xs:hidden"
                style={{backgroundColor: 'transparent'}}>
             <ImageMosaic className="w-full h-full" />
           </div>
@@ -2113,7 +1293,7 @@ export default function Home() {
               <h2 className="text-[clamp(36px,5vw,72px)] font-light leading-[1.1] text-white mb-[2rem] tracking-wide flex items-center">
                 <span className="mr-4">Let&apos;s Create</span>
                 <motion.span 
-                  className="text-[#4A90E2] inline-block relative min-w-[120px] text-left"
+                  className="text-white inline-block relative min-w-[120px] text-left"
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   animate={{ 
                     opacity: typingStarted ? 1 : 0, 
@@ -2139,7 +1319,7 @@ export default function Home() {
                           opacity: 1, 
                           y: 0, 
                           scale: 1,
-                          color: ['#4A90E2', '#5BA3F5', '#4A90E2']
+                          color: ['#ffffff', '#e5e7eb', '#ffffff']
                         }}
                         transition={{ 
                           duration: 0.2,
@@ -2155,7 +1335,7 @@ export default function Home() {
 
                   {/* Subtle glow effect around the text */}
                   <motion.div
-                    className="absolute inset-0 bg-[#4A90E2]/20 blur-xl rounded-lg"
+                    className="absolute inset-0 bg-white/20 blur-xl rounded-lg"
                     animate={{
                       opacity: [0.2, 0.4, 0.2],
                       scale: [0.8, 1.1, 0.8]
@@ -2171,7 +1351,7 @@ export default function Home() {
                   {[...Array(3)].map((_, i) => (
                     <motion.div
                       key={i}
-                      className="absolute w-1 h-1 bg-[#4A90E2] rounded-full"
+                      className="absolute w-1 h-1 bg-white rounded-full"
                       style={{
                         left: `${20 + i * 30}%`,
                         top: `${10 + i * 10}%`
@@ -2241,10 +1421,10 @@ export default function Home() {
                       <input
                         type="email"
                         placeholder="Enter your email address"
-                        className="w-full bg-transparent border border-white/20 rounded-none px-4 py-3 text-white placeholder:text-white/40 text-[14px] font-light focus:outline-none focus:border-[#4A90E2] transition-all duration-300"
+                        className="w-full bg-transparent border border-white/20 rounded-none px-4 py-3 text-white placeholder:text-white/40 text-[14px] font-light focus:outline-none focus:border-white transition-all duration-300"
                       />
                       <motion.button
-                        className="absolute right-0 top-0 h-full px-6 bg-[#4A90E2] text-white text-[14px] font-light hover:bg-[#357ABD] transition-all duration-300"
+                        className="absolute right-0 top-0 h-full px-6 bg-white text-black text-[14px] font-light hover:bg-gray-100 transition-all duration-300"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -2269,7 +1449,7 @@ export default function Home() {
                     transition={{ duration: 0.8, delay: 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <h3 className="text-[14px] font-medium text-[#4A90E2] mb-[2rem] tracking-wide uppercase">
+                    <h3 className="text-[14px] font-medium text-white mb-[2rem] tracking-wide uppercase">
                       Services
                     </h3>
                     <div className="space-y-[1.2rem]">
@@ -2287,7 +1467,7 @@ export default function Home() {
                           whileHover={{ x: 4 }}
                         >
                           <span className="flex items-center">
-                            <span className="w-0 h-[1px] bg-[#4A90E2] group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
+                            <span className="w-0 h-[1px] bg-white group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
                             {item.name}
                           </span>
                         </motion.a>
@@ -2302,7 +1482,7 @@ export default function Home() {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     viewport={{ once: true }}
                   >
-                    <h3 className="text-[14px] font-medium text-[#4A90E2] mb-[2rem] tracking-wide uppercase">
+                    <h3 className="text-[14px] font-medium text-white mb-[2rem] tracking-wide uppercase">
                       Solutions
                     </h3>
                     <div className="space-y-[1.2rem]">
@@ -2320,7 +1500,7 @@ export default function Home() {
                           whileHover={{ x: 4 }}
                         >
                           <span className="flex items-center">
-                            <span className="w-0 h-[1px] bg-[#4A90E2] group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
+                            <span className="w-0 h-[1px] bg-white group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
                             {item.name}
                           </span>
                         </motion.a>
@@ -2335,7 +1515,7 @@ export default function Home() {
                     transition={{ duration: 0.8, delay: 0.3 }}
                     viewport={{ once: true }}
                   >
-                    <h3 className="text-[14px] font-medium text-[#4A90E2] mb-[2rem] tracking-wide uppercase">
+                    <h3 className="text-[14px] font-medium text-white mb-[2rem] tracking-wide uppercase">
                       Company
                     </h3>
                     <div className="space-y-[1.2rem]">
@@ -2353,7 +1533,7 @@ export default function Home() {
                           whileHover={{ x: 4 }}
                         >
                           <span className="flex items-center">
-                            <span className="w-0 h-[1px] bg-[#4A90E2] group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
+                            <span className="w-0 h-[1px] bg-white group-hover:w-4 transition-all duration-300 mr-0 group-hover:mr-2"></span>
                             {item.name}
                           </span>
                         </motion.a>
@@ -2384,20 +1564,20 @@ export default function Home() {
                   <div className="space-y-[1.5rem]">
                     <motion.a
                     href="mailto:hello@digitalstudiolabs.com"
-                      className="group flex items-center space-x-3 text-white/70 hover:text-[#4A90E2] transition-colors duration-300"
+                      className="group flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-300"
                       whileHover={{ x: 4 }}
                     >
-                      <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#4A90E2] transition-colors duration-300">
+                      <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white transition-colors duration-300">
                         <span className="text-[10px]">@</span>
                       </div>
                       <span className="text-[14px] font-light">hello@digitalstudiolabs.com</span>
                     </motion.a>
                     <motion.a
                     href="tel:+15551234567"
-                      className="group flex items-center space-x-3 text-white/70 hover:text-[#4A90E2] transition-colors duration-300"
+                      className="group flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-300"
                       whileHover={{ x: 4 }}
                     >
-                      <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center group-hover:border-[#4A90E2] transition-colors duration-300">
+                      <div className="w-6 h-6 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white transition-colors duration-300">
                         <span className="text-[10px]">📞</span>
                       </div>
                       <span className="text-[14px] font-light">+1 (555) 123-4567</span>
@@ -2435,7 +1615,7 @@ export default function Home() {
                         whileHover={{ scale: 1.1, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-[#4A90E2] hover:border-[#4A90E2] transition-all duration-300">
+                        <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 hover:border-white transition-all duration-300">
                           <span className="text-[16px]">{social.icon}</span>
                         </div>
                       </motion.a>
