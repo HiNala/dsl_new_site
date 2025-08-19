@@ -214,9 +214,9 @@ const TEAM_MEMBERS = [
 
 export function HoverSliderDemo() {
 	return (
-		<HoverSlider className="min-h-svh place-content-center p-6 md:px-12 bg-white text-black">
-			<div className="flex flex-wrap items-center justify-evenly gap-6 md:gap-12">
-				<div className="flex flex-col space-y-2 md:space-y-4">
+		<HoverSlider className="min-h-[70vh] place-content-center p-6 md:px-12 bg-transparent text-white">
+			<div className="grid grid-cols-[520px_1fr] items-center gap-16">
+				<div className="flex flex-col space-y-6 md:space-y-8">
 					{TEAM_MEMBERS.map((member, index) => (
 						<motion.div
 							key={member.name}
@@ -226,7 +226,7 @@ export function HoverSliderDemo() {
 						>
 							<TextStaggerHover
 								index={index}
-								className="text-4xl font-bold uppercase tracking-tighter block"
+								className="text-[clamp(22px,2.6vw,36px)] font-bold uppercase tracking-tight block text-white"
 								text={member.name}
 							/>
 						</motion.div>
@@ -241,19 +241,19 @@ export function HoverSliderDemo() {
 									imageUrl={member.imageUrl}
 									src={member.imageUrl}
 									alt={`${member.name} - ${member.role}`}
-									className="size-full max-h-96 object-cover rounded-lg"
+									className="size-full max-h-[460px] object-cover rounded-xl shadow-2xl"
 									loading="eager"
 									decoding="async"
 								/>
 							</div>
 						))}
 					</HoverSliderImageWrap>
-					<div className="mt-4 relative min-h-[5.5rem] md:min-h-[4.5rem] sm:min-h-[4.5rem] overflow-hidden text-center px-2">
+					<div className="mt-4 relative min-h-[4.2rem] overflow-hidden text-center px-2">
 						{TEAM_MEMBERS.map((member, index) => (
 							<HoverSliderContext.Consumer key={member.id}>
 								{(context) => (
 									<motion.div
-										className="absolute inset-0 text-sm text-black whitespace-normal break-words"
+										className="absolute inset-0 text-sm text-white whitespace-normal break-words"
 										initial={{ y: 10, opacity: 0 }}
 										animate={context?.activeSlide === index ? { y: 0, opacity: 1 } : { y: -10, opacity: 0 }}
 										transition={{
@@ -274,7 +274,7 @@ export function HoverSliderDemo() {
 													ease: [0.25, 0.46, 0.45, 0.94],
 												}}
 											>
-												{char}
+											{char}
 											</motion.span>
 										))}
 										<motion.span
@@ -300,7 +300,7 @@ export function HoverSliderDemo() {
 													ease: [0.25, 0.46, 0.45, 0.94],
 												}}
 											>
-												{char}
+											{char}
 											</motion.span>
 										))}
 									</motion.div>

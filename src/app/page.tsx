@@ -6,6 +6,7 @@ import { EvervaultBackground } from '@/components/ui/evervault-background';
 import { DynamicFrameLayout } from '@/components/ui/dynamic-frame-layout';
 import { HoverSliderDemo } from '@/components/ui/hover-slider';
 import Image from 'next/image';
+import { AboutCard } from '@/components/about-card';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -1138,43 +1139,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 2: About Us Title Card */}
+      {/* Section 2: Our Team (moved from white section) */}
       <section id="about-overview" className="section-container">
         <div className="relative w-full h-full bg-black">
-          <div className="absolute right-[4vw] top-[4rem]">
-            <h2 className="text-[clamp(48px,6vw,80px)] font-light leading-[1.0] text-white">ABOUT US</h2>
+          {/* Our Team content centered with title above */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-[4vw]">
+            <div className="w-full max-w-[1100px] flex flex-col items-start">
+              <div className="w-[520px] text-center">
+                <TextSplit
+                  className="text-[clamp(36px,4.5vw,64px)] font-light leading-[1] tracking-tight"
+                  topClassName="text-white"
+                  bottomClassName="text-white"
+                  maxMove={100}
+                  falloff={0.2}
+                >
+                  THE TEAM
+                </TextSplit>
+              </div>
+              <div className="mt-1">
+                <HoverSliderDemo />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Section 3: Our Work */}
+      {/* Section 3: About Us content card */}
       <section id="companies" className="section-container">
         <div className="relative w-full h-full bg-white">
-            <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
-                  
-            {/* Our Team Headline with Animation - Right Side */}
-              <div className="absolute left-[4vw] top-[4rem] z-30">
-                <div className="text-left mb-[3rem]">
-                  <TextSplit
-                    className="text-[clamp(48px,6vw,80px)] font-light leading-[1.0] tracking-tighter"
-                    topClassName="text-black"
-                    bottomClassName="text-black"
-                    maxMove={100}
-                    falloff={0.2}
-                  >
-                    OUR TEAM
-                  </TextSplit>
-                </div>
-              </div>
-
-              {/* Our Team Hover Slider - Focal content centered */}
-              <div className="absolute inset-0 flex items-center justify-center pt-[8rem]">
-                <div className="w-full max-w-[1280px]">
-                  <HoverSliderDemo />
-                </div>
-              </div>
-              
-            </div>
+          <AboutCard />
         </div>
       </section>
 
@@ -1198,8 +1191,8 @@ export default function Home() {
       <section id="contact" className="section-container bg-white">
         <div className="relative w-full h-full py-[4rem] px-[4vw] flex flex-col">
           
-          {/* D/S/L Stacked Letters - Bottom Right (matching other sections) */}
-          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center space-y-2 z-20 md:right-[3rem] md:bottom-[3rem] sm:right-[2rem] sm:bottom-[2rem] xs:right-[1rem] xs:bottom-[1rem]">
+          {/* D/S/L Stacked Letters - Bottom Right with larger spacing */}
+          <div className="absolute right-[3rem] bottom-[3rem] flex flex-col items-center gap-[1.25rem] z-20 md:right-[3rem] md:bottom-[3rem] sm:right-[2rem] sm:bottom-[2rem] xs:right-[1rem] xs:bottom-[1rem]">
             <DSLLetter letter="D" />
             <DSLLetter letter="S" />
             <DSLLetter letter="L" />
